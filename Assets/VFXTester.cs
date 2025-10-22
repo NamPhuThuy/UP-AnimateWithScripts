@@ -27,6 +27,8 @@ namespace NamPhuThuy.AnimateWithScripts
         #endregion
     }
 
+#if UNITY_EDITOR
+    
     [CustomEditor(typeof(VFXTester))]
     public class VFXTesterEditor : Editor
     {
@@ -171,4 +173,5 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #endregion
     }
+#endif
 }
