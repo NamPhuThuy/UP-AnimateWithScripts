@@ -118,6 +118,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public void SetContent(string message)
         {
             messageText.text = message;
+            // messageText.GetComponent<LeanLocalizedTextMeshProUGUI>().TranslationName = message; // either enable this line or enable above line (use 1 only)
         }
 
         public void SetContent(string message, Action moreSetup)
