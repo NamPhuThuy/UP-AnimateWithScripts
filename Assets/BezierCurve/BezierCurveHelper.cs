@@ -1,6 +1,11 @@
-// csharp
+/*
+https://github.com/NamPhuThuy
+ */
+
+
 using System;
 using System.Collections;
+using System.Reflection;
 using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
@@ -227,4 +232,6 @@ namespace NamPhuThuy.AnimateWithScripts
             else tr.position = pos;
         }
     }
+    
+    
 }
