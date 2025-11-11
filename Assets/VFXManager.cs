@@ -36,9 +36,9 @@ namespace NamPhuThuy.AnimateWithScripts
             base.Awake();
             PreloadAll();
             
-            DebugLogger.LogSimple(message:$"anchored posi: {GetComponent<RectTransform>().anchoredPosition}");
-            DebugLogger.LogSimple(message:$"rect position: {GetComponent<RectTransform>().position}");
-            DebugLogger.LogSimple(message:$"transform position: {transform.position}");
+            DebugLogger.Log(message:$"anchored posi: {GetComponent<RectTransform>().anchoredPosition}");
+            DebugLogger.Log(message:$"rect position: {GetComponent<RectTransform>().position}");
+            DebugLogger.Log(message:$"transform position: {transform.position}");
         }
 
         #endregion

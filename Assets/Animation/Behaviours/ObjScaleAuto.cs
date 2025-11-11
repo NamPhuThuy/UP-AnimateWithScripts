@@ -20,20 +20,31 @@ namespace NamPhuThuy.AnimateWithScripts
 
         [Header("Behavior")] 
         private Sequence currentSequence;
+        
+        [Header("Delay")]
+        [SerializeField] private float delayBeforeStart = 0f;
+        [SerializeField] private float delayBetweenLoops = 0f;
 
         protected override void OnEnable()
         {
             base.OnEnable();
         }
-        
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+        }
+
         #region MonoBehaviour
 
         public override void Play()
         {
             currentSequence = DOTween.Sequence();
-            currentSequence.Insert(0, transform.DOScale(targetScale, time).SetEase(Ease.InOutSine));
-            currentSequence.Insert(time, transform.DOScale(originalScale, time2).SetEase(Ease.InOutSine));
-            currentSequence.SetLoops(-1).SetUpdate(true);
+            currentSequence.AppendInterval(delayBeforeStart);
+            currentSequence.AppendCallback(() =>
+            {
+                CreateLoopSequence();
+            });
         }
 
         public override void Stop()
@@ -55,6 +66,17 @@ namespace NamPhuThuy.AnimateWithScripts
         #endregion
 
         #region Private Methods
+        
+        private void CreateLoopSequence()
+        {
+            currentSequence?.Kill();
+            
+            currentSequence = DOTween.Sequence();
+            currentSequence.Append(transform.DOScale(targetScale, time).SetEase(Ease.InOutSine));
+            currentSequence.Append(transform.DOScale(originalScale, time2).SetEase(Ease.InOutSine));
+            currentSequence.AppendInterval(delayBetweenLoops);
+            currentSequence.SetLoops(-1).SetUpdate(true);
+        }
 
         #endregion
     }
