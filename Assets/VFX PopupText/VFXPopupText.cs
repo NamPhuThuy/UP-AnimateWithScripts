@@ -31,6 +31,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private Sequence _seq;
         private Vector2 _basePos;
 
+        #region MonoBehaviour Callbacks
+
         void Awake()
         {
             if (!_canvasGroup) _canvasGroup = GetComponent<CanvasGroup>();
@@ -51,6 +53,11 @@ namespace NamPhuThuy.AnimateWithScripts
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
         }
+        
+
+        #endregion
+
+        #region Override Methods
 
         public override void Play<T>(T args)
         {
@@ -75,7 +82,9 @@ namespace NamPhuThuy.AnimateWithScripts
                 throw new ArgumentException("Invalid argument type for VFXPopupText");
             }
         }
+        
 
+        #endregion
         private void PlayPopupText(PopupTextArgs args)
         {
             KillTweens();
@@ -126,5 +135,10 @@ namespace NamPhuThuy.AnimateWithScripts
             messageText.text = message;
             moreSetup?.Invoke();
         }
+    }
+
+    public static class VFXPopupTextMessage
+    {
+        public const string NO_PICTURE = "No Picture";
     }
 }

@@ -22,5 +22,6 @@ namespace NamPhuThuy.AnimateWithScripts
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newHeight);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newHeight * aspect);
         }
+        
     }
 }
