@@ -69,6 +69,8 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 throw new ArgumentException("Invalid argument type for VFXPopupText");
             }
+            
+           
         }
 
         public override void Play(object args)
@@ -81,6 +83,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 throw new ArgumentException("Invalid argument type for VFXPopupText");
             }
+            
         }
         
 
@@ -89,6 +92,11 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             KillTweens();
 
+            if (args.font != null)
+            {
+                messageText.font = args.font; // ✅ Apply custom font
+            }
+            
             SetContent(args.message, args.onComplete);
             SetRandomColor();
             gameObject.SetActive(true);
@@ -102,7 +110,9 @@ namespace NamPhuThuy.AnimateWithScripts
 
             _seq.Append(_rectTransform.DOScale(1.1f, 0.7f * _inDuration).SetEase(_inEase));
             _seq.Append(_rectTransform.DOScale(1f, 0.3f * _inDuration).SetEase(_inEase));
+            
             if (_holdDuration > 0f) _seq.AppendInterval(_holdDuration);
+            
             _seq.Append(_rectTransform.DOAnchorPosY(_basePos.y + _upDistance, _upDuration).SetEase(_upEase));
             _seq.Append(_rectTransform.DOScale(1.1f, 0.3f * _downFadeDuration).SetEase(_downEase));
             _seq.Join(_canvasGroup.DOFade(0f, 0.7f * _downFadeDuration));
@@ -115,19 +125,20 @@ namespace NamPhuThuy.AnimateWithScripts
                 _canvasGroup.alpha = 0f;
                 args.onComplete?.Invoke();
             });
+            
+            StartAutoReturn(args.duration + 0.5f);
         }
 
         private void SetRandomColor()
         {
             var colorPairs = ColorHelper.RandomContrastColorPair();
             backImage.color = colorPairs.Key;
-            messageText.color = colorPairs.Value;
+            // messageText.color = colorPairs.Value;
         }
 
         public void SetContent(string message)
         {
             messageText.text = message;
-            // messageText.GetComponent<LeanLocalizedTextMeshProUGUI>().TranslationName = message; // either enable this line or enable above line (use 1 only)
         }
 
         public void SetContent(string message, Action moreSetup)

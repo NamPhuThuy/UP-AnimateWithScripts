@@ -26,6 +26,7 @@ namespace NamPhuThuy.AnimateWithScripts
         protected readonly List<Tween> tweens = new();
         [SerializeField] protected bool isPlaying;
         
+        
         #endregion
 
         #region Private Fields
@@ -44,9 +45,16 @@ namespace NamPhuThuy.AnimateWithScripts
             tweens.Clear();
         }
         
+        private IEnumerator AutoReturnAfter(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            VFXManager.Ins.Release(this);
+        }
+        
         #endregion
 
         #region Public Methods
+        protected Coroutine _autoReturnCoroutine;
         
         // Generic play method that each VFX implements
         public abstract void Play<T>(T args) where T : struct, IVFXArguments;
@@ -71,8 +79,24 @@ namespace NamPhuThuy.AnimateWithScripts
             isPlaying = false;
             KillTweens();
             gameObject.SetActive(false);
+            
+            if (_autoReturnCoroutine != null)
+            {
+                StopCoroutine(_autoReturnCoroutine);
+                _autoReturnCoroutine = null;
+            }
         }
         
+        #endregion
+
+        #region Protected Methods
+
+        protected void StartAutoReturn(float duration)
+        {
+            if (_autoReturnCoroutine != null) StopCoroutine(_autoReturnCoroutine);
+            _autoReturnCoroutine = StartCoroutine(AutoReturnAfter(duration));
+        }
+
         #endregion
     }
 }

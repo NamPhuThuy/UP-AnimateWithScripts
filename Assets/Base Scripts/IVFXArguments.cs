@@ -3,6 +3,7 @@ Github: https://github.com/NamPhuThuy
 */
 
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
@@ -49,8 +50,11 @@ namespace NamPhuThuy.AnimateWithScripts
         public string message;
         public Vector3 worldPos;
         public Color color;
+        public Transform initialParent;
+        public TMP_FontAsset font; 
         public float duration;
         public System.Action onComplete;
+        
     }
     
     public struct StatChangeTextArgs : IVFXArguments

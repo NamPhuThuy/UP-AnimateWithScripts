@@ -107,7 +107,9 @@ namespace NamPhuThuy.AnimateWithScripts
                     vfx.transform.position = coinArgs.startPosition;
                     break;
                 case VFXType.POPUP_TEXT when args is PopupTextArgs popupArgs:
-                    vfx.transform.position = popupArgs.worldPos;
+                    // Set position currently doesn't work, the position is set default in the prefab
+                    // vfx.transform.position = popupArgs.worldPos;
+                    vfx.transform.SetParent(popupArgs.initialParent, worldPositionStays:false);
                     break;
                 // ... other cases
             }
@@ -129,6 +131,7 @@ namespace NamPhuThuy.AnimateWithScripts
         
             // Play with type-safe arguments
             vfx.Play(args);
+            
             return args;
         }
 
