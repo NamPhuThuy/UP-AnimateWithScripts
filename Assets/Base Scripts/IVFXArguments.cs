@@ -48,9 +48,9 @@ namespace NamPhuThuy.AnimateWithScripts
         public VFXType Type => VFXType.POPUP_TEXT;
         
         public string message;
-        public Vector3 worldPos;
+        public Vector3 customAnchoredPos;
+        public Transform customParent;
         public Color color;
-        public Transform initialParent;
         public TMP_FontAsset font; 
         public float duration;
         public System.Action onComplete;

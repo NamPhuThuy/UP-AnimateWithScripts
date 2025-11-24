@@ -94,7 +94,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
             if (args.font != null)
             {
-                messageText.font = args.font; // ✅ Apply custom font
+                messageText.font = args.font; // Apply custom font
             }
             
             SetContent(args.message, args.onComplete);
@@ -102,7 +102,21 @@ namespace NamPhuThuy.AnimateWithScripts
             gameObject.SetActive(true);
 
             _seq?.Kill(false);
-            _rectTransform.anchoredPosition = _basePos;
+
+            if (args.customParent != null)
+            {
+                transform.parent = args.customParent.transform;
+            }
+
+            if (args.customAnchoredPos != default)
+            {
+                SetAnchoredPos(args.customAnchoredPos);
+            }
+            else
+            {
+                SetAnchoredPos(_basePos);
+            }
+            
             _rectTransform.localScale = Vector3.zero;
             _canvasGroup.alpha = 1f;
 
@@ -136,6 +150,15 @@ namespace NamPhuThuy.AnimateWithScripts
             // messageText.color = colorPairs.Value;
         }
 
+
+        #region Getters
+
+        private void SetAnchoredPos(Vector2 anchoredPos)
+        {
+            _rectTransform.anchoredPosition = anchoredPos;
+        }
+
+        #endregion
         public void SetContent(string message)
         {
             messageText.text = message;

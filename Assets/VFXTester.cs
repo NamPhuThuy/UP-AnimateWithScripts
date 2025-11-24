@@ -89,7 +89,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var args = new PopupTextArgs {
                     message = "Hello!",
-                    worldPos = managerAnchoredPos,
+                    customAnchoredPos = managerAnchoredPos,
                     color = Color.white,
                     duration = 1f,
                     onComplete = null
