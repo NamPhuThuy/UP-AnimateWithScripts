@@ -101,7 +101,6 @@ namespace NamPhuThuy.AnimateWithScripts
         private void PositionVFX<T>(VFXBase vfx, T args) where T : struct, IVFXArguments
         {
             // Use pattern matching or switch on Type for positioning logic
-            DebugLogger.Log(message:$"type: {args.Type}");
             switch (args.Type)
             {
                 case VFXType.ITEM_FLY when args is ItemFlyArgs coinArgs:
