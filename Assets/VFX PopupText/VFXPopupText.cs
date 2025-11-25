@@ -30,6 +30,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private Sequence _seq;
         private Vector2 _basePos;
+        private string _fallbackText = "Watch out!";
 
         #region MonoBehaviour Callbacks
 
@@ -97,7 +98,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 messageText.font = args.font; // Apply custom font
             }
             
-            SetContent(args.message, args.onComplete);
+            SetContent(args.message);
             SetRandomColor();
             gameObject.SetActive(true);
 
@@ -143,24 +144,23 @@ namespace NamPhuThuy.AnimateWithScripts
             StartAutoReturn(args.duration + 0.5f);
         }
 
+        
+
+        #region Set Up
+
         private void SetRandomColor()
         {
             var colorPairs = ColorHelper.RandomContrastColorPair();
             backImage.color = colorPairs.Key;
             // messageText.color = colorPairs.Value;
         }
-
-
-        #region Getters
-
-        private void SetAnchoredPos(Vector2 anchoredPos)
-        {
-            _rectTransform.anchoredPosition = anchoredPos;
-        }
-
-        #endregion
+        
         public void SetContent(string message)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                message = _fallbackText;
+            }
             messageText.text = message;
         }
 
@@ -169,6 +169,20 @@ namespace NamPhuThuy.AnimateWithScripts
             messageText.text = message;
             moreSetup?.Invoke();
         }
+        
+        private void SetAnchoredPos(Vector2 anchoredPos)
+        {
+            _rectTransform.anchoredPosition = anchoredPos;
+        }
+
+        #endregion
+
+        #region Getters
+
+        
+
+        #endregion
+        
     }
 
     public static class VFXPopupTextMessage
