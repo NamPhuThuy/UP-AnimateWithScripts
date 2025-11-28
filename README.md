@@ -10,20 +10,9 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts">
+  <a href="https://github.com/NamPhuThuy/UPack-Animate-With-Scripts">
     <img src="images/avatar.png" alt="Logo" width="200">
   </a>
-
-<h3 align="center">README-Template</h3>
-
-  <p align="center">
-    <a href="https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts">View Demo</a>
-    ·
-    <a href="https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    ·
-    <a href="https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
-</div>
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -54,23 +43,19 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 This is the short description about the project. Technologies, tools be used 
  :smile:
 
-## To do
-- [ ] Change the package name into something like **Animate with Scripts**
-- [ ] Add more scripts (AutoRotate, AutoMoveBetween)
-- [ ] Add feature to change the setup for VFX/Animation (change the default font for VFXPopupText, add VFXPopupText.ChangeFont() API)
+### Features
 
+#### Item Fly
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+#### StatChangeText
 
+#### PopupText
 
 
 ### Built With
-Major frameworks/libraries used in project
 * [![Unity][Unity.com]][Unity-url]
 * [![CSharp][CSharp.com]][CSharp-url]
 
@@ -92,18 +77,7 @@ Instructions to setup this project locally.
 <!-- USAGE EXAMPLES -->
 ## Usage examples
 
-Some useful examples of how this project can be used (add screenshots, code examples, demo works, resource links..)
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Top contributors:
-
-<a href="https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=NamPhuThuy/Unity-Package-VFX-From-Scripts" alt="contrib.rocks image" />
-</a>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- CONTACT -->
 ## Contact
@@ -115,22 +89,18 @@ Some useful examples of how this project can be used (add screenshots, code exam
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/NamPhuThuy/Unity-Package-VFX-From-Scripts.svg?style=for-the-badge
-[contributors-url]: https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/NamPhuThuy/Unity-Package-VFX-From-Scripts.svg?style=for-the-badge
-[forks-url]: https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/network/members
-[stars-shield]: https://img.shields.io/github/stars/NamPhuThuy/Unity-Package-VFX-From-Scripts.svg?style=for-the-badge
-[stars-url]: https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/stargazers
-[issues-shield]: https://img.shields.io/github/issues/NamPhuThuy/Unity-Package-VFX-From-Scripts.svg?style=for-the-badge
-[issues-url]: https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/issues
-[license-shield]: https://img.shields.io/github/license/NamPhuThuy/Unity-Package-VFX-From-Scripts.svg?style=for-the-badge
-[license-url]: https://github.com/NamPhuThuy/Unity-Package-VFX-From-Scripts/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
+[contributors-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
+[forks-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/network/members
+[stars-shield]: https://img.shields.io/github/stars/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
+[stars-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/stargazers
+[issues-shield]: https://img.shields.io/github/issues/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
+[issues-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/issues
+[license-shield]: https://img.shields.io/github/license/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
+[license-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/blob/main/LICENSE
 
 <!-- Contact -->
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
