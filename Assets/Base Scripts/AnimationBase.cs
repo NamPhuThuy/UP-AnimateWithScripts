@@ -14,18 +14,15 @@ using UnityEditor;
 namespace NamPhuThuy.AnimateWithScripts
 {
     
-    public abstract class VFXBase : MonoBehaviour
+    public abstract class AnimationBase : MonoBehaviour
     {
         #region Private Serializable Fields
 
         [Header("Base")] 
-        [SerializeField] protected float showDuration = 0.25f;
-        [SerializeField] protected float lifeTime = 4.0f; // safety auto-release  
         [SerializeField] protected bool autoDisable = true; // return to pool when done  
 
         protected readonly List<Tween> tweens = new();
         [SerializeField] protected bool isPlaying;
-        
         
         #endregion
 
@@ -48,7 +45,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private IEnumerator AutoReturnAfter(float seconds)
         {
             yield return new WaitForSeconds(seconds);
-            VFXManager.Ins.Release(this);
+            AnimationManager.Ins.Release(this);
         }
         
         #endregion
@@ -57,7 +54,7 @@ namespace NamPhuThuy.AnimateWithScripts
         protected Coroutine _autoReturnCoroutine;
         
         // Generic play method that each VFX implements
-        public abstract void Play<T>(T args) where T : struct, IVFXArguments;
+        public abstract void Play<T>(T args) where T : struct, IAnimationArgs;
     
         // Or use object if you prefer runtime type checking
         public abstract void Play(object args);
@@ -69,7 +66,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
             KillTweens();
 
-            if (autoDisable) VFXManager.Ins.Release(this);
+            if (autoDisable) AnimationManager.Ins.Release(this);
             else gameObject.SetActive(false);
         }
         

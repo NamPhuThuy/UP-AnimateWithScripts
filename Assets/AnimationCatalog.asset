@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 489d55adf15de4a4d9973586c0a30e35, type: 3}
-  m_Name: VFXCatalog
+  m_Name: AnimationCatalog
   m_EditorClassIdentifier: 
   entries:
   - type: 1

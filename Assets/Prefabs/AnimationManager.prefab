@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2419984297241155700}
   - component: {fileID: 6844429010950890990}
   m_Layer: 0
-  m_Name: VFXManager
+  m_Name: AnimationManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ec2066f5b6b2546a9f5b7ac1ad36a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.VFXManager
-  vfxCatalog: {fileID: 11400000, guid: acfa961d03b4e4b4ebd7306479e380eb, type: 2}
+  animationCatalog: {fileID: 11400000, guid: acfa961d03b4e4b4ebd7306479e380eb, type: 2}
 --- !u!223 &2419984297241155700
 Canvas:
   m_ObjectHideFlags: 0

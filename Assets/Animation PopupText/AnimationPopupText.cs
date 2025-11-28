@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace NamPhuThuy.AnimateWithScripts
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class VFXPopupText : VFXBase
+    public class AnimationPopupText : AnimationBase
     {
         [Header("Components")]
         private CanvasGroup _canvasGroup;
@@ -30,7 +30,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private Sequence _seq;
         private Vector2 _basePos;
-        private string _fallbackText = "Watch out!";
+        private readonly string _fallbackText = "Watch out!";
 
         #region MonoBehaviour Callbacks
 
@@ -143,9 +143,7 @@ namespace NamPhuThuy.AnimateWithScripts
             
             StartAutoReturn(args.duration + 0.5f);
         }
-
         
-
         #region Set Up
 
         private void SetRandomColor()
@@ -183,10 +181,5 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #endregion
         
-    }
-
-    public static class VFXPopupTextMessage
-    {
-        public const string NO_PICTURE = "No Picture";
     }
 }

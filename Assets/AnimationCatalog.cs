@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public enum VFXType
+    public enum AnimationType
     {
         NONE = 0,
         POPUP_TEXT = 1,
@@ -22,14 +22,14 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
     [CreateAssetMenu(fileName = "VFXCatalog", menuName = "VFX/VFX Catalog")]
-    public class VFXCatalog : ScriptableObject
+    public class AnimationCatalog : ScriptableObject
     {
         public List<Entry> entries = new();
         
         [NonSerialized]
-        private Dictionary<VFXType, Entry> _dictTypeEntry;
+        private Dictionary<AnimationType, Entry> _dictTypeEntry;
 
-        public Dictionary<VFXType, Entry> DictTypeEntry
+        public Dictionary<AnimationType, Entry> DictTypeEntry
         {
             get
             {
@@ -53,7 +53,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (_dictTypeEntry != null) return;
 
-            _dictTypeEntry = new Dictionary<VFXType, Entry>(entries?.Count ?? 0);
+            _dictTypeEntry = new Dictionary<AnimationType, Entry>(entries?.Count ?? 0);
             if (entries == null) return;
 
             // Last write wins if duplicates exist
@@ -73,7 +73,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public void InvalidateIndex() => _dictTypeEntry = null;
         
         /// <summary>Get entry by type (null if missing).</summary>
-        public Entry GetEntry(VFXType type)
+        public Entry GetEntry(AnimationType type)
         {
             EnsureDict();
             if (_dictTypeEntry == null) return null;
@@ -82,7 +82,7 @@ namespace NamPhuThuy.AnimateWithScripts
         }
 
         /// <summary>Try-get pattern to avoid null checks.</summary>
-        public bool TryGetEntry(VFXType type, out Entry entry)
+        public bool TryGetEntry(AnimationType type, out Entry entry)
         {
             EnsureDict();
             if (_dictTypeEntry == null)
@@ -94,27 +94,27 @@ namespace NamPhuThuy.AnimateWithScripts
         }
         
         /// <summary>Does an entry exist for this type?</summary>
-        public bool IsContains(VFXType type)
+        public bool IsContains(AnimationType type)
         {
             EnsureDict();
             return _dictTypeEntry != null && _dictTypeEntry.ContainsKey(type);
         }
         
         /// <summary>Get the prefab for a VFX type (null if missing).</summary>
-        public VFXBase GetPrefab(VFXType type)
+        public AnimationBase GetPrefab(AnimationType type)
         {
             return GetEntry(type)?.prefab;
         }
         
         /// <summary>Get preload count (fallback if missing).</summary>
-        public int GetPreload(VFXType type, int fallback = 0)
+        public int GetPreload(AnimationType type, int fallback = 0)
         {
             var e = GetEntry(type);
             return e != null ? Mathf.Max(0, e.preload) : Mathf.Max(0, fallback);
         }
 
         /// <summary>Get safety auto-release seconds (fallback if missing).</summary>
-        public float GetSoftMaxAliveSeconds(VFXType type, float fallback = 10f)
+        public float GetSoftMaxAliveSeconds(AnimationType type, float fallback = 10f)
         {
             var e = GetEntry(type);
             return e != null ? Mathf.Max(0f, e.softMaxAliveSeconds) : Mathf.Max(0f, fallback);
@@ -125,8 +125,8 @@ namespace NamPhuThuy.AnimateWithScripts
         [Serializable]
         public class Entry
         {
-            public VFXType type;
-            public VFXBase prefab; 
+            public AnimationType type;
+            public AnimationBase prefab; 
             [Min(0)] public int preload = 3;
             public float softMaxAliveSeconds = 10f; // safety auto-release
         }

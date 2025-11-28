@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6742332825487428674}
   - component: {fileID: 6670669583149072350}
   m_Layer: 5
-  m_Name: VFX ItemFly
+  m_Name: Animation ItemFly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

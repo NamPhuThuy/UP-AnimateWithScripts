@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class VFXScreenShake : VFXBase
+    public class AnimationScreenShake : AnimationBase
     {
         [SerializeField] private Camera targetCamera;
         
@@ -71,7 +71,7 @@ namespace NamPhuThuy.AnimateWithScripts
             else
             {
                 targetCamera.transform.localPosition = originalPosition;
-                VFXManager.Ins.Release(this);
+                AnimationManager.Ins.Release(this);
             }
         }
     }

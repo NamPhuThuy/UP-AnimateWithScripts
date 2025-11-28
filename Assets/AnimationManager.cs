@@ -7,31 +7,18 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public struct VFXHandle
-    {
-        public VFXType type;
-        public GameObject go;
-        internal float dieAt;
-        public bool IsValid => go != null;
-        public void Stop() { if (go) go.SetActive(false); } // immediate release
-    }
-
     [DefaultExecutionOrder(-50)]
-    public class VFXManager : Singleton<VFXManager>
+    public class AnimationManager : Singleton<AnimationManager>
     {
-        [SerializeField] private VFXCatalog vfxCatalog;
+        [SerializeField] private AnimationCatalog animationCatalog;
         
         // type -> pooled objects
-        private readonly Dictionary<VFXType, Queue<VFXBase>> _pool = new();
-        private readonly Dictionary<VFXBase, VFXType> _reverse = new();
+        private readonly Dictionary<AnimationType, Queue<AnimationBase>> _pool = new();
+        private readonly Dictionary<AnimationBase, AnimationType> _reverse = new();
         
-        
-        // active instances (for timeout cleanup)
-        private readonly List<VFXHandle> _active = new();
-
         #region MonoBehaviour Callbacks
 
-        private void Awake()
+        protected override void Awake()
         {
             base.Awake();
             PreloadAll();
@@ -45,17 +32,17 @@ namespace NamPhuThuy.AnimateWithScripts
 
         void PreloadAll()
         {
-            if (!vfxCatalog) return;
-            foreach (var e in vfxCatalog.entries)
+            if (!animationCatalog) return;
+            foreach (var e in animationCatalog.entries)
                 Preload(e.type, e.preload);
         }
 
-        public void Preload(VFXType type, int count)
+        public void Preload(AnimationType type, int count)
         {
-            var entry = vfxCatalog.GetEntry(type);
+            var entry = animationCatalog.GetEntry(type);
             if (entry == null || !entry.prefab) return;
 
-            if (!_pool.ContainsKey(type)) _pool[type] = new Queue<VFXBase>();
+            if (!_pool.ContainsKey(type)) _pool[type] = new Queue<AnimationBase>();
             var q = _pool[type];
 
             while (q.Count < count)
@@ -68,12 +55,12 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
 
-        private VFXBase Get(VFXType type)
+        private AnimationBase Get(AnimationType type)
         {
-            if (!_pool.TryGetValue(type, out var q)) { q = new Queue<VFXBase>(); _pool[type] = q; }
+            if (!_pool.TryGetValue(type, out var q)) { q = new Queue<AnimationBase>(); _pool[type] = q; }
             if (q.Count > 0) return q.Dequeue();
 
-            var entry = vfxCatalog.GetEntry(type);
+            var entry = animationCatalog.GetEntry(type);
             if (entry == null || !entry.prefab)
             {
                 DebugLogger.LogWarning($"Missing VFX prefab for {type}"); 
@@ -85,28 +72,28 @@ namespace NamPhuThuy.AnimateWithScripts
             return inst;
         }
         
-        public void Release(VFXBase vfx)
+        public void Release(AnimationBase animation)
         {
-            if (!vfx) return;
-            if (!_reverse.TryGetValue(vfx, out var type)) return;
+            if (!animation) return;
+            if (!_reverse.TryGetValue(animation, out var type)) return;
 
-            vfx.StopImmediate();
-            vfx.transform.SetParent(transform, false);
-            vfx.gameObject.SetActive(false);
-            _pool[type].Enqueue(vfx);
+            animation.StopImmediate();
+            animation.transform.SetParent(transform, false);
+            animation.gameObject.SetActive(false);
+            _pool[type].Enqueue(animation);
         }
 
         #region Private Methods
         
-        private void PositionVFX<T>(VFXBase vfx, T args) where T : struct, IVFXArguments
+        private void PositionVFX<T>(AnimationBase animation, T args) where T : struct, IAnimationArgs
         {
             // Use pattern matching or switch on Type for positioning logic
             switch (args.Type)
             {
-                case VFXType.ITEM_FLY when args is ItemFlyArgs coinArgs:
-                    vfx.transform.position = coinArgs.startPosition;
+                case AnimationType.ITEM_FLY when args is ItemFlyArgs coinArgs:
+                    animation.transform.position = coinArgs.startPosition;
                     break;
-                case VFXType.POPUP_TEXT when args is PopupTextArgs popupArgs:
+                case AnimationType.POPUP_TEXT when args is PopupTextArgs popupArgs:
                     // positioning in the VFXPopupText.cs itself
                     break;
                 // ... other cases
@@ -119,7 +106,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region Public Methods
         
-        public T Play<T>(T args) where T : struct, IVFXArguments
+        public T Play<T>(T args) where T : struct, IAnimationArgs
         {
             var vfx = Get(args.Type);
             if (!vfx) return args;

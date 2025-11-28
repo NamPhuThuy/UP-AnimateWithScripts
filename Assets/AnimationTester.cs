@@ -12,7 +12,7 @@ using UnityEditor;
 namespace NamPhuThuy.AnimateWithScripts
 {
     
-    public class VFXTester : MonoBehaviour
+    public class AnimationTester : MonoBehaviour
     {
         #region Private Serializable Fields
         
@@ -29,14 +29,14 @@ namespace NamPhuThuy.AnimateWithScripts
 
 #if UNITY_EDITOR
     
-    [CustomEditor(typeof(VFXTester))]
+    [CustomEditor(typeof(AnimationTester))]
     public class VFXTesterEditor : Editor
     {
-        private VFXTester _script;
+        private AnimationTester _script;
         private Texture2D frogIcon;
         
         
-        private VFXType selectedVFXType = VFXType.NONE;
+        private AnimationType _selectedAnimationType = AnimationType.NONE;
         private Vector3 testPosition = Vector3.zero;
         private int testAmount = 100;
         private string testMessage = "Test Message";
@@ -44,10 +44,13 @@ namespace NamPhuThuy.AnimateWithScripts
         private Vector2 managerAnchoredPos = Vector2.zero;
         
         private bool isUseVFXManagerPos = false;
+
+        #region Callbacks
+
         private void OnEnable()
         {
-            _script = (VFXTester)target;
-            managerAnchoredPos = VFXManager.Ins.GetComponent<RectTransform>().anchoredPosition;
+            _script = (AnimationTester)target;
+            managerAnchoredPos = AnimationManager.Ins.GetComponent<RectTransform>().anchoredPosition;
             frogIcon = Resources.Load<Texture2D>("frog");
         }
 
@@ -61,7 +64,7 @@ namespace NamPhuThuy.AnimateWithScripts
             EditorGUILayout.LabelField("VFX Testing", EditorStyles.boldLabel);
 
             // VFX Type selection
-            selectedVFXType = (VFXType)EditorGUILayout.EnumPopup("VFX Type", selectedVFXType);
+            _selectedAnimationType = (AnimationType)EditorGUILayout.EnumPopup("VFX Type", _selectedAnimationType);
 
             // Test parameters
             testPosition = EditorGUILayout.Vector3Field("Position", testPosition);
@@ -81,6 +84,8 @@ namespace NamPhuThuy.AnimateWithScripts
             EditorGUILayout.Space(5);
         }
 
+        #endregion
+
         #region VFX-Buttons
 
         private void ButtonPlayPopupText()
@@ -94,7 +99,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     duration = 1f,
                     onComplete = null
                 };
-                VFXManager.Ins.Play<PopupTextArgs>(args);
+                AnimationManager.Ins.Play<PopupTextArgs>(args);
             }
             
         }
@@ -110,7 +115,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     amount = testAmount,
                     prevValue = 0,
                     target = coinText.transform,
-                    startPosition = VFXManager.Ins.transform.position,
+                    startPosition = AnimationManager.Ins.transform.position,
                     targetInteractTransform = coinPanel.transform, // For positioning the target
                     itemAmount = _script.itemAmount,
                     itemSprite = _script.itemSprites[_script.itemSpriteIndex],
@@ -118,7 +123,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     onComplete = () => Debug.Log("Animation complete!")
                 };
                 
-                VFXManager.Ins.Play(args);
+                AnimationManager.Ins.Play(args);
             }
 
             void TurnOnStatChangeVFX(Transform coinText)
@@ -132,7 +137,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     onComplete = null
                 };
                 
-                VFXManager.Ins.Play(args);
+                AnimationManager.Ins.Play(args);
             }
         }
         
@@ -152,7 +157,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     onComplete = null
                 };
                 
-                VFXManager.Ins.Play(args);
+                AnimationManager.Ins.Play(args);
             }
         }
 
@@ -160,7 +165,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (GUILayout.Button(new GUIContent("Play Screen Shake", frogIcon)))
             {
-                VFXManager.Ins.Play(new ScreenShakeArgs
+                AnimationManager.Ins.Play(new ScreenShakeArgs
                 {
                     intensity = 0.5f,
                     duration = 0.3f,

@@ -8,16 +8,16 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public interface IVFXArguments
+    public interface IAnimationArgs
     {
-        VFXType Type { get; }
+        AnimationType Type { get; }
         
        
     }
     
-    public struct ItemFlyArgs : IVFXArguments
+    public struct ItemFlyArgs : IAnimationArgs
     {
-        public VFXType Type => VFXType.ITEM_FLY;
+        public AnimationType Type => AnimationType.ITEM_FLY;
         
         public int amount;
         public int prevValue;
@@ -43,9 +43,9 @@ namespace NamPhuThuy.AnimateWithScripts
         }*/
     }
     
-    public struct PopupTextArgs : IVFXArguments
+    public struct PopupTextArgs : IAnimationArgs
     {
-        public VFXType Type => VFXType.POPUP_TEXT;
+        public AnimationType Type => AnimationType.POPUP_TEXT;
         
         public string message;
         public Vector3 customAnchoredPos;
@@ -57,9 +57,9 @@ namespace NamPhuThuy.AnimateWithScripts
         
     }
     
-    public struct StatChangeTextArgs : IVFXArguments
+    public struct StatChangeTextArgs : IAnimationArgs
     {
-        public VFXType Type => VFXType.STAT_CHANGE_TEXT;
+        public AnimationType Type => AnimationType.STAT_CHANGE_TEXT;
         public int amount;
         public Color color;
         public Vector2 offset;
@@ -68,9 +68,9 @@ namespace NamPhuThuy.AnimateWithScripts
         public System.Action onComplete;
     }
     
-    public struct ScreenShakeArgs : IVFXArguments
+    public struct ScreenShakeArgs : IAnimationArgs
     {
-        public VFXType Type => VFXType.SCREEN_SHAKE;
+        public AnimationType Type => AnimationType.SCREEN_SHAKE;
         public float intensity;
         public float duration;
         public AnimationCurve shakeCurve;
