@@ -6,14 +6,6 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/NamPhuThuy/UPack-Animate-With-Scripts">
-    <img src="images/avatar.png" alt="Logo" width="200">
-  </a>
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
