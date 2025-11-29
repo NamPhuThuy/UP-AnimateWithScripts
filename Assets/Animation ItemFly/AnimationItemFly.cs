@@ -249,8 +249,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 _currentArgs.onItemInteract?.Invoke();
                 ApllyPunchEffect();
                 UpdateFakeResourceText();
-                
-                
 
                 reward.gameObject.SetActive(false);
             }));
