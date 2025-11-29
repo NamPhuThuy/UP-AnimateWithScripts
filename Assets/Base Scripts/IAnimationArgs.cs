@@ -22,6 +22,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public int amount;
         public int prevValue;
         public int itemAmount;
+        public float delayBetweenItems;
         public Transform target;
         public Transform targetInteractTransform;
         public Sprite itemSprite;

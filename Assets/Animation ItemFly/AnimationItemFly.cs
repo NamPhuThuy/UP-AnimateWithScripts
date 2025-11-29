@@ -63,6 +63,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private float _spawnStepDelay;
         private ItemFlyArgs _currentArgs;
         
+        private bool isHaveRealText => realResourceText != null;
+        
         
         private Transform _initTextParent;
         #endregion
@@ -112,8 +114,12 @@ namespace NamPhuThuy.AnimateWithScripts
         
             totalAmount = _currentArgs.amount;
             prevValue = _currentArgs.prevValue;
+
+            if (!Mathf.Approximately(_currentArgs.delayBetweenItems, 0))
+            {
+                pathDuration = _currentArgs.delayBetweenItems;
+            }
             
-            _activeItemCount = Mathf.Max(1, _currentArgs.itemAmount);
             _activeItemCount = Mathf.Max(1, _currentArgs.itemAmount > 0 ? _currentArgs.itemAmount : _initialPoolSize);
             EnsurePool(_activeItemCount);
 
@@ -162,9 +168,13 @@ namespace NamPhuThuy.AnimateWithScripts
 
             AutoFindResourceDisplay();
 
-            realResourceText.gameObject.SetActive(false);
-            fakeResourceText.gameObject.SetActive(true);
-            fakeResourceText.text = prevValue.ToString();
+            if (isHaveRealText)
+            {
+                realResourceText.gameObject.SetActive(false);
+                fakeResourceText.gameObject.SetActive(true);
+                fakeResourceText.text = prevValue.ToString();
+            }
+            
 
             for (int i = 0; i < _activeItemCount; i++)
             {
@@ -220,22 +230,27 @@ namespace NamPhuThuy.AnimateWithScripts
             seq.Append(reward.transform.DOPath(path, pathDuration, PathType.CatmullRom).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 _remainingItems--;
-
+                DebugLogger.Log(message:$"remain Items: {_remainingItems}");
+                
                 if (_remainingItems <= 0)
                 {
-                    realResourceText.gameObject.SetActive(true);
-                    fakeResourceText.gameObject.SetActive(false);
-                    fakeResourceText.transform.SetParent(transform);
-                    realResourceText.text = $"{prevValue + totalAmount}";
+                    if (isHaveRealText)
+                    {
+                        realResourceText.gameObject.SetActive(true);
+                        fakeResourceText.gameObject.SetActive(false);
+                        fakeResourceText.transform.SetParent(transform);
+                        realResourceText.text = $"{prevValue + totalAmount}";
+                    }
                     
                     // NEW
                     _currentArgs.onComplete?.Invoke();
                 }
-                else
-                {
-                    _currentArgs.onItemInteract?.Invoke();
-                    UpdateFakeResourceText();
-                }
+                
+                _currentArgs.onItemInteract?.Invoke();
+                ApllyPunchEffect();
+                UpdateFakeResourceText();
+                
+                
 
                 reward.gameObject.SetActive(false);
             }));
@@ -243,17 +258,21 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void UpdateFakeResourceText()
         {
+            if (isHaveRealText)
+                fakeResourceText.text = $"{prevValue + totalAmount - _remainingItems * _unitValue}";
+        }
+
+        private void ApllyPunchEffect()
+        {
+            DebugLogger.Log();
             if (_shakeFakeResourceTextTween != null && _shakeFakeResourceTextTween.IsActive())
             {
                 _shakeFakeResourceTextTween.Kill();
             }
-
             targetInteractTransform.localScale = Vector3.one;
-
+            
             _shakeFakeResourceTextTween = targetInteractTransform
                 .DOPunchScale(0.15f * Vector3.one, 0.3f);
-
-            fakeResourceText.text = $"{prevValue + totalAmount - _remainingItems * _unitValue}";
         }
 
         private enum CurveType
@@ -325,7 +344,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void AutoFindResourceDisplay()
         {
-            if (realResourceText == null) return;
+            if (!isHaveRealText) return;
     
             fakeResourceText.CopyProperties(realResourceText);
             fakeResourceText.transform.SetParent(realResourceText.transform.parent);
