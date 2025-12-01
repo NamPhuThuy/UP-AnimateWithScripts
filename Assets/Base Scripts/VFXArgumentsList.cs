@@ -1,5 +1,0 @@
-namespace NamPhuThuy.AnimateWithScripts
-{
-    
-    
-}
