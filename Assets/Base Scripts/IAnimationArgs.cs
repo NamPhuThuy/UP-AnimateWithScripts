@@ -19,7 +19,10 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         public AnimationType Type => AnimationType.ITEM_FLY;
         
-        public int amount;
+        [Tooltip("The value to add to the preValue")]
+        public int addValue;
+        
+        [Tooltip("The value before adding")]
         public int prevValue;
         public int itemAmount;
         public float delayBetweenItems;

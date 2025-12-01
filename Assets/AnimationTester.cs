@@ -112,7 +112,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 var coinText = _script.coinText.transform;
                 
                 var args = new ItemFlyArgs {
-                    amount = testAmount,
+                    addValue = testAmount,
                     prevValue = 0,
                     target = coinText.transform,
                     startPosition = AnimationManager.Ins.transform.position,

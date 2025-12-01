@@ -63,7 +63,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private float _spawnStepDelay;
         private ItemFlyArgs _currentArgs;
         
-        private bool isHaveRealText => realResourceText != null;
+        private bool IsHaveRealText => realResourceText != null;
         
         
         private Transform _initTextParent;
@@ -83,9 +83,9 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public override void Play<T>(T args)
         {
-            if (args is ItemFlyArgs coinArgs)
+            if (args is ItemFlyArgs itemFlyArgs)
             {
-                _currentArgs = coinArgs;
+                _currentArgs = itemFlyArgs;
                 gameObject.SetActive(true);
                 SetValues();
                 KillTweens();
@@ -105,14 +105,16 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void SetValues()
         {
+            // COMPONENTS
             realResourceText = _currentArgs.target.GetComponent<TextMeshProUGUI>();
+            targetInteractTransform = _currentArgs.targetInteractTransform ? _currentArgs.targetInteractTransform : null;
+            itemSprite = _currentArgs.itemSprite ?? itemSprite;
+            
+            
             targetPosition = _currentArgs.targetInteractTransform ? _currentArgs.targetInteractTransform.transform.position : _currentArgs.target.position;
             
-            targetInteractTransform = _currentArgs.targetInteractTransform ? _currentArgs.targetInteractTransform : null;
-            
-            itemSprite = _currentArgs.itemSprite ?? itemSprite;
-        
-            totalAmount = _currentArgs.amount;
+            // VALUES
+            totalAmount = _currentArgs.addValue;
             prevValue = _currentArgs.prevValue;
 
             if (!Mathf.Approximately(_currentArgs.delayBetweenItems, 0))
@@ -121,8 +123,6 @@ namespace NamPhuThuy.AnimateWithScripts
             }
             
             _activeItemCount = Mathf.Max(1, _currentArgs.itemAmount > 0 ? _currentArgs.itemAmount : _initialPoolSize);
-            EnsurePool(_activeItemCount);
-
             _remainingItems = _activeItemCount;
             _unitValue = totalAmount / _initialPoolSize;
             
@@ -131,6 +131,9 @@ namespace NamPhuThuy.AnimateWithScripts
             _spawnStepDelay = (_activeItemCount > 1) ? spacingBudget / (_activeItemCount - 1) : 0f;
             
             transform.position = _currentArgs.startPosition;
+            Debug.Log(message:$"start posi: {_currentArgs.startPosition}");
+            
+            EnsurePool(_activeItemCount);
         }
         
         private void CreatePool()
@@ -168,7 +171,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
             AutoFindResourceDisplay();
 
-            if (isHaveRealText)
+            if (IsHaveRealText)
             {
                 realResourceText.gameObject.SetActive(false);
                 fakeResourceText.gameObject.SetActive(true);
@@ -234,7 +237,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 
                 if (_remainingItems <= 0)
                 {
-                    if (isHaveRealText)
+                    if (IsHaveRealText)
                     {
                         realResourceText.gameObject.SetActive(true);
                         fakeResourceText.gameObject.SetActive(false);
@@ -256,7 +259,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void UpdateFakeResourceText()
         {
-            if (isHaveRealText)
+            if (IsHaveRealText)
                 fakeResourceText.text = $"{prevValue + totalAmount - _remainingItems * _unitValue}";
         }
 
@@ -342,7 +345,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void AutoFindResourceDisplay()
         {
-            if (!isHaveRealText) return;
+            if (!IsHaveRealText) return;
     
             fakeResourceText.CopyProperties(realResourceText);
             fakeResourceText.transform.SetParent(realResourceText.transform.parent);
