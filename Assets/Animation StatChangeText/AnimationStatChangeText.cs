@@ -43,21 +43,8 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
 
-        private void SetValues()
-        {
-            moveDistance = _currentArgs.moveDistance;
-            targetText = _currentArgs.initialParent.GetComponent<TextMeshProUGUI>();
-        }
-
-        private Vector3 GetRandomPos(float range)
-        {
-            return new Vector3(
-                UnityEngine.Random.Range(-range, range),
-                UnityEngine.Random.Range(-range, range),
-                0f
-            );
-        }
-
+        #region Override Methods
+        
         public override void Play<T>(T args)
         {
             if (args is StatChangeTextArgs statArgs)
@@ -70,11 +57,25 @@ namespace NamPhuThuy.AnimateWithScripts
                 throw new ArgumentException("Invalid argument type for VFXStatChangeText");
             }
         }
-
-        public override void Play(object args)
+        
+        protected override void SetValues()
         {
-            throw new NotImplementedException();
+            moveDistance = _currentArgs.moveDistance;
+            targetText = _currentArgs.initialParent.GetComponent<TextMeshProUGUI>();
         }
+
+        #endregion
+
+        private Vector3 GetRandomPos(float range)
+        {
+            return new Vector3(
+                UnityEngine.Random.Range(-range, range),
+                UnityEngine.Random.Range(-range, range),
+                0f
+            );
+        }
+
+        
 
         private void PlayStatChangeText()
         {
@@ -110,7 +111,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 gameObject.SetActive(false);
                 transform.SetParent(_initialParent, true);
-                _currentArgs.onComplete?.Invoke();
+                _currentArgs.OnComplete?.Invoke();
             });
         }
     }

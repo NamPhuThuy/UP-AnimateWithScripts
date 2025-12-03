@@ -26,14 +26,6 @@ namespace NamPhuThuy.AnimateWithScripts
         
         #endregion
 
-        #region Private Fields
-
-        #endregion
-
-        #region MonoBehaviour Callbacks
-
-        #endregion
-
         #region Private Methods
         
         protected void KillTweens()
@@ -50,14 +42,19 @@ namespace NamPhuThuy.AnimateWithScripts
         
         #endregion
 
+        #region Abstract Methods
+
+        // Generic play method that each VFX implements
+        public abstract void Play<T>(T args) where T : struct, IAnimationArgs;
+
+        protected abstract void SetValues();
+
+        #endregion
+
         #region Public Methods
         protected Coroutine _autoReturnCoroutine;
         
-        // Generic play method that each VFX implements
-        public abstract void Play<T>(T args) where T : struct, IAnimationArgs;
-    
-        // Or use object if you prefer runtime type checking
-        public abstract void Play(object args);
+       
 
         public void Complete()
         {

@@ -25,7 +25,6 @@ namespace NamPhuThuy.AnimateWithScripts
         private const float SIZE_RANDOM_MIN = 1.1f;
         private const float SIZE_RANDOM_MAX = 1.3f;
 
-
         [Header("Stats")]
         
         [SerializeField] private Vector3 targetPosition;
@@ -92,18 +91,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 StartCoroutine(TriggerCollectAnim());
             }
         }
-        
-        public override void Play(object args)
-        {
-            throw new NotImplementedException();
-        }
-        
 
         #endregion
 
         #region Set up
 
-        private void SetValues()
+        protected override void SetValues()
         {
             // COMPONENTS
             realResourceText = _currentArgs.target.GetComponent<TextMeshProUGUI>();
@@ -245,8 +238,7 @@ namespace NamPhuThuy.AnimateWithScripts
                         realResourceText.text = $"{prevValue + totalAmount}";
                     }
                     
-                    // NEW
-                    _currentArgs.onComplete?.Invoke();
+                    _currentArgs.OnComplete?.Invoke();
                 }
                 
                 _currentArgs.onItemInteract?.Invoke();

@@ -2,7 +2,9 @@
 Github: https://github.com/NamPhuThuy
 */
 
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
@@ -15,13 +17,19 @@ namespace NamPhuThuy.AnimateWithScripts
         private float shakeDuration;
         private float shakeIntensity;
         private AnimationCurve shakeCurve;
-        
+
+        #region MonoBehaviour Callbacks
+
         private void Start()
         {
             if (!targetCamera)
                 targetCamera = Camera.main;
         }
         
+
+        #endregion
+        #region Override Methods
+
         public override void Play<T>(T args)
         {
             if (args is ScreenShakeArgs shakeArgs)
@@ -39,10 +47,12 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
 
-        public override void Play(object args)
+        protected override void SetValues()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
+
+        #endregion
 
         public void StopImmediate()
         {
