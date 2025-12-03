@@ -43,6 +43,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public string message;
         public Vector3 customAnchoredPos;
         public Transform customParent;
+        public float customScale;
         public Color textColor;
         public TMP_FontAsset textFont; 
         public float duration;

@@ -99,6 +99,19 @@ namespace NamPhuThuy.AnimateWithScripts
                 SetAnchoredPos(_basePos);
             }
             
+            if (!Mathf.Approximately(_currentArgs.customScale, 0f))
+            {
+                backImage.rectTransform.localScale = Vector3.one * _currentArgs.customScale;
+                messageText.rectTransform.localScale = Vector3.one * _currentArgs.customScale;
+                DebugLogger.Log(message:$"use custom");
+            }
+            else
+            {
+                backImage.rectTransform.localScale = Vector3.one;
+                messageText.rectTransform.localScale = Vector3.one;
+                DebugLogger.Log(message:$"dont use custom");
+            }
+            
             SetContent(_currentArgs.message);
             SetRandomColor();
         }

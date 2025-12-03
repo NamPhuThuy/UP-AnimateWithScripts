@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace NamPhuThuy.AnimateWithScripts
     public static class DebugLogger
     {
         public static bool enableLog = true;
-        public static readonly Color defaultColor = Color.white;
+        public static readonly Color defaultColor = Color.cyan;
         public static readonly Color eventColor = Color.yellow;
         
 
@@ -94,6 +95,7 @@ namespace NamPhuThuy.AnimateWithScripts
             Debug.Log(ColorizedText($"{frameInfo} - {content}", color, setBold));
         }
         
+        static int limitChars = 12;
         public static void Log(
             [CallerLineNumber] int line = 0
             , [CallerMemberName] string memberName = ""
@@ -107,7 +109,12 @@ namespace NamPhuThuy.AnimateWithScripts
             string className = Path.GetFileNameWithoutExtension(filePath);
 
             Color currentColor = color == default ? Color.cyan : color;
-            string resMessage = $"{className}().{memberName}: {message}";
+            
+            
+            string classNameShort = className.Length > limitChars ? className.Substring(0, limitChars) : className;
+            string memberNameShort = memberName.Length > limitChars ? memberName.Substring(0, limitChars) : memberName;
+            
+            string resMessage = $"{classNameShort}().{memberNameShort}: {message}";
             
             Debug.Log(ColorizedText(resMessage, currentColor, setBold), context: context);
             
@@ -218,6 +225,56 @@ namespace NamPhuThuy.AnimateWithScripts
                 : $"EXCEPTION in {context}: {ex.Message}\nStackTrace: {ex.StackTrace}";
     
             Debug.LogError(ColorizedText(message, Color.red, true), contextObject);
+        }
+
+        #endregion
+
+        #region Data Structure Logging
+
+        
+        public static void LogDictionary(IDictionary dict, string title = "Dictionary", 
+            Color color = default, bool setBold = false, Object context = null)
+        {
+            if (!enableLog)
+                return;
+
+            if (dict == null)
+            {
+                LogWithoutHeader($"{title}: NULL dictionary", color, context, setBold);
+                return;
+            }
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"{title} (count={dict.Count}):");
+
+            foreach (DictionaryEntry entry in dict)
+            {
+                sb.AppendLine($"  {entry.Key} -> {entry.Value}");
+            }
+
+            LogWithoutHeader(sb.ToString(), color, context, setBold);
+        }
+        
+        public static void LogList(IList list, string title = "List", Color color = default, bool setBold = false, Object context = null)
+        {
+            if (!enableLog)
+                return;
+
+            if (list == null)
+            {
+                LogWithoutHeader($"{title}: NULL list", color, context, setBold);
+                return;
+            }
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"{title} (count={list.Count}):");
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                sb.AppendLine($"  [{i}] -> {list[i]}");
+            }
+
+            LogWithoutHeader(sb.ToString(), color, context, setBold);
         }
 
         #endregion
