@@ -12,7 +12,7 @@ namespace NamPhuThuy.AnimateWithScripts
         [Header("Components")]
         private CanvasGroup _canvasGroup;
         private RectTransform _rectTransform;
-        [SerializeField] TextMeshProUGUI messageText;
+        [SerializeField] private TextMeshProUGUI messageText;
         public TextMeshProUGUI MessageText => messageText;
         [SerializeField] private Image backImage;
 
@@ -31,6 +31,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private Sequence _seq;
         private Vector2 _basePos;
         private readonly string _fallbackText = "Watch out!";
+        private PopupTextArgs _currentArgs;
 
         #region MonoBehaviour Callbacks
 
@@ -54,7 +55,6 @@ namespace NamPhuThuy.AnimateWithScripts
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
         }
-        
 
         #endregion
 
@@ -64,60 +64,63 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (args is PopupTextArgs popupArgs)
             {
-                PlayPopupText(popupArgs);
+                _currentArgs = popupArgs;
+                gameObject.SetActive(true);
+                KillTweens();
+                
+                SetValues();
+                
+                PlayAnim();
             }
             else
             {
                 throw new ArgumentException("Invalid argument type for VFXPopupText");
             }
-            
-           
         }
 
-        public override void Play(object args)
+        protected override void SetValues()
         {
-            if (args is PopupTextArgs popupArgs)
+            if (_currentArgs.textFont != null)
             {
-                PlayPopupText(popupArgs);
-            }
-            else
-            {
-                throw new ArgumentException("Invalid argument type for VFXPopupText");
+                messageText.font = _currentArgs.textFont; // Apply custom font
             }
             
-        }
-        
-
-        #endregion
-        private void PlayPopupText(PopupTextArgs args)
-        {
-            KillTweens();
-
-            if (args.font != null)
+            if (_currentArgs.customParent != null)
             {
-                messageText.font = args.font; // Apply custom font
-            }
-            
-            SetContent(args.message);
-            SetRandomColor();
-            gameObject.SetActive(true);
-
-            _seq?.Kill(false);
-
-            if (args.customParent != null)
-            {
-                transform.parent = args.customParent.transform;
+                transform.parent = _currentArgs.customParent.transform;
             }
 
-            if (args.customAnchoredPos != default)
+            if (_currentArgs.customAnchoredPos != default)
             {
-                SetAnchoredPos(args.customAnchoredPos);
+                SetAnchoredPos(_currentArgs.customAnchoredPos);
             }
             else
             {
                 SetAnchoredPos(_basePos);
             }
             
+            if (!Mathf.Approximately(_currentArgs.customScale, 0f))
+            {
+                backImage.rectTransform.localScale = Vector3.one * _currentArgs.customScale;
+                messageText.rectTransform.localScale = Vector3.one * _currentArgs.customScale;
+                DebugLogger.Log(message:$"use custom");
+            }
+            else
+            {
+                backImage.rectTransform.localScale = Vector3.one;
+                messageText.rectTransform.localScale = Vector3.one;
+                DebugLogger.Log(message:$"dont use custom");
+            }
+            
+            SetContent(_currentArgs.message);
+            SetRandomColor();
+        }
+
+        #endregion
+        private void PlayAnim()
+        {
+            _seq?.Kill(false);
+           
             _rectTransform.localScale = Vector3.zero;
             _canvasGroup.alpha = 1f;
 
@@ -138,20 +141,13 @@ namespace NamPhuThuy.AnimateWithScripts
                 gameObject.SetActive(false);
                 _rectTransform.anchoredPosition = _basePos;
                 _canvasGroup.alpha = 0f;
-                args.onComplete?.Invoke();
+                _currentArgs.OnComplete?.Invoke();
             });
             
-            StartAutoReturn(args.duration + 0.5f);
+            StartAutoReturn(_currentArgs.duration + 0.5f);
         }
         
         #region Set Up
-
-        private void SetRandomColor()
-        {
-            var colorPairs = ColorHelper.RandomContrastColorPair();
-            backImage.color = colorPairs.Key;
-            // messageText.color = colorPairs.Value;
-        }
         
         public void SetContent(string message)
         {
@@ -167,7 +163,14 @@ namespace NamPhuThuy.AnimateWithScripts
             messageText.text = message;
             moreSetup?.Invoke();
         }
-        
+
+        private void SetRandomColor()
+        {
+            var colorPairs = ColorHelper.RandomContrastColorPair();
+            backImage.color = colorPairs.Key;
+            // messageText.color = colorPairs.Value;
+        }
+       
         private void SetAnchoredPos(Vector2 anchoredPos)
         {
             _rectTransform.anchoredPosition = anchoredPos;

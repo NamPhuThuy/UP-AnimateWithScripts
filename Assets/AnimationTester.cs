@@ -95,9 +95,8 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new PopupTextArgs {
                     message = "Hello!",
                     customAnchoredPos = managerAnchoredPos,
-                    color = Color.white,
+                    textColor = Color.white,
                     duration = 1f,
-                    onComplete = null
                 };
                 AnimationManager.Ins.Play<PopupTextArgs>(args);
             }
@@ -112,7 +111,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 var coinText = _script.coinText.transform;
                 
                 var args = new ItemFlyArgs {
-                    amount = testAmount,
+                    addValue = testAmount,
                     prevValue = 0,
                     target = coinText.transform,
                     startPosition = AnimationManager.Ins.transform.position,
@@ -120,7 +119,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     itemAmount = _script.itemAmount,
                     itemSprite = _script.itemSprites[_script.itemSpriteIndex],
                     onItemInteract = () => TurnOnStatChangeVFX(coinText),
-                    onComplete = () => Debug.Log("Animation complete!")
+                    OnComplete = () => Debug.Log("Animation complete!")
                 };
                 
                 AnimationManager.Ins.Play(args);
@@ -134,7 +133,6 @@ namespace NamPhuThuy.AnimateWithScripts
                     offset = Vector2.zero,
                     moveDistance = new Vector2(0f, 30f),
                     initialParent = coinText,
-                    onComplete = null
                 };
                 
                 AnimationManager.Ins.Play(args);
@@ -154,7 +152,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     offset = Vector2.zero,
                     moveDistance = new Vector2(0f, 30f),
                     initialParent = coinText,
-                    onComplete = null
+                    OnComplete = null
                 };
                 
                 AnimationManager.Ins.Play(args);
@@ -169,7 +167,8 @@ namespace NamPhuThuy.AnimateWithScripts
                 {
                     intensity = 0.5f,
                     duration = 0.3f,
-                    shakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0)
+                    shakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0),
+                    OnComplete = null
                 });
             }
         }

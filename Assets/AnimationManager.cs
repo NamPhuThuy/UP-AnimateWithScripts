@@ -83,39 +83,16 @@ namespace NamPhuThuy.AnimateWithScripts
             _pool[type].Enqueue(animation);
         }
 
-        #region Private Methods
-        
-        private void PositionVFX<T>(AnimationBase animation, T args) where T : struct, IAnimationArgs
-        {
-            // Use pattern matching or switch on Type for positioning logic
-            switch (args.Type)
-            {
-                case AnimationType.ITEM_FLY when args is ItemFlyArgs coinArgs:
-                    animation.transform.position = coinArgs.startPosition;
-                    break;
-                case AnimationType.POPUP_TEXT when args is PopupTextArgs popupArgs:
-                    // positioning in the VFXPopupText.cs itself
-                    break;
-                // ... other cases
-            }
-        }
-        
-
-        #endregion
-        
 
         #region Public Methods
         
         public T Play<T>(T args) where T : struct, IAnimationArgs
         {
-            var vfx = Get(args.Type);
-            if (!vfx) return args;
+            AnimationBase animationBase = Get(args.Type);
+            if (!animationBase) return args;
 
-            // Position the VFX based on argument type
-            PositionVFX(vfx, args);
-        
             // Play with type-safe arguments
-            vfx.Play(args);
+            animationBase.Play(args);
             
             return args;
         }
