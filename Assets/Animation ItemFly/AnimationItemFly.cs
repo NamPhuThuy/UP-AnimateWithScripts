@@ -316,8 +316,8 @@ namespace NamPhuThuy.AnimateWithScripts
                         y = (j % 2 == 0) ? 0.2f : 0.8f; // sharp zigzag
                         break;
                     case CurveType.CIRCULAR:
-                        y = 1 - Mathf.Sqrt(1 - x * x); // quarter circle*/
-                        break;
+                        y = 1 - Mathf.Sqrt(1 - x * x); // quarter circle
+                        break;*/
                 }
         
                 // Add some randomness to each point
