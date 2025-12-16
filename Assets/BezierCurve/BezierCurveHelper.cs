@@ -36,6 +36,29 @@ namespace NamPhuThuy.AnimateWithScripts
             float ttt = tt * t;
             return uuu * p0 + 3f * uu * t * p1 + 3f * u * tt * p2 + ttt * p3;
         }
+        
+        /* EXAMPLE USAGE:
+           Coroutine anim = BezierCurveHelper.AnimateQuadratic(
+                    runner: this,
+                    subject: food.transform,
+                    p0: startPos,
+                    p1: controlPoint,
+                    p2: endPos,
+                    duration: GamePlayConst.FOOD_TRANSFER_TIME,
+                    ease: BezierCurveHelper.EaseOutCubic,
+                    rotate: true,
+                    rotateEuler: new Vector3(0f, 0f, 360f),
+                    restoreRotation: true,
+                    onStart: null,
+                    onStep: null,
+                    onComplete: () =>
+                    {
+                        food.SetSortingLayer(SortingLayerConst.FOOD); 
+                        AudioManager.Ins.Play(AudioEnum.POP_SELECT);
+                        targetGrill.Push(food);
+                    }
+                );
+         */
 
         // --- Quadratic animation: explicit control point ---
         public static Coroutine AnimateQuadratic(
