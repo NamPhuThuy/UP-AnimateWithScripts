@@ -44,7 +44,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public Vector3 customAnchoredPos;
         public Transform customParent;
         public float customScale;
-        public Color textColor;
+        public Color textColor; // default is (0f, 0f, 0f, 0f)
         public TMP_FontAsset textFont; 
         public float duration;
     }

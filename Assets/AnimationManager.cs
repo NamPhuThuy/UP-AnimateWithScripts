@@ -3,6 +3,7 @@ Github: https://github.com/NamPhuThuy
 */
 
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
@@ -10,7 +11,11 @@ namespace NamPhuThuy.AnimateWithScripts
     [DefaultExecutionOrder(-50)]
     public class AnimationManager : Singleton<AnimationManager>
     {
+        [Header("Components")]
         [SerializeField] private AnimationCatalog animationCatalog;
+        
+        [SerializeField] private TMP_FontAsset defaultFont;
+        public TMP_FontAsset DefaultFont => defaultFont;
         
         // type -> pooled objects
         private readonly Dictionary<AnimationType, Queue<AnimationBase>> _pool = new();

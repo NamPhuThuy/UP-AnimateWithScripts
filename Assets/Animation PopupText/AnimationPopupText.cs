@@ -9,6 +9,9 @@ namespace NamPhuThuy.AnimateWithScripts
     [RequireComponent(typeof(CanvasGroup))]
     public class AnimationPopupText : AnimationBase
     {
+        [Header("Stats")] 
+        [SerializeField] private float duration = 1f;
+        
         [Header("Components")]
         private CanvasGroup _canvasGroup;
         private RectTransform _rectTransform;
@@ -84,11 +87,17 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 messageText.font = _currentArgs.textFont; // Apply custom font
             }
+            else
+            {
+                messageText.font = AnimationManager.Ins.DefaultFont;
+            }
             
             if (_currentArgs.customParent != null)
             {
                 transform.parent = _currentArgs.customParent.transform;
             }
+
+            duration = Mathf.Max(_currentArgs.duration, duration);
 
             if (_currentArgs.customAnchoredPos != default)
             {
@@ -114,6 +123,15 @@ namespace NamPhuThuy.AnimateWithScripts
             
             SetContent(_currentArgs.message);
             SetRandomColor();
+
+            if (_currentArgs.textColor != default) 
+            {
+                messageText.color = _currentArgs.textColor;
+            }
+            else
+            {
+                messageText.color = Color.white;
+            }
         }
 
         #endregion
@@ -144,7 +162,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 _currentArgs.OnComplete?.Invoke();
             });
             
-            StartAutoReturn(_currentArgs.duration + 0.5f);
+            StartAutoReturn(duration + 0.5f);
         }
         
         #region Set Up
