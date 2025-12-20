@@ -59,5 +59,11 @@ namespace NamPhuThuy.AnimateWithScripts
                 objTransform.gameObject.SetActive(false);
             });
         }
+        
+        public static Tween Wait1Second(Action onComplete) 
+        {
+            // DOTween: run `onComplete` after 1 second
+            return DOVirtual.DelayedCall(1f, () => onComplete?.Invoke(), ignoreTimeScale: false);
+        }
     }
 }
