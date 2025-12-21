@@ -26,20 +26,20 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void SetTextColor()
         {
-            if (_currentArgs.amount >= 0)
+            if (_currentArgs.Amount >= 0)
             {
-                text.text = $"+{_currentArgs.amount}";
+                text.text = $"+{_currentArgs.Amount}";
                 text.color = Color.green;
             }
             else
             {
-                text.text = $"{_currentArgs.amount}";
+                text.text = $"{_currentArgs.Amount}";
                 text.color = Color.red;
             }
 
-            if (_currentArgs.color != default)
+            if (_currentArgs.Color != default)
             {
-                text.color = _currentArgs.color;
+                text.color = _currentArgs.Color;
             }
         }
 
@@ -60,8 +60,8 @@ namespace NamPhuThuy.AnimateWithScripts
         
         protected override void SetValues()
         {
-            moveDistance = _currentArgs.moveDistance;
-            targetText = _currentArgs.initialParent.GetComponent<TextMeshProUGUI>();
+            moveDistance = _currentArgs.MoveDistance;
+            targetText = _currentArgs.InitialParent.GetComponent<TextMeshProUGUI>();
         }
 
         #endregion
@@ -92,7 +92,7 @@ namespace NamPhuThuy.AnimateWithScripts
             vfxRect.pivot = targetRect.pivot;
 
             Vector3 moreOffset = GetRandomPos(0.4f);
-            transform.position = targetText.transform.position + (Vector3)_currentArgs.offset + moreOffset;
+            transform.position = targetText.transform.position + (Vector3)_currentArgs.Offset + moreOffset;
 
             text.CopyProperties(targetText);
             text.fontSize *= textSizeMul;

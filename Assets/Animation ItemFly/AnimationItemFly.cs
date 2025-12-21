@@ -99,23 +99,23 @@ namespace NamPhuThuy.AnimateWithScripts
         protected override void SetValues()
         {
             // COMPONENTS
-            realResourceText = _currentArgs.target.GetComponent<TextMeshProUGUI>();
-            targetInteractTransform = _currentArgs.targetInteractTransform ? _currentArgs.targetInteractTransform : null;
-            itemSprite = _currentArgs.itemSprite ?? itemSprite;
+            realResourceText = _currentArgs.Target.GetComponent<TextMeshProUGUI>();
+            targetInteractTransform = _currentArgs.TargetInteractTransform ? _currentArgs.TargetInteractTransform : null;
+            itemSprite = _currentArgs.ItemSprite ?? itemSprite;
             
             
-            targetPosition = _currentArgs.targetInteractTransform ? _currentArgs.targetInteractTransform.transform.position : _currentArgs.target.position;
+            targetPosition = _currentArgs.TargetInteractTransform ? _currentArgs.TargetInteractTransform.transform.position : _currentArgs.Target.position;
             
             // VALUES
-            totalAmount = _currentArgs.addValue;
-            prevValue = _currentArgs.prevValue;
+            totalAmount = _currentArgs.AddValue;
+            prevValue = _currentArgs.PrevValue;
 
-            if (!Mathf.Approximately(_currentArgs.delayBetweenItems, 0))
+            if (!Mathf.Approximately(_currentArgs.DelayBetweenItems, 0))
             {
-                pathDuration = _currentArgs.delayBetweenItems;
+                pathDuration = _currentArgs.DelayBetweenItems;
             }
             
-            _activeItemCount = Mathf.Max(1, _currentArgs.itemAmount > 0 ? _currentArgs.itemAmount : _initialPoolSize);
+            _activeItemCount = Mathf.Max(1, _currentArgs.ItemAmount > 0 ? _currentArgs.ItemAmount : _initialPoolSize);
             _remainingItems = _activeItemCount;
             _unitValue = totalAmount / _initialPoolSize;
             
@@ -123,8 +123,8 @@ namespace NamPhuThuy.AnimateWithScripts
             float spacingBudget = Mathf.Max(0f, totalVfxDuration - INITIAL_DELAY - bounceDuration - pathDuration);
             _spawnStepDelay = (_activeItemCount > 1) ? spacingBudget / (_activeItemCount - 1) : 0f;
             
-            transform.position = _currentArgs.startPosition;
-            Debug.Log(message:$"start posi: {_currentArgs.startPosition}");
+            transform.position = _currentArgs.StartPosition;
+            Debug.Log(message:$"start posi: {_currentArgs.StartPosition}");
             
             EnsurePool(_activeItemCount);
         }
@@ -241,7 +241,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     _currentArgs.OnComplete?.Invoke();
                 }
                 
-                _currentArgs.onItemInteract?.Invoke();
+                _currentArgs.OnItemInteract?.Invoke();
                 ApllyPunchEffect();
                 UpdateFakeResourceText();
 

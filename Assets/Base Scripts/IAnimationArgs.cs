@@ -10,29 +10,30 @@ namespace NamPhuThuy.AnimateWithScripts
 {
     public interface IAnimationArgs
     {
-        AnimationType Type { get; }
-        Action OnComplete { get; set; }
+        //interface members are implicitly public
+        public AnimationType Type { get; }
+        public Action OnComplete { get; set; }
     }
     
     public struct ItemFlyArgs : IAnimationArgs
     {
-        public AnimationType Type => AnimationType.ITEM_FLY;
+        public AnimationType Type => AnimationType.ITEM_FLY; //interface implementation
         public Action OnComplete { get; set; }
 
         [Tooltip("The value to add to the preValue")]
-        public int addValue;
+        public int AddValue;
         
         [Tooltip("The value before adding")]
-        public int prevValue;
-        public int itemAmount;
-        public float delayBetweenItems;
+        public int PrevValue;
+        public int ItemAmount;
+        public float DelayBetweenItems;
         
         [Tooltip("Transform that contain TextMeshProUGUI")]
-        public Transform target;
-        public Transform targetInteractTransform;
-        public Sprite itemSprite;
-        public Vector3 startPosition;
-        public System.Action onItemInteract;
+        public Transform Target;
+        public Transform TargetInteractTransform;
+        public Sprite ItemSprite;
+        public Vector3 StartPosition;
+        public System.Action OnItemInteract;
     }
     
     public struct PopupTextArgs : IAnimationArgs
@@ -40,13 +41,13 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationType Type => AnimationType.POPUP_TEXT;
         public Action OnComplete { get; set; }
 
-        public string message;
-        public Vector3 customAnchoredPos;
-        public Transform customParent;
-        public float customScale;
-        public Color textColor; // default is (0f, 0f, 0f, 0f)
-        public TMP_FontAsset textFont; 
-        public float duration;
+        public string Message;
+        public Vector3 CustomAnchoredPos;
+        public Transform CustomParent;
+        public float CustomScale;
+        public Color TextColor; // default is (0f, 0f, 0f, 0f)
+        public TMP_FontAsset TextFont; 
+        public float Duration;
     }
     
     public struct StatChangeTextArgs : IAnimationArgs
@@ -54,11 +55,11 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationType Type => AnimationType.STAT_CHANGE_TEXT;
         public Action OnComplete { get; set; }
 
-        public int amount;
-        public Color color;
-        public Vector2 offset;
-        public Vector2 moveDistance;
-        public Transform initialParent;
+        public int Amount;
+        public Color Color;
+        public Vector2 Offset;
+        public Vector2 MoveDistance;
+        public Transform InitialParent;
     }
     
     public struct ScreenShakeArgs : IAnimationArgs
@@ -66,9 +67,9 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationType Type => AnimationType.SCREEN_SHAKE;
         public Action OnComplete { get; set; }
 
-        public float intensity;
-        public float duration;
-        public AnimationCurve shakeCurve;
+        public float Intensity;
+        public float Duration;
+        public AnimationCurve ShakeCurve;
     }
     
 }

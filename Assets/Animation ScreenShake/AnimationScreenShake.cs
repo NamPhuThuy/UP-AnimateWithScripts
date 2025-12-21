@@ -34,9 +34,9 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (args is ScreenShakeArgs shakeArgs)
             {
-                shakeIntensity = shakeArgs.intensity;
-                shakeDuration = shakeArgs.duration;
-                shakeCurve = shakeArgs.shakeCurve ?? AnimationCurve.EaseInOut(0, 1, 1, 0);
+                shakeIntensity = shakeArgs.Intensity;
+                shakeDuration = shakeArgs.Duration;
+                shakeCurve = shakeArgs.ShakeCurve ?? AnimationCurve.EaseInOut(0, 1, 1, 0);
                 
                 if (targetCamera)
                 {

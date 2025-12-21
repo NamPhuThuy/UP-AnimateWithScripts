@@ -83,35 +83,35 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void SetValues()
         {
-            if (_currentArgs.textFont != null)
+            if (_currentArgs.TextFont != null)
             {
-                messageText.font = _currentArgs.textFont; // Apply custom font
+                messageText.font = _currentArgs.TextFont; // Apply custom font
             }
             else
             {
                 messageText.font = AnimationManager.Ins.DefaultFont;
             }
             
-            if (_currentArgs.customParent != null)
+            if (_currentArgs.CustomParent != null)
             {
-                transform.parent = _currentArgs.customParent.transform;
+                transform.parent = _currentArgs.CustomParent.transform;
             }
 
-            duration = Mathf.Max(_currentArgs.duration, duration);
+            duration = Mathf.Max(_currentArgs.Duration, duration);
 
-            if (_currentArgs.customAnchoredPos != default)
+            if (_currentArgs.CustomAnchoredPos != default)
             {
-                SetAnchoredPos(_currentArgs.customAnchoredPos);
+                SetAnchoredPos(_currentArgs.CustomAnchoredPos);
             }
             else
             {
                 SetAnchoredPos(_basePos);
             }
             
-            if (!Mathf.Approximately(_currentArgs.customScale, 0f))
+            if (!Mathf.Approximately(_currentArgs.CustomScale, 0f))
             {
-                backImage.rectTransform.localScale = Vector3.one * _currentArgs.customScale;
-                messageText.rectTransform.localScale = Vector3.one * _currentArgs.customScale;
+                backImage.rectTransform.localScale = Vector3.one * _currentArgs.CustomScale;
+                messageText.rectTransform.localScale = Vector3.one * _currentArgs.CustomScale;
                 DebugLogger.Log(message:$"use custom");
             }
             else
@@ -121,12 +121,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 DebugLogger.Log(message:$"dont use custom");
             }
             
-            SetContent(_currentArgs.message);
+            SetContent(_currentArgs.Message);
             SetRandomColor();
 
-            if (_currentArgs.textColor != default) 
+            if (_currentArgs.TextColor != default) 
             {
-                messageText.color = _currentArgs.textColor;
+                messageText.color = _currentArgs.TextColor;
             }
             else
             {
