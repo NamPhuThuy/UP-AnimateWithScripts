@@ -8,9 +8,10 @@ using Random = UnityEngine.Random;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class AnimationScreenShake : AnimationBase
+    public class ScreenShake : AnimationBase
     {
         [SerializeField] private Camera targetCamera;
+        [SerializeField] private ScreenShakeArgs currentArgs;
         
         private Vector3 originalPosition;
         private float shakeTimer;

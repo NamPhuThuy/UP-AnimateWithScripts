@@ -14718,7 +14718,7 @@ GameObject:
   - component: {fileID: 1960265130971469059}
   - component: {fileID: 3712385461926560693}
   m_Layer: 0
-  m_Name: AnimationSimpleParticle
+  m_Name: SimpleParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

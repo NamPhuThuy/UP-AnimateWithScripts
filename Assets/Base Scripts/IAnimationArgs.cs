@@ -14,6 +14,7 @@ namespace NamPhuThuy.AnimateWithScripts
         Action OnComplete { get; set; }
     }
     
+    [Serializable]
     public struct ItemFlyArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.ITEM_FLY;
@@ -35,6 +36,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public System.Action OnItemInteract;
     }
     
+    [Serializable]
     public struct PopupTextArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.POPUP_TEXT;
@@ -49,6 +51,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public float Duration;
     }
     
+    [Serializable]
     public struct StatChangeTextArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.STAT_CHANGE_TEXT;
@@ -61,6 +64,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public Transform InitialParent;
     }
     
+    [Serializable]
     public struct ScreenShakeArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.SCREEN_SHAKE;

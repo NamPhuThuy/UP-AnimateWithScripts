@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -30,6 +31,7 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private Vector3 targetPosition;
         [SerializeField] private int totalAmount;
         [SerializeField] private int prevValue;
+        [SerializeField] private ItemFlyArgs currentArgs;
 
         [Header("Components")]
         [SerializeField] private GameObject itemContainer;
@@ -60,7 +62,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private int _unitValue;
         private int _remainingItems;
         private float _spawnStepDelay;
-        private ItemFlyArgs _currentArgs;
+        
         
         private bool IsHaveRealText => realResourceText != null;
         
@@ -84,7 +86,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (args is ItemFlyArgs itemFlyArgs)
             {
-                _currentArgs = itemFlyArgs;
+                currentArgs = itemFlyArgs;
                 gameObject.SetActive(true);
                 SetValues();
                 KillTweens();
@@ -99,23 +101,23 @@ namespace NamPhuThuy.AnimateWithScripts
         protected override void SetValues()
         {
             // COMPONENTS
-            realResourceText = _currentArgs.Target.GetComponent<TextMeshProUGUI>();
-            targetInteractTransform = _currentArgs.TargetInteractTransform ? _currentArgs.TargetInteractTransform : null;
-            itemSprite = _currentArgs.ItemSprite ?? itemSprite;
+            realResourceText = currentArgs.Target.GetComponent<TextMeshProUGUI>();
+            targetInteractTransform = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform : null;
+            itemSprite = currentArgs.ItemSprite ?? itemSprite;
             
             
-            targetPosition = _currentArgs.TargetInteractTransform ? _currentArgs.TargetInteractTransform.transform.position : _currentArgs.Target.position;
+            targetPosition = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform.transform.position : currentArgs.Target.position;
             
             // VALUES
-            totalAmount = _currentArgs.AddValue;
-            prevValue = _currentArgs.PrevValue;
+            totalAmount = currentArgs.AddValue;
+            prevValue = currentArgs.PrevValue;
 
-            if (!Mathf.Approximately(_currentArgs.DelayBetweenItems, 0))
+            if (!Mathf.Approximately(currentArgs.DelayBetweenItems, 0))
             {
-                pathDuration = _currentArgs.DelayBetweenItems;
+                pathDuration = currentArgs.DelayBetweenItems;
             }
             
-            _activeItemCount = Mathf.Max(1, _currentArgs.ItemAmount > 0 ? _currentArgs.ItemAmount : _initialPoolSize);
+            _activeItemCount = Mathf.Max(1, currentArgs.ItemAmount > 0 ? currentArgs.ItemAmount : _initialPoolSize);
             _remainingItems = _activeItemCount;
             _unitValue = totalAmount / _initialPoolSize;
             
@@ -123,8 +125,8 @@ namespace NamPhuThuy.AnimateWithScripts
             float spacingBudget = Mathf.Max(0f, totalVfxDuration - INITIAL_DELAY - bounceDuration - pathDuration);
             _spawnStepDelay = (_activeItemCount > 1) ? spacingBudget / (_activeItemCount - 1) : 0f;
             
-            transform.position = _currentArgs.StartPosition;
-            Debug.Log(message:$"start posi: {_currentArgs.StartPosition}");
+            transform.position = currentArgs.StartPosition;
+            Debug.Log(message:$"start posi: {currentArgs.StartPosition}");
             
             EnsurePool(_activeItemCount);
         }
@@ -238,10 +240,10 @@ namespace NamPhuThuy.AnimateWithScripts
                         realResourceText.text = $"{prevValue + totalAmount}";
                     }
                     
-                    _currentArgs.OnComplete?.Invoke();
+                    currentArgs.OnComplete?.Invoke();
                 }
                 
-                _currentArgs.OnItemInteract?.Invoke();
+                currentArgs.OnItemInteract?.Invoke();
                 ApllyPunchEffect();
                 UpdateFakeResourceText();
 

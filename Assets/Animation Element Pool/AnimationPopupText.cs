@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace NamPhuThuy.AnimateWithScripts
@@ -11,6 +12,7 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         [Header("Stats")] 
         [SerializeField] private float duration = 1f;
+        [SerializeField] private PopupTextArgs currentArgs;
         
         [Header("Components")]
         private CanvasGroup _canvasGroup;
@@ -34,7 +36,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private Sequence _seq;
         private Vector2 _basePos;
         private readonly string _fallbackText = "Watch out!";
-        private PopupTextArgs _currentArgs;
+       
 
         #region MonoBehaviour Callbacks
 
@@ -67,7 +69,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (args is PopupTextArgs popupArgs)
             {
-                _currentArgs = popupArgs;
+                currentArgs = popupArgs;
                 gameObject.SetActive(true);
                 KillTweens();
                 
@@ -83,35 +85,35 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void SetValues()
         {
-            if (_currentArgs.TextFont != null)
+            if (currentArgs.TextFont != null)
             {
-                messageText.font = _currentArgs.TextFont; // Apply custom font
+                messageText.font = currentArgs.TextFont; // Apply custom font
             }
             else
             {
                 messageText.font = AnimationManager.Ins.DefaultFont;
             }
             
-            if (_currentArgs.CustomParent != null)
+            if (currentArgs.CustomParent != null)
             {
-                transform.parent = _currentArgs.CustomParent.transform;
+                transform.parent = currentArgs.CustomParent.transform;
             }
 
-            duration = Mathf.Max(_currentArgs.Duration, duration);
+            duration = Mathf.Max(currentArgs.Duration, duration);
 
-            if (_currentArgs.CustomAnchoredPos != default)
+            if (currentArgs.CustomAnchoredPos != default)
             {
-                SetAnchoredPos(_currentArgs.CustomAnchoredPos);
+                SetAnchoredPos(currentArgs.CustomAnchoredPos);
             }
             else
             {
                 SetAnchoredPos(_basePos);
             }
             
-            if (!Mathf.Approximately(_currentArgs.CustomScale, 0f))
+            if (!Mathf.Approximately(currentArgs.CustomScale, 0f))
             {
-                backImage.rectTransform.localScale = Vector3.one * _currentArgs.CustomScale;
-                messageText.rectTransform.localScale = Vector3.one * _currentArgs.CustomScale;
+                backImage.rectTransform.localScale = Vector3.one * currentArgs.CustomScale;
+                messageText.rectTransform.localScale = Vector3.one * currentArgs.CustomScale;
                 DebugLogger.Log(message:$"use custom");
             }
             else
@@ -121,12 +123,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 DebugLogger.Log(message:$"dont use custom");
             }
             
-            SetContent(_currentArgs.Message);
+            SetContent(currentArgs.Message);
             SetRandomColor();
 
-            if (_currentArgs.TextColor != default) 
+            if (currentArgs.TextColor != default) 
             {
-                messageText.color = _currentArgs.TextColor;
+                messageText.color = currentArgs.TextColor;
             }
             else
             {
@@ -159,7 +161,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 gameObject.SetActive(false);
                 _rectTransform.anchoredPosition = _basePos;
                 _canvasGroup.alpha = 0f;
-                _currentArgs.OnComplete?.Invoke();
+                currentArgs.OnComplete?.Invoke();
             });
             
             StartAutoReturn(duration + 0.5f);

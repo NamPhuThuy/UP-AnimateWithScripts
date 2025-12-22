@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6632417140856879203}
   - component: {fileID: 9145777501125222086}
   m_Layer: 0
-  m_Name: AnimationScreenShake
+  m_Name: ScreenShake
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

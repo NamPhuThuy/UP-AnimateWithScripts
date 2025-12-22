@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class AnimationSimpleParticle : AnimationBase
+    public class SimpleParticle : AnimationBase
     {
         [Header("Components")]
         [SerializeField] private ParticleSystem particleSystem;

@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
@@ -15,9 +16,10 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private Vector2 moveDistance;
         [SerializeField] private float duration = 1f;
         [SerializeField] private float textSizeMul = 1.3f;
+        [SerializeField]  private StatChangeTextArgs currentArgs;
 
         private Transform _initialParent;
-        private StatChangeTextArgs _currentArgs;
+       
 
         void Awake()
         {
@@ -26,20 +28,20 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void SetTextColor()
         {
-            if (_currentArgs.Amount >= 0)
+            if (currentArgs.Amount >= 0)
             {
-                text.text = $"+{_currentArgs.Amount}";
+                text.text = $"+{currentArgs.Amount}";
                 text.color = Color.green;
             }
             else
             {
-                text.text = $"{_currentArgs.Amount}";
+                text.text = $"{currentArgs.Amount}";
                 text.color = Color.red;
             }
 
-            if (_currentArgs.Color != default)
+            if (currentArgs.Color != default)
             {
-                text.color = _currentArgs.Color;
+                text.color = currentArgs.Color;
             }
         }
 
@@ -49,7 +51,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (args is StatChangeTextArgs statArgs)
             {
-                _currentArgs = statArgs;
+                currentArgs = statArgs;
                 PlayStatChangeText();
             }
             else
@@ -60,8 +62,8 @@ namespace NamPhuThuy.AnimateWithScripts
         
         protected override void SetValues()
         {
-            moveDistance = _currentArgs.MoveDistance;
-            targetText = _currentArgs.InitialParent.GetComponent<TextMeshProUGUI>();
+            moveDistance = currentArgs.MoveDistance;
+            targetText = currentArgs.InitialParent.GetComponent<TextMeshProUGUI>();
         }
 
         #endregion
@@ -92,7 +94,7 @@ namespace NamPhuThuy.AnimateWithScripts
             vfxRect.pivot = targetRect.pivot;
 
             Vector3 moreOffset = GetRandomPos(0.4f);
-            transform.position = targetText.transform.position + (Vector3)_currentArgs.Offset + moreOffset;
+            transform.position = targetText.transform.position + (Vector3)currentArgs.Offset + moreOffset;
 
             text.CopyProperties(targetText);
             text.fontSize *= textSizeMul;
@@ -111,7 +113,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 gameObject.SetActive(false);
                 transform.SetParent(_initialParent, true);
-                _currentArgs.OnComplete?.Invoke();
+                currentArgs.OnComplete?.Invoke();
             });
         }
     }
