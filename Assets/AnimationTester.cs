@@ -93,10 +93,10 @@ namespace NamPhuThuy.AnimateWithScripts
             if (GUILayout.Button(new GUIContent("Play VFX Popup Text", frogIcon)))
             {
                 var args = new PopupTextArgs {
-                    message = "Hello!",
-                    customAnchoredPos = managerAnchoredPos,
-                    textColor = Color.white,
-                    duration = 1f,
+                    Message = "Hello!",
+                    CustomAnchoredPos = managerAnchoredPos,
+                    TextColor = Color.white,
+                    Duration = 1f,
                 };
                 AnimationManager.Ins.Play<PopupTextArgs>(args);
             }
@@ -111,14 +111,14 @@ namespace NamPhuThuy.AnimateWithScripts
                 var coinText = _script.coinText.transform;
                 
                 var args = new ItemFlyArgs {
-                    addValue = testAmount,
-                    prevValue = 0,
-                    target = coinText.transform,
-                    startPosition = AnimationManager.Ins.transform.position,
-                    targetInteractTransform = coinPanel.transform, // For positioning the target
-                    itemAmount = _script.itemAmount,
-                    itemSprite = _script.itemSprites[_script.itemSpriteIndex],
-                    onItemInteract = () => TurnOnStatChangeVFX(coinText),
+                    AddValue = testAmount,
+                    PrevValue = 0,
+                    Target = coinText.transform,
+                    StartPosition = AnimationManager.Ins.transform.position,
+                    TargetInteractTransform = coinPanel.transform, // For positioning the target
+                    ItemAmount = _script.itemAmount,
+                    ItemSprite = _script.itemSprites[_script.itemSpriteIndex],
+                    OnItemInteract = () => TurnOnStatChangeVFX(coinText),
                     OnComplete = () => Debug.Log("Animation complete!")
                 };
                 
@@ -128,11 +128,11 @@ namespace NamPhuThuy.AnimateWithScripts
             void TurnOnStatChangeVFX(Transform coinText)
             {
                 var args = new StatChangeTextArgs {
-                    amount = testAmount / _script.itemAmount,
-                    color = Color.yellow,
-                    offset = Vector2.zero,
-                    moveDistance = new Vector2(0f, 30f),
-                    initialParent = coinText,
+                    Amount = testAmount / _script.itemAmount,
+                    Color = Color.yellow,
+                    Offset = Vector2.zero,
+                    MoveDistance = new Vector2(0f, 30f),
+                    InitialParent = coinText,
                 };
                 
                 AnimationManager.Ins.Play(args);
@@ -147,11 +147,11 @@ namespace NamPhuThuy.AnimateWithScripts
                 var coinText = _script.coinText.transform;
                 
                 var args = new StatChangeTextArgs {
-                    amount = 5,
-                    color = Color.yellow,
-                    offset = Vector2.zero,
-                    moveDistance = new Vector2(0f, 30f),
-                    initialParent = coinText,
+                    Amount = 5,
+                    Color = Color.yellow,
+                    Offset = Vector2.zero,
+                    MoveDistance = new Vector2(0f, 30f),
+                    InitialParent = coinText,
                     OnComplete = null
                 };
                 
@@ -165,9 +165,9 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 AnimationManager.Ins.Play(new ScreenShakeArgs
                 {
-                    intensity = 0.5f,
-                    duration = 0.3f,
-                    shakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0),
+                    Intensity = 0.5f,
+                    Duration = 0.3f,
+                    ShakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0),
                     OnComplete = null
                 });
             }
