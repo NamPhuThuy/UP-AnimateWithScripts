@@ -10,14 +10,13 @@ namespace NamPhuThuy.AnimateWithScripts
 {
     public interface IAnimationArgs
     {
-        //interface members are implicitly public
-        public AnimationType Type { get; }
-        public Action OnComplete { get; set; }
+        AnimationType Type { get; }
+        Action OnComplete { get; set; }
     }
     
     public struct ItemFlyArgs : IAnimationArgs
     {
-        public AnimationType Type => AnimationType.ITEM_FLY; //interface implementation
+        public AnimationType Type => AnimationType.ITEM_FLY;
         public Action OnComplete { get; set; }
 
         [Tooltip("The value to add to the preValue")]
@@ -90,7 +89,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
         // Optional custom parent (e.g., a specific canvas or UI layer)
         public Transform customParent;
-
+        public Material customMaterial;
+        public Color customColor;
         // Optional behavior
         public bool ignoreTimeScale;
     }

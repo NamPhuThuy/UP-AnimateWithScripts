@@ -1,49 +1,99 @@
+// Assets/_Project/UPack-Animate-with-Scripts/Assets/Animation Element Pool/AnimationSimpleParticle.cs
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    
     public class AnimationSimpleParticle : AnimationBase
     {
-        #region Private Serializable Fields
-
         [Header("Components")]
         [SerializeField] private ParticleSystem particleSystem;
 
-        private Canvas _canvas;
-        private RectTransform _rectTransform;
-        private SimpleParticleArgs _currentArgs;
-        
-        #endregion
+        [Header("Custom Material")]
+        [Tooltip("If set, overrides the material on all ParticleSystemRenderers under this VFX instance.")]
+        [SerializeField] private Material customMaterial;
 
-        #region Private Fields
+        [Header("Persistent Screen Size (Orthographic)")]
+        [SerializeField] private bool keepConstantScreenSize = true;
 
-        #endregion
+        [Tooltip("If empty, uses args.worldCamera, then Camera.main.")]
+        [SerializeField] private Camera referenceCamera;
 
-        #region MonoBehaviour Callbacks
+        [Tooltip("Captured at Play() to compute inverse scaling when the ortho size changes.")]
+        [SerializeField] private bool captureBaselineOnPlay = true;
 
-        void Awake()
+        [SerializeField] private SimpleParticleArgs _currentArgs;
+        private Coroutine _autoReleaseRoutine;
+
+        private Vector3 _baseLocalScale = Vector3.one;
+        private float _baselineOrthoSize = 0f;
+
+        private void Awake()
         {
-            if (!particleSystem) particleSystem = GetComponentInChildren<ParticleSystem>(true);
-            _rectTransform = GetComponent<RectTransform>();
-            _canvas = GetComponentInParent<Canvas>();
+            if (!particleSystem)
+                particleSystem = GetComponentInChildren<ParticleSystem>(true);
+
+            _baseLocalScale = transform.localScale;
         }
 
-        void OnDisable()
+        private void OnEnable()
         {
-            StopImmediate();
+            if (_baseLocalScale == Vector3.zero)
+                _baseLocalScale = Vector3.one;
         }
 
-        #endregion
+        public override void Play<T>(T args)
+        {
+            if (args is not SimpleParticleArgs a)
+                throw new ArgumentException("Invalid argument type for AnimationSimpleParticle");
 
-        #region Private Methods
-        
+            _currentArgs = a;
+
+            gameObject.SetActive(true);
+            isPlaying = true;
+            KillTweens();
+
+            if (_currentArgs.customParent != null)
+                transform.SetParent(_currentArgs.customParent, true);
+
+            SetValues();
+
+            ApplyCustomMaterialIfAny();
+            PlayParticle();
+        }
+
+        protected override void SetValues()
+        {
+            if (_currentArgs.fromWorld)
+            {
+                transform.position = new Vector3(_currentArgs.worldPosition.x, _currentArgs.worldPosition.y, -12f);
+            }
+            else
+            {
+                transform.position = new Vector3(
+                    _currentArgs.anchoredPosition.x,
+                    _currentArgs.anchoredPosition.y,
+                    transform.position.z
+                );
+            }
+
+            customMaterial = _currentArgs.customMaterial;
+        }
+
+        private void ApplyCustomMaterialIfAny()
+        {
+            if (!customMaterial) return;
+
+            var renderers = GetComponentsInChildren<ParticleSystemRenderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                // Use sharedMaterial to avoid per-instance material instantiation.
+                renderers[i].material = customMaterial;
+                renderers[i].material.color = _currentArgs.customColor;
+            }
+        }
+
         private void PlayParticle()
         {
             if (!particleSystem)
@@ -54,14 +104,17 @@ namespace NamPhuThuy.AnimateWithScripts
             }
 
             particleSystem.gameObject.SetActive(true);
-
-            timeScaleModeApply(_currentArgs.ignoreTimeScale);
+            ApplyTimeScaleMode(_currentArgs.ignoreTimeScale);
 
             particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             particleSystem.Play(true);
 
             float life = GetEstimatedDuration(particleSystem);
-            StartCoroutine(AutoReleaseAfter(life));
+
+            if (_autoReleaseRoutine != null)
+                StopCoroutine(_autoReleaseRoutine);
+
+            _autoReleaseRoutine = StartCoroutine(AutoReleaseAfter(life));
         }
 
         private IEnumerator AutoReleaseAfter(float seconds)
@@ -76,7 +129,7 @@ namespace NamPhuThuy.AnimateWithScripts
             _currentArgs.OnComplete?.Invoke();
             StartAutoReturn(0.05f);
         }
-        
+
         private static float GetEstimatedDuration(ParticleSystem ps)
         {
             float max = 0f;
@@ -88,26 +141,20 @@ namespace NamPhuThuy.AnimateWithScripts
                 if (main.loop)
                     d = Mathf.Max(d, 0.25f);
 
-                float life = 0f;
-                switch (main.startLifetime.mode)
+                float life = main.startLifetime.mode switch
                 {
-                    case ParticleSystemCurveMode.Constant:
-                        life = main.startLifetime.constant;
-                        break;
-                    case ParticleSystemCurveMode.TwoConstants:
-                        life = main.startLifetime.constantMax;
-                        break;
-                    default:
-                        life = main.startLifetime.constantMax;
-                        break;
-                }
+                    ParticleSystemCurveMode.Constant => main.startLifetime.constant,
+                    ParticleSystemCurveMode.TwoConstants => main.startLifetime.constantMax,
+                    _ => main.startLifetime.constantMax
+                };
 
                 max = Mathf.Max(max, d + life);
             }
+
             return Mathf.Max(0.1f, max);
         }
 
-        private void timeScaleModeApply(bool ignore)
+        private void ApplyTimeScaleMode(bool ignore)
         {
             if (!particleSystem) return;
 
@@ -118,126 +165,30 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
 
-        #endregion
-
-        #region Override Methods
-        
-        public override void Play<T>(T args)
-        {
-            if (args is not SimpleParticleArgs a)
-            {
-                throw new ArgumentException("Invalid argument type for AnimationSimpleParticle");
-            }
-
-            _currentArgs = a;
-
-            gameObject.SetActive(true);
-            KillTweens();
-
-            if (_currentArgs.customParent != null)
-                transform.SetParent(_currentArgs.customParent, false);
-            else if (_canvas != null)
-                transform.SetParent(_canvas.transform, false);
-
-            SetValues();
-            PlayParticle();
-        }
-
-        protected override void SetValues()
-        {
-            if (_canvas == null) _canvas = GetComponentInParent<Canvas>();
-            if (_rectTransform == null) _rectTransform = GetComponent<RectTransform>();
-
-            if (_canvas == null || _rectTransform == null)
-                return;
-
-            if (_currentArgs.FromWorld)
-            {
-                var cam = _currentArgs.worldCamera ? _currentArgs.worldCamera : Camera.main;
-                if (!cam) return;
-
-                Vector2 screen = RectTransformUtility.WorldToScreenPoint(cam, _currentArgs.worldPosition);
-
-                RectTransform canvasRect = _canvas.transform as RectTransform;
-                if (!canvasRect) return;
-
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                        canvasRect,
-                        screen,
-                        _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera,
-                        out var local))
-                {
-                    _rectTransform.anchoredPosition = local;
-                }
-            }
-            else
-            {
-                _rectTransform.anchoredPosition = _currentArgs.anchoredPosition;
-            }
-        }
-        
         public void StopImmediate()
         {
+            if (_autoReleaseRoutine != null)
+            {
+                StopCoroutine(_autoReleaseRoutine);
+                _autoReleaseRoutine = null;
+            }
+
             if (particleSystem)
             {
                 particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                 particleSystem.gameObject.SetActive(false);
             }
+
+            transform.localScale = _baseLocalScale;
+
             base.EndFast();
         }
-        #endregion
 
-        #region Editor Methods
-
-        public void ResetValues()
+        private Camera GetCamera()
         {
-            if (!particleSystem)
-            {
-                particleSystem = GetComponentInChildren<ParticleSystem>(true);
-            }
-
-            _rectTransform = GetComponent<RectTransform>();
-            _canvas = GetComponentInParent<Canvas>();
-        }
-
-        #endregion
-
-        
-    }
-
-    /*#if UNITY_EDITOR
-    [CustomEditor(typeof(AnimationSimpleParticle))]
-    [CanEditMultipleObjects]
-    public class AnimationSimpleParticleEditor : Editor
-    {
-        private AnimationSimpleParticle script;
-        private Texture2D frogIcon;
-        
-        private void OnEnable()
-        {
-            frogIcon = Resources.Load<Texture2D>("frog"); // no extension needed
-        }
-        
-        public override void OnInspectorGUI()
-        {
-            DrawDefaultInspector();
-            script = (AnimationSimpleParticle)target;
-
-            ButtonResetValues();
-        }
-
-        private void ButtonResetValues()
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button(new GUIContent("Reset Values", frogIcon), GUILayout.Width(InspectorConst.BUTTON_WIDTH_MEDIUM)))
-            {
-                script.ResetValues();
-                EditorUtility.SetDirty(script); // Mark the object as dirty
-            }
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
+            if (referenceCamera) return referenceCamera;
+            if (_currentArgs.worldCamera) return _currentArgs.worldCamera;
+            return Camera.main;
         }
     }
-    #endif*/
 }
