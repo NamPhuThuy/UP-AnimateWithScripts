@@ -71,4 +71,27 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationCurve shakeCurve;
     }
     
+    [Serializable]
+    public struct SimpleParticleArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.SIMPLE_PARTICLE;
+        public Action OnComplete { get; set; }
+
+        // If true, interpret position as world space and convert to screen/UI space.
+        public bool fromWorld;
+
+        // Used when fromWorld == true
+        public Vector3 worldPosition;
+        public Camera worldCamera; // optional; falls back to Camera.main
+
+        // Used when fromWorld == false
+        public Vector2 anchoredPosition;
+
+        // Optional custom parent (e.g., a specific canvas or UI layer)
+        public Transform customParent;
+
+        // Optional behavior
+        public bool ignoreTimeScale;
+    }
+
 }

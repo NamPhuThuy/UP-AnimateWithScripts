@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4825960104378949343}
   - component: {fileID: 658901984484033640}
   m_Layer: 0
-  m_Name: Animation StatChangeText
+  m_Name: AnimationStatChangeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -28,9 +28,9 @@ namespace NamPhuThuy.AnimateWithScripts
             base.Awake();
             PreloadAll();
             
-            DebugLogger.Log(message:$"anchored posi: {GetComponent<RectTransform>().anchoredPosition}");
+            /*DebugLogger.Log(message:$"anchored posi: {GetComponent<RectTransform>().anchoredPosition}");
             DebugLogger.Log(message:$"rect position: {GetComponent<RectTransform>().position}");
-            DebugLogger.Log(message:$"transform position: {transform.position}");
+            DebugLogger.Log(message:$"transform position: {transform.position}");*/
         }
 
         #endregion
@@ -82,7 +82,7 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!animation) return;
             if (!_reverse.TryGetValue(animation, out var type)) return;
 
-            animation.StopImmediate();
+            animation.EndFast();
             animation.transform.SetParent(transform, false);
             animation.gameObject.SetActive(false);
             _pool[type].Enqueue(animation);

@@ -29,3 +29,7 @@ MonoBehaviour:
     prefab: {fileID: 9145777501125222086, guid: 3386109ecf5f03844880768592fe24ee, type: 3}
     preload: 3
     softMaxAliveSeconds: 10
+  - type: 6
+    prefab: {fileID: 3712385461926560693, guid: 3b9595dac36d1cc4d85299badc1f7cd6, type: 3}
+    preload: 3
+    softMaxAliveSeconds: 10

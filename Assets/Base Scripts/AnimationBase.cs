@@ -56,20 +56,30 @@ namespace NamPhuThuy.AnimateWithScripts
         
        
 
-        public void Complete()
+        public void End()
         {
-            if (!isPlaying) return;
+            if (!isPlaying)
+            {
+                return;
+            }
+
             isPlaying = false;
 
             KillTweens();
 
-            if (autoDisable) AnimationManager.Ins.Release(this);
-            else gameObject.SetActive(false);
+            if (autoDisable)
+            {
+                AnimationManager.Ins.Release(this);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
         
-        public void StopImmediate()
+        public void EndFast()
         {
-            CancelInvoke(nameof(Complete));
+            CancelInvoke(nameof(End));
             isPlaying = false;
             KillTweens();
             gameObject.SetActive(false);
