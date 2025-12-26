@@ -65,5 +65,11 @@ namespace NamPhuThuy.AnimateWithScripts
             // DOTween: run `onComplete` after 1 second
             return DOVirtual.DelayedCall(1f, () => onComplete?.Invoke(), ignoreTimeScale: false);
         }
+        
+        public static Tween WaitSomeSeconds(float seconds, Action onComplete) 
+        {
+            // DOTween: run `onComplete` after `seconds`
+            return DOVirtual.DelayedCall(seconds, () => onComplete?.Invoke(), ignoreTimeScale: false);
+        }
     }
 }
