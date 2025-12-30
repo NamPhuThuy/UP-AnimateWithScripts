@@ -9,8 +9,9 @@ namespace NamPhuThuy.AnimateWithScripts
     public class AnimationStatChangeText : AnimationBase
     {
         [Header("Components")]
-        [SerializeField] private TextMeshProUGUI text;
+        [SerializeField] private TextMeshProUGUI animText;
         [SerializeField] private TextMeshProUGUI targetText;
+        [SerializeField] private GameObject targetObject;
 
         [Header("Stats")]
         [SerializeField] private Vector2 moveDistance;
@@ -26,25 +27,6 @@ namespace NamPhuThuy.AnimateWithScripts
             _initialParent = transform.parent;
         }
 
-        private void SetTextColor()
-        {
-            if (currentArgs.Amount >= 0)
-            {
-                text.text = $"+{currentArgs.Amount}";
-                text.color = Color.green;
-            }
-            else
-            {
-                text.text = $"{currentArgs.Amount}";
-                text.color = Color.red;
-            }
-
-            if (currentArgs.Color != default)
-            {
-                text.color = currentArgs.Color;
-            }
-        }
-
         #region Override Methods
         
         public override void Play<T>(T args)
@@ -52,6 +34,7 @@ namespace NamPhuThuy.AnimateWithScripts
             if (args is StatChangeTextArgs statArgs)
             {
                 currentArgs = statArgs;
+                SetValues();
                 PlayStatChangeText();
             }
             else
@@ -63,7 +46,46 @@ namespace NamPhuThuy.AnimateWithScripts
         protected override void SetValues()
         {
             moveDistance = currentArgs.MoveDistance;
-            targetText = currentArgs.InitialParent.GetComponent<TextMeshProUGUI>();
+            targetObject = currentArgs.TargetObject;
+
+            targetText = targetObject.GetComponent<TextMeshProUGUI>();
+            if (targetText != null)
+            {
+                animText.CopyProperties(targetText);
+                
+                var targetRect = targetText.GetComponent<RectTransform>();
+                var vfxRect = GetComponent<RectTransform>();
+            
+            
+                vfxRect.sizeDelta = targetRect.sizeDelta;
+                vfxRect.anchorMin = targetRect.anchorMin;
+                vfxRect.anchorMax = targetRect.anchorMax;
+                vfxRect.pivot = targetRect.pivot;
+            }
+            
+            _initialParent = currentArgs.TargetObject.transform;
+            
+            // Set Text Properties
+            
+            animText.fontSize *= textSizeMul;
+            animText.enableAutoSizing = false;
+           
+            // Set Text Color
+            if (currentArgs.Amount >= 0)
+            {
+                animText.text = $"+{currentArgs.Amount}";
+                animText.color = Color.green;
+            }
+            else
+            {
+                animText.text = $"-{currentArgs.Amount}";
+                animText.color = Color.red;
+            }
+
+            if (currentArgs.CustomColor != default)
+            {
+                animText.color = currentArgs.CustomColor;
+            }
         }
 
         #endregion
@@ -77,38 +99,21 @@ namespace NamPhuThuy.AnimateWithScripts
             );
         }
 
-        
-
         private void PlayStatChangeText()
         {
-            SetValues();
+            transform.SetParent(targetObject.transform.parent, true);
 
-            var targetRect = targetText.GetComponent<RectTransform>();
-            var vfxRect = GetComponent<RectTransform>();
-
-            transform.SetParent(targetText.transform.parent, true);
-
-            vfxRect.sizeDelta = targetRect.sizeDelta;
-            vfxRect.anchorMin = targetRect.anchorMin;
-            vfxRect.anchorMax = targetRect.anchorMax;
-            vfxRect.pivot = targetRect.pivot;
 
             Vector3 moreOffset = GetRandomPos(0.4f);
-            transform.position = targetText.transform.position + (Vector3)currentArgs.Offset + moreOffset;
-
-            text.CopyProperties(targetText);
-            text.fontSize *= textSizeMul;
-            text.enableAutoSizing = false;
-
-            SetTextColor();
-
-            text.DOFade(1f, 0f);
+            transform.position = targetObject.transform.position + (Vector3)currentArgs.Offset + moreOffset;
+           
+            animText.DOFade(1f, 0f);
             gameObject.SetActive(true);
 
             Vector3 moveTarget = transform.position + (Vector3)moveDistance;
             Sequence seq = DOTween.Sequence();
             seq.Append(transform.DOMove(moveTarget, duration));
-            seq.Join(text.DOFade(0f, duration));
+            seq.Join(animText.DOFade(0f, duration));
             seq.OnComplete(() =>
             {
                 gameObject.SetActive(false);

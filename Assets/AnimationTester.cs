@@ -16,6 +16,9 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         #region Private Serializable Fields
         
+        [Header("Dummy Components")]
+        public Transform dummy;
+        
         [Header("RESOURCES FLY")]
         public TextMeshProUGUI coinText;
         public Image coinImage;
@@ -129,10 +132,10 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var args = new StatChangeTextArgs {
                     Amount = testAmount / _script.itemAmount,
-                    Color = Color.yellow,
+                    CustomColor = Color.yellow,
                     Offset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
-                    InitialParent = coinText,
+                    TargetObject = coinText.gameObject,
                 };
                 
                 AnimationManager.Ins.Play(args);
@@ -148,10 +151,10 @@ namespace NamPhuThuy.AnimateWithScripts
                 
                 var args = new StatChangeTextArgs {
                     Amount = 5,
-                    Color = Color.yellow,
+                    CustomColor = Color.yellow,
                     Offset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
-                    InitialParent = coinText,
+                    TargetObject = _script.dummy.gameObject,
                     OnComplete = null
                 };
                 

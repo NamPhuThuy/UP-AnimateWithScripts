@@ -58,10 +58,11 @@ namespace NamPhuThuy.AnimateWithScripts
         public Action OnComplete { get; set; }
 
         public int Amount;
-        public Color Color;
+        public Color CustomColor;
+        public TMP_FontAsset CustomFont;
         public Vector2 Offset;
         public Vector2 MoveDistance;
-        public Transform InitialParent;
+        public GameObject TargetObject;
     }
     
     [Serializable]
