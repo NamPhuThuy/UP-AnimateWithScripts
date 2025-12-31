@@ -4843,7 +4843,7 @@ GameObject:
   - component: {fileID: 4509366627444391888}
   - component: {fileID: 4829366620315317147}
   m_Layer: 0
-  m_Name: Water_blast_green_02
+  m_Name: Impulse Blast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
