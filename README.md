@@ -57,17 +57,20 @@ This is the short description about the project. Technologies, tools be used
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- HOW TO USE -->
-## HOW TO USE
+<!-- INSTALLATION -->
+## INSTALLATION
 
-Instructions to setup this project locally.
+### UNITY PACKAGE MANAGER
+- Step 1: From Unity Editor -> Window -> Package Management -> Package Manager
+- Step 2: Press the plus (+) icon in the top-left of Window
+- Step 3: Select **Install package from git URL** -> paste the <git-URL> (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git) and choose Install
 
-### Prerequisites
 
-### Installation
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+### THROUGH GIT
+- Step 1: Copy the <git-URL> (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git)
+- Step 2: Open Git CLI and type: git install https://github.com/NamPhuThuy/UP-AnimateWithScripts.git
+- Step 3: Enter and wait
+- Step 4: Make sure you have install the package TextMeshProUGUI in the Unity Project
 
 
 <!-- USAGE EXAMPLES -->
