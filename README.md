@@ -33,18 +33,22 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+# About The Project
 
 This is the short description about the project. Technologies, tools be used 
  :smile:
 
-### Features
+## Features
 
-#### Item Fly
+### Item Fly
 
-#### StatChangeText
+### StatChangeText
 
-#### PopupText
+### PopupText
+
+## Particle System
+
+
 
 
 ### Built With
@@ -106,7 +110,7 @@ Instructions to setup this project locally.
 
 
 <!-- Mock Up -->
-[product-screenshot]: images/avatar.png
+[product-screenshot]: images/avatar_510x540.png
 
 <!-- Tech Stack -->
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white

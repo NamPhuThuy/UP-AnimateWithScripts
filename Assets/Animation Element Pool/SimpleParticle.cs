@@ -1,4 +1,3 @@
-// Assets/_Project/UPack-Animate-with-Scripts/Assets/Animation Element Pool/AnimationSimpleParticle.cs
 using System;
 using System.Collections;
 using UnityEngine;
