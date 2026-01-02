@@ -130,7 +130,12 @@ namespace NamPhuThuy.AnimateWithScripts
             
             EnsurePool(_activeItemCount);
         }
-        
+
+        protected override void ResetValues()
+        {
+            throw new NotImplementedException();
+        }
+
         private void CreatePool()
         {
             iconList = new List<RectTransform>(_initialPoolSize);

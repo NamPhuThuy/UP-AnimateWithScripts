@@ -4,7 +4,8 @@
     "references": [
         "UnityEngine.UI",
         "Unity.TextMeshPro",
-        "NamPhuThuy.AnimateWithScripts.DOTween"
+        "NamPhuThuy.AnimateWithScripts.DOTween",
+        "NamPhuThuy.Common"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

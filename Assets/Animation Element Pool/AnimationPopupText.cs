@@ -136,6 +136,11 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
 
+        protected override void ResetValues()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
         private void PlayAnim()
         {

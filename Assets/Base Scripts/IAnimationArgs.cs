@@ -58,9 +58,12 @@ namespace NamPhuThuy.AnimateWithScripts
         public Action OnComplete { get; set; }
 
         public int Amount;
+        public string AdditionalIconText; // e.g., "%"
+        public bool IsBold;
+        public float Duration;
         public Color CustomColor;
         public TMP_FontAsset CustomFont;
-        public Vector2 Offset;
+        public Vector2 RectTransformOffset;
         public Vector2 MoveDistance;
         public GameObject TargetObject;
     }

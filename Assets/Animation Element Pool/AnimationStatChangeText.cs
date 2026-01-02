@@ -2,7 +2,6 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
@@ -12,6 +11,7 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private TextMeshProUGUI animText;
         [SerializeField] private TextMeshProUGUI targetText;
         [SerializeField] private GameObject targetObject;
+        [SerializeField] private Vector3 targetPosition;
 
         [Header("Stats")]
         [SerializeField] private Vector2 moveDistance;
@@ -20,7 +20,6 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField]  private StatChangeTextArgs currentArgs;
 
         private Transform _initialParent;
-       
 
         void Awake()
         {
@@ -45,6 +44,11 @@ namespace NamPhuThuy.AnimateWithScripts
         
         protected override void SetValues()
         {
+            if (currentArgs.Duration > 0f)
+            {
+                duration = currentArgs.Duration;
+            }
+            
             moveDistance = currentArgs.MoveDistance;
             targetObject = currentArgs.TargetObject;
 
@@ -73,19 +77,29 @@ namespace NamPhuThuy.AnimateWithScripts
             // Set Text Color
             if (currentArgs.Amount >= 0)
             {
-                animText.text = $"+{currentArgs.Amount}";
+                animText.text = $"+{currentArgs.Amount}{currentArgs.AdditionalIconText}";
                 animText.color = Color.green;
             }
             else
             {
-                animText.text = $"-{currentArgs.Amount}";
+                animText.text = $"-{currentArgs.Amount}{currentArgs.AdditionalIconText}";
                 animText.color = Color.red;
+            }
+
+            if (currentArgs.IsBold)
+            {   
+                animText.fontStyle |= FontStyles.Bold;
             }
 
             if (currentArgs.CustomColor != default)
             {
                 animText.color = currentArgs.CustomColor;
             }
+        }
+
+        protected override void ResetValues()
+        {
+            animText.fontStyle &= ~FontStyles.Bold;
         }
 
         #endregion
@@ -99,14 +113,29 @@ namespace NamPhuThuy.AnimateWithScripts
             );
         }
 
+        private Vector2 startPosition;
+        private Vector2 endPosition;
         private void PlayStatChangeText()
         {
-            transform.SetParent(targetObject.transform.parent, true);
+            // transform.SetParent(targetObject.transform.parent, true);
 
-
-            Vector3 moreOffset = GetRandomPos(0.4f);
-            transform.position = targetObject.transform.position + (Vector3)currentArgs.Offset + moreOffset;
-           
+            
+            // Convert targetObject's world position to screen position
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
+            Debug.Log(message:$"screenPos: {screenPos}");
+            startPosition = new Vector2(screenPos.x, screenPos.y) + currentArgs.RectTransformOffset;
+            endPosition = startPosition + currentArgs.MoveDistance;
+            
+            Debug.Log(message:$"startPosi: {startPosition}, endPosi: {endPosition}");
+            
+            // Set initial anchored position
+            RectTransform rt = GetComponent<RectTransform>();
+            rt.position = startPosition;
+            
+            Vector2 offset = Vector2Helper.RandomPointInRange(35f, preferHorizontal:true);
+            
+            rt.position += (Vector3)offset/*currentArgs.RectTransformOffset*/;
+            
             animText.DOFade(1f, 0f);
             gameObject.SetActive(true);
 
@@ -119,6 +148,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 gameObject.SetActive(false);
                 transform.SetParent(_initialParent, true);
                 currentArgs.OnComplete?.Invoke();
+                ResetValues();
             });
         }
     }

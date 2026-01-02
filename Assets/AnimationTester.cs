@@ -133,7 +133,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new StatChangeTextArgs {
                     Amount = testAmount / _script.itemAmount,
                     CustomColor = Color.yellow,
-                    Offset = Vector2.zero,
+                    RectTransformOffset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
                     TargetObject = coinText.gameObject,
                 };
@@ -152,7 +152,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new StatChangeTextArgs {
                     Amount = 5,
                     CustomColor = Color.yellow,
-                    Offset = Vector2.zero,
+                    RectTransformOffset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
                     TargetObject = _script.dummy.gameObject,
                     OnComplete = null

@@ -80,6 +80,11 @@ namespace NamPhuThuy.AnimateWithScripts
             customMaterial = _currentArgs.customMaterial;
         }
 
+        protected override void ResetValues()
+        {
+            throw new NotImplementedException();
+        }
+
         private void ApplyCustomMaterialIfAny()
         {
             if (!customMaterial) return;

@@ -48,6 +48,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public abstract void Play<T>(T args) where T : struct, IAnimationArgs;
 
         protected abstract void SetValues();
+        protected abstract void ResetValues();
 
         #endregion
 

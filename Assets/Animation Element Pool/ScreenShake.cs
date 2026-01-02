@@ -53,6 +53,11 @@ namespace NamPhuThuy.AnimateWithScripts
             throw new NotImplementedException();
         }
 
+        protected override void ResetValues()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         public void StopImmediate()
