@@ -71,5 +71,10 @@ namespace NamPhuThuy.AnimateWithScripts
             // DOTween: run `onComplete` after `seconds`
             return DOVirtual.DelayedCall(seconds, () => onComplete?.Invoke(), ignoreTimeScale: false);
         }
+
+        public static void PopupScaleSquence(Transform transform1, Action onCompleteAction)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
