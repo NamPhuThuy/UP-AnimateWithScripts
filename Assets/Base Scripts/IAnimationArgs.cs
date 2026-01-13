@@ -80,13 +80,15 @@ namespace NamPhuThuy.AnimateWithScripts
     }
     
     [Serializable]
-    public struct SimpleParticleArgs : IAnimationArgs
+    public struct ParticleSystemArgs : IAnimationArgs
     {
-        public AnimationType Type => AnimationType.SIMPLE_PARTICLE;
+        public AnimationType Type => AnimationType.PARTICLE_SYSTEM;
         public Action OnComplete { get; set; }
 
+        // Must have values
         // If true, interpret position as world space and convert to screen/UI space.
         public bool fromWorld;
+        public ParticleSystem particleSystem;
 
         // Used when fromWorld == true
         public Vector3 worldPosition;
@@ -95,10 +97,13 @@ namespace NamPhuThuy.AnimateWithScripts
         // Used when fromWorld == false
         public Vector2 anchoredPosition;
 
+        // Custom values
         // Optional custom parent (e.g., a specific canvas or UI layer)
         public Transform customParent;
         public Material customMaterial;
         public Color customColor;
+
+        public Texture customTexture;
         // Optional behavior
         public bool ignoreTimeScale;
     }

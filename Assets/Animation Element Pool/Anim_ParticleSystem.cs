@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class SimpleParticle : AnimationBase
+    public class Anim_ParticleSystem : AnimationBase
     {
         [Header("Components")]
         [SerializeField] private ParticleSystem particleSystem;
@@ -12,6 +12,8 @@ namespace NamPhuThuy.AnimateWithScripts
         [Header("Custom Material")]
         [Tooltip("If set, overrides the material on all ParticleSystemRenderers under this VFX instance.")]
         [SerializeField] private Material customMaterial;
+        [SerializeField] private ParticleSystemRenderer[] PSRenderers;
+        private MaterialPropertyBlock _materialPropertyBlock;
 
         [Header("Persistent Screen Size (Orthographic)")]
         [SerializeField] private bool keepConstantScreenSize = true;
@@ -22,7 +24,7 @@ namespace NamPhuThuy.AnimateWithScripts
         [Tooltip("Captured at Play() to compute inverse scaling when the ortho size changes.")]
         [SerializeField] private bool captureBaselineOnPlay = true;
 
-        [SerializeField] private SimpleParticleArgs _currentArgs;
+        [SerializeField] private ParticleSystemArgs currentArgs;
         private Coroutine _autoReleaseRoutine;
 
         private Vector3 _baseLocalScale = Vector3.one;
@@ -32,9 +34,6 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void Awake()
         {
-            if (!particleSystem)
-                particleSystem = GetComponentInChildren<ParticleSystem>(true);
-
             _baseLocalScale = transform.localScale;
         }
 
@@ -46,49 +45,83 @@ namespace NamPhuThuy.AnimateWithScripts
 
 
         #endregion
-      
+
+        #region Override Methods
+
         public override void Play<T>(T args)
         {
-            if (args is not SimpleParticleArgs a)
+            if (args is not ParticleSystemArgs a)
                 throw new ArgumentException("Invalid argument type for AnimationSimpleParticle");
 
-            _currentArgs = a;
+            currentArgs = a;
 
             gameObject.SetActive(true);
             isPlaying = true;
             KillTweens();
 
-            if (_currentArgs.customParent != null)
-                transform.SetParent(_currentArgs.customParent, true);
+            if (currentArgs.customParent != null)
+                transform.SetParent(currentArgs.customParent, true);
 
             SetValues();
 
-            ApplyCustomMaterialIfAny();
+            // ApplyCustomMaterialIfAny();
             PlayParticle();
         }
 
         protected override void SetValues()
         {
-            if (_currentArgs.fromWorld)
+            if (currentArgs.fromWorld)
             {
-                transform.position = new Vector3(_currentArgs.worldPosition.x, _currentArgs.worldPosition.y, -12f);
+                transform.position = new Vector3(currentArgs.worldPosition.x, currentArgs.worldPosition.y, -12f);
             }
             else
             {
                 transform.position = new Vector3(
-                    _currentArgs.anchoredPosition.x,
-                    _currentArgs.anchoredPosition.y,
+                    currentArgs.anchoredPosition.x,
+                    currentArgs.anchoredPosition.y,
                     transform.position.z
                 );
             }
 
-            customMaterial = _currentArgs.customMaterial;
+            particleSystem = currentArgs.particleSystem;
+            
+            customMaterial = currentArgs.customMaterial;
+            
+            // Custom Values
+            if (currentArgs.customTexture != null)
+            {
+                PSRenderers = new ParticleSystemRenderer[particleSystem.transform.childCount + 1];
+                for (int i = 0; i < PSRenderers.Length; i++)
+                {
+                    PSRenderers[i] = particleSystem.GetComponent<ParticleSystemRenderer>();
+                }
+
+                _materialPropertyBlock = new MaterialPropertyBlock();
+                ApplyCustomTexture(currentArgs.customTexture);
+            }
         }
 
         protected override void ResetValues()
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void ApplyCustomTexture(Texture texture)
+        {
+            foreach (var particleSystemRenderer in PSRenderers)
+            {
+                particleSystemRenderer.GetPropertyBlock(_materialPropertyBlock);
+                _materialPropertyBlock.SetTexture("_MainTex", texture);
+                particleSystemRenderer.SetPropertyBlock(_materialPropertyBlock);
+            }
+        }
+
+        #endregion
+       
 
         private void ApplyCustomMaterialIfAny()
         {
@@ -99,7 +132,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 // Use sharedMaterial to avoid per-instance material instantiation.
                 renderers[i].material = customMaterial;
-                renderers[i].material.color = _currentArgs.customColor;
+                renderers[i].material.color = currentArgs.customColor;
             }
         }
 
@@ -108,12 +141,12 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!particleSystem)
             {
                 StartAutoReturn(0.1f);
-                _currentArgs.OnComplete?.Invoke();
+                currentArgs.OnComplete?.Invoke();
                 return;
             }
 
             particleSystem.gameObject.SetActive(true);
-            ApplyTimeScaleMode(_currentArgs.ignoreTimeScale);
+            ApplyTimeScaleMode(currentArgs.ignoreTimeScale);
 
             particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             particleSystem.Play(true);
@@ -131,11 +164,11 @@ namespace NamPhuThuy.AnimateWithScripts
             float t = 0f;
             while (t < seconds)
             {
-                t += _currentArgs.ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+                t += currentArgs.ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
                 yield return null;
             }
 
-            _currentArgs.OnComplete?.Invoke();
+            currentArgs.OnComplete?.Invoke();
             StartAutoReturn(0.05f);
         }
 
@@ -196,7 +229,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private Camera GetCamera()
         {
             if (referenceCamera) return referenceCamera;
-            if (_currentArgs.worldCamera) return _currentArgs.worldCamera;
+            if (currentArgs.worldCamera) return currentArgs.worldCamera;
             return Camera.main;
         }
     }
