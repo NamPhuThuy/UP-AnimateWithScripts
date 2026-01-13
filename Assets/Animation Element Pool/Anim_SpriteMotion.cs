@@ -28,6 +28,8 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private float duration = 2f;
         [SerializeField] private Vector3 worldSpaceStartPosi;
         [SerializeField] private SpriteMotionArgs currentArgs;
+        [SerializeField] private string sortingLayerName;
+        [SerializeField] private int sortingOrder;
 
         private Sequence _sequence;
         #endregion
@@ -147,6 +149,18 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 duration = currentArgs.customDuration;
             }
+
+            if (currentArgs.customSortingOrder != 0)
+            {
+                spriteRenderer.sortingOrder = currentArgs.customSortingOrder;
+            }
+
+            if (currentArgs.customSortingLayer != null)
+            {
+                sortingLayerName = currentArgs.customSortingLayer;
+                spriteRenderer.sortingLayerName = currentArgs.customSortingLayer;
+            }
+
         }
 
         protected override void ResetValues()

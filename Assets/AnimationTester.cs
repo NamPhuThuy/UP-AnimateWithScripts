@@ -40,12 +40,14 @@ namespace NamPhuThuy.AnimateWithScripts
         private Texture2D frogIcon;
 
 
-        private AnimationType _selectedAnimationType = AnimationType.NONE;
         private Vector3 testPosition = Vector3.zero;
         private int testAmount = 100;
         private string testMessage = "Test Message";
-        private float testDuration = 2f;
+        private float _testDuration = 2f;
         private Vector2 managerAnchoredPos = Vector2.zero;
+        
+        // Sprite Motion
+        private ObjActiveAuto.MotionType _motionType;
 
         private bool isUseVFXManagerPos = false;
 
@@ -65,17 +67,17 @@ namespace NamPhuThuy.AnimateWithScripts
             // if (!Application.isPlaying) return;
 
             EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("VFX Testing", EditorStyles.boldLabel);
-
-            // VFX Type selection
-            _selectedAnimationType = (AnimationType)EditorGUILayout.EnumPopup("VFX Type", _selectedAnimationType);
+            EditorGUILayout.LabelField("General Attributes", EditorStyles.boldLabel);
 
             // Test parameters
             testPosition = EditorGUILayout.Vector3Field("Position", testPosition);
             testAmount = EditorGUILayout.IntField("Amount", testAmount);
             testMessage = EditorGUILayout.TextField("Message", testMessage);
-            testDuration = EditorGUILayout.FloatField("Duration", testDuration);
+            _testDuration = EditorGUILayout.FloatField("Duration", _testDuration);
             isUseVFXManagerPos = EditorGUILayout.Toggle("Use VFXManager Position", isUseVFXManagerPos);
+            
+            EditorGUILayout.LabelField("Sprite Motion", EditorStyles.boldLabel);
+            _motionType = (ObjActiveAuto.MotionType)EditorGUILayout.EnumPopup("Motion Type", _motionType);
 
             EditorGUILayout.Space(5);
 
@@ -187,10 +189,10 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var args = new SpriteMotionArgs()
                 {
-                    sprite = _script.itemSprites[0],
-                    motionType = ObjActiveAuto.MotionType.CLOCK,
+                    sprite = _script.itemSprites[6],
+                    motionType = _motionType,
                     worldSpaceStartPosi = _script.mainCamera.ScreenToWorldPoint(_script.dummyUGUI.position),
-                    customDuration = 4f,
+                    customDuration = _testDuration,
                     OnComplete = null
                 };
 

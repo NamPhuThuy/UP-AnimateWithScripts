@@ -116,6 +116,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
         // Custom values
         public float customDuration;
+        public string customSortingLayer;
+        public int customSortingOrder;
     }
 
 }
