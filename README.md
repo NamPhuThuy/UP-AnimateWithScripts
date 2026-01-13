@@ -90,16 +90,16 @@ This is the short description about the project. Technologies, tools be used
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
-[contributors-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
-[forks-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/network/members
-[stars-shield]: https://img.shields.io/github/stars/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
-[stars-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/stargazers
-[issues-shield]: https://img.shields.io/github/issues/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
-[issues-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/issues
-[license-shield]: https://img.shields.io/github/license/NamPhuThuy/UPack-Animate-With-Scripts.svg?style=for-the-badge
-[license-url]: https://github.com/NamPhuThuy/UPack-Animate-With-Scripts/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
+[contributors-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
+[forks-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/network/members
+[stars-shield]: https://img.shields.io/github/stars/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
+[stars-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/stargazers
+[issues-shield]: https://img.shields.io/github/issues/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
+[issues-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/issues
+[license-shield]: https://img.shields.io/github/license/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
+[license-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/blob/main/LICENSE
 
 <!-- Contact -->
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
