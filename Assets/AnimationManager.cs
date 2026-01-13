@@ -82,7 +82,6 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!animation) return;
             if (!_reverse.TryGetValue(animation, out var type)) return;
 
-            animation.EndFast();
             animation.transform.SetParent(transform, false);
             animation.gameObject.SetActive(false);
             _pool[type].Enqueue(animation);

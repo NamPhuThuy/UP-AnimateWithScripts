@@ -18,9 +18,6 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         #region Private Serializable Fields
 
-        [Header("Base")] 
-        [SerializeField] protected bool autoDisable = true; // return to pool when done  
-
         protected readonly List<Tween> tweens = new();
         [SerializeField] protected bool isPlaying;
         
@@ -55,41 +52,26 @@ namespace NamPhuThuy.AnimateWithScripts
         #region Public Methods
         protected Coroutine _autoReturnCoroutine;
         
-       
-
-        public void End()
+        public virtual void Recycle()
         {
-            if (!isPlaying)
-            {
-                return;
-            }
-
             isPlaying = false;
-
             KillTweens();
 
-            if (autoDisable)
-            {
-                AnimationManager.Ins.Release(this);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            AnimationManager.Ins.Release(this);
         }
         
-        public void EndFast()
+        public virtual void EndFast()
         {
-            CancelInvoke(nameof(End));
+            CancelInvoke(nameof(Recycle));
             isPlaying = false;
             KillTweens();
-            gameObject.SetActive(false);
             
             if (_autoReturnCoroutine != null)
             {
                 StopCoroutine(_autoReturnCoroutine);
                 _autoReturnCoroutine = null;
             }
+            AnimationManager.Ins.Release(this);
         }
         
         #endregion

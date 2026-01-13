@@ -63,11 +63,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private int _remainingItems;
         private float _spawnStepDelay;
         
-        
         private bool IsHaveRealText => realResourceText != null;
         
-        
-        private Transform _initTextParent;
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -75,7 +72,6 @@ namespace NamPhuThuy.AnimateWithScripts
         private void Awake()
         {
             CreatePool();
-            _initTextParent = fakeResourceText.transform.parent;
         }
 
         #endregion
@@ -235,6 +231,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 _remainingItems--;
                 DebugLogger.Log(message:$"remain Items: {_remainingItems}");
                 
+                // Animate the last item
                 if (_remainingItems <= 0)
                 {
                     if (IsHaveRealText)
@@ -246,6 +243,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     }
                     
                     currentArgs.OnComplete?.Invoke();
+                    Recycle();
                 }
                 
                 currentArgs.OnItemInteract?.Invoke();
@@ -254,6 +252,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
                 reward.gameObject.SetActive(false);
             }));
+            
         }
 
         private void UpdateFakeResourceText()

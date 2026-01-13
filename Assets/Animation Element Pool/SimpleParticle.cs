@@ -28,6 +28,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private Vector3 _baseLocalScale = Vector3.one;
         private float _baselineOrthoSize = 0f;
 
+        #region MonoBehaviour Callbacks
+
         private void Awake()
         {
             if (!particleSystem)
@@ -42,6 +44,9 @@ namespace NamPhuThuy.AnimateWithScripts
                 _baseLocalScale = Vector3.one;
         }
 
+
+        #endregion
+      
         public override void Play<T>(T args)
         {
             if (args is not SimpleParticleArgs a)

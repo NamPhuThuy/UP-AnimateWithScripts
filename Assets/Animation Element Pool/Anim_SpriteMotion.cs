@@ -73,40 +73,6 @@ namespace NamPhuThuy.AnimateWithScripts
         }
 
         /// <summary>
-        /// Plays a motion from start to end while simultaneously fading out.
-        /// </summary>
-        public void PlayWithFadeOut(Vector3 startPos, Vector3 endPos, float duration, Action onComplete = null)
-        {
-            ResetValues();
-            transform.position = startPos;
-
-            Sequence seq = DOTween.Sequence();
-            seq.Append(transform.DOMove(endPos, duration).SetEase(Ease.OutQuad));
-            seq.Join(spriteRenderer.DOFade(0f, duration).SetEase(Ease.InQuad));
-            seq.OnComplete(() => onComplete?.Invoke());
-
-            _sequence = seq;
-        }
-
-        /// <summary>
-        /// Plays an animation where the sprite scales up and then fades out at its start position.
-        /// Useful for score popups or impact effects.
-        /// </summary>
-        public void PlayPunchAndFade(Vector3 position, float punchScale, float duration, Action onComplete = null)
-        {
-            ResetValues();
-            transform.position = position;
-            transform.localScale = Vector3.zero;
-
-            Sequence seq = DOTween.Sequence();
-            seq.Append(transform.DOScale(Vector3.one * punchScale, duration * 0.5f).SetEase(Ease.OutBack));
-            seq.Append(spriteRenderer.DOFade(0f, duration * 0.5f).SetEase(Ease.InQuad));
-            seq.OnComplete(() => onComplete?.Invoke());
-
-            _sequence = seq;
-        }
-
-        /// <summary>
         /// Immediately stops any running animation and deactivates the GameObject.
         /// Should be called by the object pool when the item is despawned.
         /// </summary>
@@ -115,6 +81,7 @@ namespace NamPhuThuy.AnimateWithScripts
             DebugLogger.Log();
             _sequence?.Kill();
             ResetValues();
+            Recycle();
         }
 
 

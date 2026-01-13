@@ -145,10 +145,10 @@ namespace NamPhuThuy.AnimateWithScripts
             seq.Join(animText.DOFade(0f, duration));
             seq.OnComplete(() =>
             {
-                gameObject.SetActive(false);
-                transform.SetParent(_initialParent, true);
+                // transform.SetParent(_initialParent, true);
                 currentArgs.OnComplete?.Invoke();
                 ResetValues();
+                Recycle();
             });
         }
     }

@@ -138,7 +138,10 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void ResetValues()
         {
-            throw new NotImplementedException();
+            _seq = null;
+            gameObject.SetActive(false);
+            _rectTransform.anchoredPosition = _basePos;
+            _canvasGroup.alpha = 0f;
         }
 
         #endregion
@@ -162,10 +165,8 @@ namespace NamPhuThuy.AnimateWithScripts
             _seq.Append(_rectTransform.DOScale(0, 0.7f * _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(() =>
             {
-                _seq = null;
-                gameObject.SetActive(false);
-                _rectTransform.anchoredPosition = _basePos;
-                _canvasGroup.alpha = 0f;
+                ResetValues();
+                Recycle();
                 currentArgs.OnComplete?.Invoke();
             });
             
