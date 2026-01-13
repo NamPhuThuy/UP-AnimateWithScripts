@@ -11,15 +11,16 @@ using UnityEditor;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    
     public class AnimationTester : MonoBehaviour
     {
         #region Private Serializable Fields
-        
-        [Header("Dummy Components")]
-        public Transform dummy;
-        
-        [Header("RESOURCES FLY")]
+
+        [Header("Components")] 
+        public Transform dummyUGUI;
+        public Transform dummySprite;
+        public Camera mainCamera;
+
+        [Header("RESOURCES FLY")] 
         public TextMeshProUGUI coinText;
         public Image coinImage;
 
@@ -31,21 +32,21 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
 #if UNITY_EDITOR
-    
+
     [CustomEditor(typeof(AnimationTester))]
     public class VFXTesterEditor : Editor
     {
         private AnimationTester _script;
         private Texture2D frogIcon;
-        
-        
+
+
         private AnimationType _selectedAnimationType = AnimationType.NONE;
         private Vector3 testPosition = Vector3.zero;
         private int testAmount = 100;
         private string testMessage = "Test Message";
         private float testDuration = 2f;
         private Vector2 managerAnchoredPos = Vector2.zero;
-        
+
         private bool isUseVFXManagerPos = false;
 
         #region Callbacks
@@ -60,7 +61,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            
+
             // if (!Application.isPlaying) return;
 
             EditorGUILayout.Space(10);
@@ -77,12 +78,13 @@ namespace NamPhuThuy.AnimateWithScripts
             isUseVFXManagerPos = EditorGUILayout.Toggle("Use VFXManager Position", isUseVFXManagerPos);
 
             EditorGUILayout.Space(5);
-            
+
             ButtonPlayPopupText();
             ButtonPlayItemFly();
             ButtonStatChange();
             ButtonScreenShake();
-            
+            ButtonSpriteMotion();
+
             // Quick test all VFX types
             EditorGUILayout.Space(5);
         }
@@ -95,7 +97,8 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (GUILayout.Button(new GUIContent("Play VFX Popup Text", frogIcon)))
             {
-                var args = new PopupTextArgs {
+                var args = new PopupTextArgs
+                {
                     Message = "Hello!",
                     CustomAnchoredPos = managerAnchoredPos,
                     TextColor = Color.white,
@@ -103,7 +106,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 };
                 AnimationManager.Ins.Play<PopupTextArgs>(args);
             }
-            
         }
 
         private void ButtonPlayItemFly()
@@ -112,8 +114,9 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var coinPanel = _script.coinImage.transform;
                 var coinText = _script.coinText.transform;
-                
-                var args = new ItemFlyArgs {
+
+                var args = new ItemFlyArgs
+                {
                     AddValue = testAmount,
                     PrevValue = 0,
                     Target = coinText.transform,
@@ -124,40 +127,42 @@ namespace NamPhuThuy.AnimateWithScripts
                     OnItemInteract = () => TurnOnStatChangeVFX(coinText),
                     OnComplete = () => Debug.Log("Animation complete!")
                 };
-                
+
                 AnimationManager.Ins.Play(args);
             }
 
             void TurnOnStatChangeVFX(Transform coinText)
             {
-                var args = new StatChangeTextArgs {
+                var args = new StatChangeTextArgs
+                {
                     Amount = testAmount / _script.itemAmount,
                     CustomColor = Color.yellow,
                     RectTransformOffset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
                     TargetObject = coinText.gameObject,
                 };
-                
+
                 AnimationManager.Ins.Play(args);
             }
         }
-        
+
         private void ButtonStatChange()
         {
             if (GUILayout.Button(new GUIContent("Play State Change Text", frogIcon)))
             {
                 var coinPanel = _script.coinImage.transform;
                 var coinText = _script.coinText.transform;
-                
-                var args = new StatChangeTextArgs {
+
+                var args = new StatChangeTextArgs
+                {
                     Amount = 5,
                     CustomColor = Color.yellow,
                     RectTransformOffset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
-                    TargetObject = _script.dummy.gameObject,
+                    TargetObject = _script.dummyUGUI.gameObject,
                     OnComplete = null
                 };
-                
+
                 AnimationManager.Ins.Play(args);
             }
         }
@@ -176,7 +181,22 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
 
+        private void ButtonSpriteMotion()
+        {
+            if (GUILayout.Button(new GUIContent("Play Sprite Motion", frogIcon)))
+            {
+                var args = new SpriteMotionArgs()
+                {
+                    sprite = _script.itemSprites[0],
+                    motionType = ObjActiveAuto.MotionType.CLOCK,
+                    worldSpaceStartPosi = _script.mainCamera.ScreenToWorldPoint(_script.dummyUGUI.position),
+                    customDuration = 4f,
+                    OnComplete = null
+                };
 
+                AnimationManager.Ins.Play(args);
+            }
+        }
 
         #endregion
     }

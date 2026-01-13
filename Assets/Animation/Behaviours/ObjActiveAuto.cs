@@ -14,6 +14,17 @@ namespace NamPhuThuy.AnimateWithScripts
             START = 2,
             
         }
+        
+        public enum MotionType
+        {
+            NONE = 0,
+            ROTATE = 1,
+            CLOCK = 2,
+            MOVE = 3,
+            SCALE = 4,
+        }
+        
+        public abstract MotionType Type { get; }
 
         #region MonoBehaviour
 

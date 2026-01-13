@@ -14,6 +14,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private Sequence _currentSeq;
         private float _rootAngle;
 
+        public override MotionType Type { get => MotionType.CLOCK; }
+
         protected override void Start()
         {
             base.Start();

@@ -25,6 +25,8 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private float delayBeforeStart = 0f;
         [SerializeField] private float delayBetweenLoops = 0f;
 
+        public override MotionType Type { get => MotionType.SCALE; }
+
         protected override void OnEnable()
         {
             base.OnEnable();

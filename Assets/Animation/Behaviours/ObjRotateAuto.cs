@@ -25,6 +25,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private Tween _currentTween;
         private Vector3 _rootLocalEulerAngles;
 
+        public override MotionType Type { get => MotionType.ROTATE; }
+
         protected override void Start()
         {
             base.Start();

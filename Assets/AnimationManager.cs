@@ -68,7 +68,7 @@ namespace NamPhuThuy.AnimateWithScripts
             var entry = animationCatalog.GetEntry(type);
             if (entry == null || !entry.prefab)
             {
-                DebugLogger.LogWarning($"Missing VFX prefab for {type}"); 
+                DebugLogger.LogError($"Missing VFX prefab for {type}", context: this); 
                 return null;
             }
 

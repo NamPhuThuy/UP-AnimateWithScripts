@@ -103,4 +103,19 @@ namespace NamPhuThuy.AnimateWithScripts
         public bool ignoreTimeScale;
     }
 
+    [Serializable]
+    public struct SpriteMotionArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.SPRITE_MOTION;
+        public Action OnComplete { get; set; }
+
+        // Must have values
+        public Sprite sprite;
+        public Vector3 worldSpaceStartPosi;
+        public ObjActiveAuto.MotionType motionType;
+
+        // Custom values
+        public float customDuration;
+    }
+
 }

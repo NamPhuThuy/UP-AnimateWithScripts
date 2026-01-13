@@ -19,6 +19,7 @@ namespace NamPhuThuy.AnimateWithScripts
         CONFETTI = 7,
         BREAK_TILE_PARTICLE = 5,
         SIMPLE_PARTICLE = 6,
+        SPRITE_MOTION = 8,
     }
 
     [CreateAssetMenu(fileName = "VFXCatalog", menuName = "VFX/VFX Catalog")]

@@ -38,6 +38,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private Sequence _currentSeq;
         private Vector3 _rootLocalPos;
 
+        public override MotionType Type { get => MotionType.MOVE; }
+
         protected override void Start()
         {
             base.Start();
