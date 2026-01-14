@@ -1,0 +1,19 @@
+{
+    "name": "NamPhuThuy.AnimateWithScripts.SpineUnityEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fbb650be8d030d243b313fa3684de116",
+        "GUID:88094d0f289899844928efc03ea82454"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

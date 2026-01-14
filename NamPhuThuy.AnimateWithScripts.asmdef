@@ -5,7 +5,9 @@
         "UnityEngine.UI",
         "Unity.TextMeshPro",
         "NamPhuThuy.AnimateWithScripts.DOTween",
-        "NamPhuThuy.Common"
+        "NamPhuThuy.Common",
+        "NamPhuThuy.AnimateWithScripts.SpineCSharp",
+        "NamPhuThuy.AnimateWithScripts.SpineUnity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

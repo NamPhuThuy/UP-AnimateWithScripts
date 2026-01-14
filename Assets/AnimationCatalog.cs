@@ -20,6 +20,7 @@ namespace NamPhuThuy.AnimateWithScripts
         BREAK_TILE_PARTICLE = 5,
         PARTICLE_SYSTEM = 6,
         SPRITE_MOTION = 8,
+        SPINE_CONTROL = 9,
     }
 
     [CreateAssetMenu(fileName = "VFXCatalog", menuName = "VFX/VFX Catalog")]

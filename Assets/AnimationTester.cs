@@ -2,6 +2,7 @@
 Github: https://github.com/NamPhuThuy
 */
 
+using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,13 @@ namespace NamPhuThuy.AnimateWithScripts
         public int itemAmount = 8;
         public int itemSpriteIndex = 0;
         public Sprite[] itemSprites;
+
+        [Header("SPINE CONTROL")] 
+        public SkeletonAnimation skeletonAnimation;
+        public SkeletonGraphic skeletonGraphic;
+        public string animationName;
+        public Anim_SpineControl.SpineType spineType;
+        
 
         #endregion
     }
@@ -86,6 +94,7 @@ namespace NamPhuThuy.AnimateWithScripts
             ButtonStatChange();
             ButtonScreenShake();
             ButtonSpriteMotion();
+            ButtonSpineControl();
 
             // Quick test all VFX types
             EditorGUILayout.Space(5);
@@ -193,6 +202,22 @@ namespace NamPhuThuy.AnimateWithScripts
                     motionType = _motionType,
                     worldSpaceStartPosi = _script.mainCamera.ScreenToWorldPoint(_script.dummyUGUI.position),
                     customDuration = _testDuration,
+                    OnComplete = null
+                };
+
+                AnimationManager.Ins.Play(args);
+            }
+        }
+        
+        private void ButtonSpineControl()
+        {
+            if (GUILayout.Button(new GUIContent("Play Spine Control", frogIcon)))
+            {
+                var args = new SpineControlArgs()
+                {
+                    skeletonAnimation = _script.skeletonAnimation,
+                    activeAnimName = _script.animationName,
+                    spineType = _script.spineType,
                     OnComplete = null
                 };
 

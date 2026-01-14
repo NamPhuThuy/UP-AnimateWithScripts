@@ -38,6 +38,8 @@
 This is the short description about the project. Technologies, tools be used 
  :smile:
 
+Native Spine-package: version 4.1
+
 ## Features
 
 ### Item Fly
