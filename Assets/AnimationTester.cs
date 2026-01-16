@@ -34,7 +34,10 @@ namespace NamPhuThuy.AnimateWithScripts
         public SkeletonGraphic skeletonGraphic;
         public string animationName;
         public Anim_SpineControl.SpineType spineType;
-        
+
+        [Header("PARTICLE SYSTEM")] 
+        public ParticleSystem particleSystem;
+
 
         #endregion
     }
@@ -231,9 +234,13 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (GUILayout.Button(new GUIContent("Play Particle System", frogIcon)))
             {
+                int randomIndex = Random.Range(0, _script.itemSprites.Length);
                 var args = new ParticleSystemArgs()
                 {
-                    
+                    particleSystem = _script.particleSystem,
+                    anchoredPos = Vector2.zero,
+                    fromWorld = true,
+                    customTexture = _script.itemSprites[randomIndex].texture,
                     OnComplete = null
                 };
 

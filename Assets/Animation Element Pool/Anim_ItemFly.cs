@@ -14,7 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class AnimationItemFly : AnimationBase
+    public class Anim_ItemFly : AnimationBase
     {
         private const int CURVE_POINT_COUNT = 5;
         private const float CURVE_STRENGTH = 8f;

@@ -111,7 +111,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public Camera worldCamera; // optional; falls back to Camera.main
 
         // Used when fromWorld == false
-        public Vector2 anchoredPosition;
+        public Vector2 anchoredPos;
 
         // Custom values
         // Optional custom parent (e.g., a specific canvas or UI layer)

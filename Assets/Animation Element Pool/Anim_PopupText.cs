@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace NamPhuThuy.AnimateWithScripts
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class AnimationPopupText : AnimationBase
+    public class Anim_PopupText : AnimationBase
     {
         [Header("Stats")] 
         [SerializeField] private float duration = 1f;

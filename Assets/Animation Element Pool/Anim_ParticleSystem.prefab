@@ -45,21 +45,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8099c92d68febdd439ee24968c8f1153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.AnimationSimpleParticle
-  autoDisable: 1
   isPlaying: 0
   particleSystem: {fileID: 842938577288254705}
   customMaterial: {fileID: 0}
+  PSRenderers: []
   keepConstantScreenSize: 1
   referenceCamera: {fileID: 0}
   captureBaselineOnPlay: 1
-  _currentArgs:
+  currentArgs:
     fromWorld: 0
+    particleSystem: {fileID: 0}
     worldPosition: {x: 0, y: 0, z: 0}
     worldCamera: {fileID: 0}
-    anchoredPosition: {x: 0, y: 0}
+    anchoredPos: {x: 0, y: 0}
     customParent: {fileID: 0}
     customMaterial: {fileID: 0}
     customColor: {r: 0, g: 0, b: 0, a: 0}
+    customTexture: {fileID: 0}
     ignoreTimeScale: 0
 --- !u!1001 &3829965299393735457
 PrefabInstance:
@@ -69,49 +71,65 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1960265130971469059}
     m_Modifications:
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2348043740108747441, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+    - target: {fileID: 2348043740108747441, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
       propertyPath: m_Name
       value: Water_blast_green_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2348043740108747441, guid: d55d59c1a863adb419cc0a838af3e33f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -120,11 +138,13 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
 --- !u!198 &842938577288254705 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4509366627444391888, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4509366627444391888, guid: d55d59c1a863adb419cc0a838af3e33f,
+    type: 3}
   m_PrefabInstance: {fileID: 3829965299393735457}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4044640159786119123 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 938921280499549426, guid: d55d59c1a863adb419cc0a838af3e33f,
+    type: 3}
   m_PrefabInstance: {fileID: 3829965299393735457}
   m_PrefabAsset: {fileID: 0}

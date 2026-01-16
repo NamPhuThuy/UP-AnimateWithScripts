@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class AnimationStatChangeText : AnimationBase
+    public class Anim_StatChangeText : AnimationBase
     {
         [Header("Components")]
         [SerializeField] private TextMeshProUGUI animText;

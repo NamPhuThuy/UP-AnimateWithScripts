@@ -43,6 +43,11 @@ namespace NamPhuThuy.AnimateWithScripts
                 _baseLocalScale = Vector3.one;
         }
 
+        private void OnDisable()
+        {
+            Destroy(particleSystem.gameObject);
+        }
+
 
         #endregion
 
@@ -70,32 +75,33 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void SetValues()
         {
+           
+
+            ParticleSystem ps = Instantiate(currentArgs.particleSystem).GetComponent<ParticleSystem>();
+            particleSystem = ps;
+            
+            customMaterial = currentArgs.customMaterial;
+            
+            
             if (currentArgs.fromWorld)
             {
-                transform.position = new Vector3(currentArgs.worldPosition.x, currentArgs.worldPosition.y, -12f);
+                particleSystem.transform.position = new Vector3(currentArgs.worldPosition.x, currentArgs.worldPosition.y, -12f);
             }
             else
             {
-                transform.position = new Vector3(
-                    currentArgs.anchoredPosition.x,
-                    currentArgs.anchoredPosition.y,
-                    transform.position.z
+                particleSystem.transform.position = new Vector3(
+                    currentArgs.anchoredPos.x,
+                    currentArgs.anchoredPos.y,
+                    particleSystem.transform.position.z
                 );
             }
-
-            particleSystem = currentArgs.particleSystem;
-            
-            customMaterial = currentArgs.customMaterial;
             
             // Custom Values
             if (currentArgs.customTexture != null)
             {
-                PSRenderers = new ParticleSystemRenderer[particleSystem.transform.childCount + 1];
-                for (int i = 0; i < PSRenderers.Length; i++)
-                {
-                    PSRenderers[i] = particleSystem.GetComponent<ParticleSystemRenderer>();
-                }
-
+                PSRenderers =  PSRenderers = particleSystem.GetComponentsInChildren<ParticleSystemRenderer>(true);
+                DebugLogger.Log(message:$"PSRenderer: {PSRenderers.Length}");
+                
                 _materialPropertyBlock = new MaterialPropertyBlock();
                 ApplyCustomTexture(currentArgs.customTexture);
             }
