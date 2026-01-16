@@ -90,9 +90,11 @@ namespace NamPhuThuy.AnimateWithScripts
             EditorGUILayout.Space(5);
 
             ButtonPlayPopupText();
+            ButtonPopupImage();
             ButtonPlayItemFly();
             ButtonStatChange();
             ButtonScreenShake();
+            ButtonParticleSystem();
             ButtonSpriteMotion();
             ButtonSpineControl();
 
@@ -106,7 +108,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void ButtonPlayPopupText()
         {
-            if (GUILayout.Button(new GUIContent("Play VFX Popup Text", frogIcon)))
+            if (GUILayout.Button(new GUIContent("Play Popup Text", frogIcon)))
             {
                 var args = new PopupTextArgs
                 {
@@ -116,6 +118,22 @@ namespace NamPhuThuy.AnimateWithScripts
                     Duration = 1f,
                 };
                 AnimationManager.Ins.Play<PopupTextArgs>(args);
+            }
+        }
+        
+        private void ButtonPopupImage()
+        {
+            if (GUILayout.Button(new GUIContent("Play Popup Image", frogIcon)))
+            {
+                int randomIndex = Random.Range(0, _script.itemSprites.Length);
+                Vector2 randAnchoredPosi = new Vector2(Random.Range(-500f, 500f), Random.Range(-700f, 700f));
+                
+                var args = new PopupImageArgs()
+                {
+                    sprite = _script.itemSprites[randomIndex],
+                    anchoredPos = randAnchoredPosi,
+                };
+                AnimationManager.Ins.Play(args);
             }
         }
 
@@ -202,6 +220,20 @@ namespace NamPhuThuy.AnimateWithScripts
                     motionType = _motionType,
                     worldSpaceStartPosi = _script.mainCamera.ScreenToWorldPoint(_script.dummyUGUI.position),
                     customDuration = _testDuration,
+                    OnComplete = null
+                };
+
+                AnimationManager.Ins.Play(args);
+            }
+        }
+        
+        private void ButtonParticleSystem()
+        {
+            if (GUILayout.Button(new GUIContent("Play Particle System", frogIcon)))
+            {
+                var args = new ParticleSystemArgs()
+                {
+                    
                     OnComplete = null
                 };
 

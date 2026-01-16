@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.Anim_ParticleSystem_Catalog
   listPS:
   - {fileID: 4509366627444391888, guid: d55d59c1a863adb419cc0a838af3e33f, type: 3}
+  - {fileID: 0}

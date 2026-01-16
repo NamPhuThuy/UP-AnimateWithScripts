@@ -5,6 +5,7 @@ Github: https://github.com/NamPhuThuy
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
@@ -49,6 +50,21 @@ namespace NamPhuThuy.AnimateWithScripts
         public Color TextColor; // default is (0f, 0f, 0f, 0f)
         public TMP_FontAsset TextFont; 
         public float Duration;
+    }
+
+    [Serializable]
+    public struct PopupImageArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.POPUP_IMAGE;
+        public Action OnComplete { get; set; }
+        
+        // Must have values
+        public Sprite sprite;
+        public Vector2 anchoredPos;
+        
+        // Custom values
+        public Color customFilterColor;
+        public float customDuration;
     }
     
     [Serializable]
