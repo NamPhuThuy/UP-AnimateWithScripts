@@ -118,7 +118,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     Message = "Hello!",
                     CustomAnchoredPos = managerAnchoredPos,
                     TextColor = Color.white,
-                    Duration = 1f,
+                    customDuration = 1f,
                 };
                 AnimationManager.Ins.Play<PopupTextArgs>(args);
             }

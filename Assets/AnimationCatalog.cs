@@ -22,6 +22,7 @@ namespace NamPhuThuy.AnimateWithScripts
         SPRITE_MOTION = 8,
         SPINE_CONTROL = 9,
         POPUP_IMAGE = 10,
+        SEGMENT_REWARD_PROGRESS = 11,
     }
 
     [CreateAssetMenu(fileName = "VFXCatalog", menuName = "VFX/VFX Catalog")]

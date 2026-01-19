@@ -99,7 +99,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 transform.parent = currentArgs.CustomParent.transform;
             }
 
-            duration = Mathf.Max(currentArgs.Duration, duration);
+            duration = Mathf.Max(currentArgs.customDuration, duration);
 
             if (currentArgs.CustomAnchoredPos != default)
             {

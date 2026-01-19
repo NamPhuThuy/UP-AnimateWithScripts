@@ -19,7 +19,10 @@ namespace NamPhuThuy.AnimateWithScripts
     public struct ItemFlyArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.ITEM_FLY;
+        
+        //Events
         public Action OnComplete { get; set; }
+        public System.Action OnItemInteract;
 
         [Tooltip("The value to add to the preValue")]
         public int AddValue;
@@ -34,7 +37,6 @@ namespace NamPhuThuy.AnimateWithScripts
         public Transform TargetInteractTransform;
         public Sprite ItemSprite;
         public Vector3 StartPosition;
-        public System.Action OnItemInteract;
     }
     
     [Serializable]
@@ -43,13 +45,16 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationType Type => AnimationType.POPUP_TEXT;
         public Action OnComplete { get; set; }
 
+        // Must-have Values
         public string Message;
+        public Color TextColor; // default is (0f, 0f, 0f, 0f)
+        public TMP_FontAsset TextFont;
+        
+        // Custom Values
+        public float customDuration;
         public Vector3 CustomAnchoredPos;
         public Transform CustomParent;
         public float CustomScale;
-        public Color TextColor; // default is (0f, 0f, 0f, 0f)
-        public TMP_FontAsset TextFont; 
-        public float Duration;
     }
 
     [Serializable]
@@ -71,6 +76,8 @@ namespace NamPhuThuy.AnimateWithScripts
     public struct StatChangeTextArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.STAT_CHANGE_TEXT;
+        
+        // Events
         public Action OnComplete { get; set; }
 
         public int Amount;
@@ -78,10 +85,13 @@ namespace NamPhuThuy.AnimateWithScripts
         public bool IsBold;
         public float Duration;
         public Color CustomColor;
-        public TMP_FontAsset CustomFont;
+        
         public Vector2 RectTransformOffset;
         public Vector2 MoveDistance;
         public GameObject TargetObject;
+        
+        //Custom Values
+        public TMP_FontAsset CustomFont;
     }
     
     [Serializable]
@@ -134,6 +144,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public Sprite sprite;
         public Vector3 worldSpaceStartPosi;
         public ObjActiveAuto.MotionType motionType;
+      
 
         // Custom values
         public float customDuration;
@@ -141,5 +152,30 @@ namespace NamPhuThuy.AnimateWithScripts
         public int customSortingOrder;
     }
 
+    [Serializable]
+    public struct RewardProgressArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.SEGMENT_REWARD_PROGRESS;
+        public Action OnComplete { get; set; }
+        public Action<int> OnSegmentComplete { get; set; }  // Callback with segment index
+        
+        // Must have values
+        public Sprite prizeSprite;
+        public int totalSegmentNum;
+        public int currentSegmentNum;
+        public int targetSegmentNum;
+        
+        // Option values
+        public string customMessage;
+        public Sprite customSegmentSprite;
+        public Sprite customBackgroundSprite;
+        public Sprite customEndpointSprite;
+        
+        // Animation settings
+        public float segmentFillDuration;
+        public float delayBetweenSegments;
+        public bool playSound;
+        public bool showParticles;
+    }
    
 }
