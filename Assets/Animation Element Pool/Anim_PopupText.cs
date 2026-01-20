@@ -11,7 +11,6 @@ namespace NamPhuThuy.AnimateWithScripts
     public class Anim_PopupText : AnimationBase
     {
         [Header("Stats")] 
-        [SerializeField] private float duration = 1f;
         [SerializeField] private PopupTextArgs currentArgs;
         
         [Header("Components")]
@@ -25,7 +24,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private readonly float _holdDuration = 0.8f;
         private readonly float _upDuration = 0.15f;
         private readonly float _downFadeDuration = 0.35f;
-        private readonly float _upDistance = 18f;
+        private readonly float _upDistance = 24f;
         private readonly Ease _inEase = Ease.OutCubic;
         private readonly Ease _upEase = Ease.OutQuad;
         private readonly Ease _downEase = Ease.InCubic;
@@ -35,7 +34,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private Sequence _seq;
         private Vector2 _basePos;
-        private readonly string _fallbackText = "Watch out!";
+        private readonly string _fallbackText = "Readying!";
        
 
         #region MonoBehaviour Callbacks
@@ -99,8 +98,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 transform.parent = currentArgs.CustomParent.transform;
             }
 
-            duration = Mathf.Max(currentArgs.customDuration, duration);
-
             if (currentArgs.CustomAnchoredPos != default)
             {
                 SetAnchoredPos(currentArgs.CustomAnchoredPos);
@@ -159,7 +156,7 @@ namespace NamPhuThuy.AnimateWithScripts
             
             if (_holdDuration > 0f) _seq.AppendInterval(_holdDuration);
             
-            _seq.Append(_rectTransform.DOAnchorPosY(_basePos.y + _upDistance, _upDuration).SetEase(_upEase));
+            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + _upDistance, _upDuration).SetEase(_upEase));
             _seq.Append(_rectTransform.DOScale(1.1f, 0.3f * _downFadeDuration).SetEase(_downEase));
             _seq.Join(_canvasGroup.DOFade(0f, 0.7f * _downFadeDuration));
             _seq.Append(_rectTransform.DOScale(0, 0.7f * _downFadeDuration).SetEase(_downEase));
@@ -170,7 +167,8 @@ namespace NamPhuThuy.AnimateWithScripts
                 currentArgs.OnComplete?.Invoke();
             });
             
-            StartAutoReturn(duration + 0.5f);
+            if (currentArgs.customDuration != 0f)
+                StartAutoReturn(currentArgs.customDuration);
         }
         
         #region Set Up

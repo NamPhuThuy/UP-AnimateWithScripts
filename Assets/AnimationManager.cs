@@ -26,7 +26,7 @@ namespace NamPhuThuy.AnimateWithScripts
         protected override void Awake()
         {
             base.Awake();
-            PreloadAll();
+            PreloadAnimations();
             
             /*DebugLogger.Log(message:$"anchored posi: {GetComponent<RectTransform>().anchoredPosition}");
             DebugLogger.Log(message:$"rect position: {GetComponent<RectTransform>().position}");
@@ -35,7 +35,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #endregion
 
-        void PreloadAll()
+        void PreloadAnimations()
         {
             if (!animationCatalog) return;
             foreach (var e in animationCatalog.entries)

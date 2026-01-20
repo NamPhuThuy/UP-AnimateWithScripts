@@ -60,10 +60,6 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] private TextMeshProUGUI progressText; // "3/10"
         
-        [Header("Visual Feedback")]
-        [SerializeField] private ParticleSystem segmentCompleteParticle;
-        [SerializeField] private ParticleSystem rewardClaimParticle;
-        
         #endregion
         
         #region Private Fields
@@ -174,11 +170,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 if (currentArgs.playSound)
                 {
                     PlaySegmentSound();
-                }
-                
-                if (currentArgs.showParticles && segmentCompleteParticle != null)
-                {
-                    PlaySegmentParticle(i);
                 }
                 
                 yield return new WaitForSeconds(delayBetween);
@@ -348,12 +339,7 @@ namespace NamPhuThuy.AnimateWithScripts
             prizeImage.DOColor(Color.yellow, 0.3f)
                 .SetLoops(4, LoopType.Yoyo);
             
-            // Particle effect
-            if (rewardClaimParticle != null)
-            {
-                rewardClaimParticle.transform.position = prizeImage.transform.position;
-                rewardClaimParticle.Play();
-            }
+        
         }
         
         private void UpdateProgressText()
@@ -368,15 +354,6 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             // TODO: Play audio clip
             // AudioManager.Instance.PlaySFX("segment_complete");
-        }
-        
-        private void PlaySegmentParticle(int segmentIndex)
-        {
-            if (segmentCompleteParticle == null || segmentIndex >= segments.Count) return;
-            
-            Vector3 particlePos = segments[segmentIndex].segmentObject.transform.position;
-            segmentCompleteParticle.transform.position = particlePos;
-            segmentCompleteParticle.Play();
         }
         
         private void SetupEndpoints()

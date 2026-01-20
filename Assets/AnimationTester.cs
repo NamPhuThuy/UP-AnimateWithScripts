@@ -55,7 +55,6 @@ namespace NamPhuThuy.AnimateWithScripts
         private int testAmount = 100;
         private string testMessage = "Test Message";
         private float _testDuration = 2f;
-        private Vector2 managerAnchoredPos = Vector2.zero;
         
         // Sprite Motion
         private ObjActiveAuto.MotionType _motionType;
@@ -67,7 +66,6 @@ namespace NamPhuThuy.AnimateWithScripts
         private void OnEnable()
         {
             _script = (AnimationTester)target;
-            managerAnchoredPos = AnimationManager.Ins.GetComponent<RectTransform>().anchoredPosition;
             frogIcon = Resources.Load<Texture2D>("frog");
         }
 
@@ -116,7 +114,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new PopupTextArgs
                 {
                     Message = "Hello!",
-                    CustomAnchoredPos = managerAnchoredPos,
+                    CustomAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
                     TextColor = Color.white,
                     customDuration = 1f,
                 };
