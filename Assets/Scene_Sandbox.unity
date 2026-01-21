@@ -958,6 +958,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1342128696}
+  - component: {fileID: 1342128699}
   - component: {fileID: 1342128698}
   - component: {fileID: 1342128697}
   m_Layer: 0
@@ -1024,6 +1025,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342128695}
   m_CullTransparentMesh: 1
+--- !u!114 &1342128699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342128695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57fec359cc93f6c44b04c6499f628b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.Utils.UITransformTester
+  positionType: 2
+  targetPosition: {x: 0, y: 0, z: 0}
+  liveUpdate: 0
+  transformPosition: {x: 0, y: 0, z: 0}
+  transformLocalPosi: {x: 0, y: 0, z: 0}
+  rectTransformPosition: {x: 0, y: 0, z: 0}
+  rectTransformAnchoredPosition: {x: 0, y: 0, z: 0}
+  rectTransformAnchoredPosition3D: {x: 0, y: 0, z: 0}
+  rectTransformLocalPosi: {x: 0, y: 0, z: 0}
+  rectTransform: {fileID: 1342128696}
 --- !u!1 &1607904961
 GameObject:
   m_ObjectHideFlags: 0

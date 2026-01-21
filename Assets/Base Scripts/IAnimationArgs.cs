@@ -66,10 +66,12 @@ namespace NamPhuThuy.AnimateWithScripts
         // Must have values
         public Sprite sprite;
         public Vector2 anchoredPos;
+        public bool isUseAnchoredPos;
         
         // Custom values
         public Color customFilterColor;
         public float customDuration;
+        public Vector2 customPosition;
     }
     
     [Serializable]

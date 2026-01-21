@@ -8,6 +8,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 301789819127934262, guid: 0eb646ba5eb0ac748b165199768b0e87,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5e10ac58cee52d54c983f343fdcf3ec6, type: 2}
+    - target: {fileID: 635662795653969101, guid: 0eb646ba5eb0ac748b165199768b0e87,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f68bb4d99c791fc4da0d5caffab0bb29, type: 2}
     - target: {fileID: 3378176563467969438, guid: 0eb646ba5eb0ac748b165199768b0e87,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -23,6 +33,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.65
       objectReference: {fileID: 0}
+    - target: {fileID: 3574571478561298270, guid: 0eb646ba5eb0ac748b165199768b0e87,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 39a3b1860804c3c48ade1a1adbb9dcdd, type: 2}
     - target: {fileID: 5790823176500231786, guid: 0eb646ba5eb0ac748b165199768b0e87,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -38,6 +53,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.65
       objectReference: {fileID: 0}
+    - target: {fileID: 6655580470104542660, guid: 0eb646ba5eb0ac748b165199768b0e87,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2e5f5d47a9546df44a6a17ba4455e0e8, type: 2}
     - target: {fileID: 6918932819184602590, guid: 0eb646ba5eb0ac748b165199768b0e87,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -53,6 +73,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.65
       objectReference: {fileID: 0}
+    - target: {fileID: 7076763235909780201, guid: 0eb646ba5eb0ac748b165199768b0e87,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 39a3b1860804c3c48ade1a1adbb9dcdd, type: 2}
     - target: {fileID: 7267875386539508066, guid: 0eb646ba5eb0ac748b165199768b0e87,
         type: 3}
       propertyPath: m_LocalScale.x

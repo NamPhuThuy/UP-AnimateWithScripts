@@ -21,6 +21,9 @@ namespace NamPhuThuy.AnimateWithScripts
         
         [Header("Stats")]
         [SerializeField] private Vector2 basePos;
+
+        [Header("Flags")] 
+        [SerializeField] private bool isAdjustAnchoredPos;
         #endregion
 
         #region Private Fields
@@ -67,6 +70,23 @@ namespace NamPhuThuy.AnimateWithScripts
                 currentArgs.OnComplete?.Invoke();
             });
         }
+
+        private void SetPosition()
+        {
+            if (currentArgs.isUseAnchoredPos)
+            {
+                imageRectTransform.anchoredPosition = currentArgs.anchoredPos;
+            }
+            else
+            {
+                // DebugLogger.Log(message: $"currentArgs.customPosition: {currentArgs.customPosition}, \ncurrentArgs.anchoredPos: {currentArgs.anchoredPos}, transform.position: {transform.position}, imageRectTransform.position: {imageRectTransform.position}");
+                // DebugLogger.Log(message:$"WorldToViewportPoint: {Camera.main.WorldToViewportPoint(currentArgs.customPosition)}, WorldToScreenPoint: {Camera.main.WorldToScreenPoint(currentArgs.customPosition)}");
+                imageRectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.customPosition);
+                // imageRectTransform.position = currentArgs.customPosition;
+                
+                // DebugLogger.Log(message:$"transform.position: {transform.position}: imageRectTransform.position {imageRectTransform.position}");
+            }
+        }
         
         #endregion
 
@@ -79,6 +99,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 currentArgs = popupImageArgs;
                 gameObject.SetActive(true);
                 SetValues();
+                SetPosition();
                 PlayAnim();
             }
         }
@@ -91,7 +112,7 @@ namespace NamPhuThuy.AnimateWithScripts
             tempColor.a = 1f;
             image.color = tempColor;
             
-            imageRectTransform.anchoredPosition = currentArgs.anchoredPos;
+            
             
             
             // Custom values
