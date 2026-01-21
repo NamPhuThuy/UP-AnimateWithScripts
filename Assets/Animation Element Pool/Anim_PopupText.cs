@@ -111,13 +111,11 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 backImage.rectTransform.localScale = Vector3.one * currentArgs.CustomScale;
                 messageText.rectTransform.localScale = Vector3.one * currentArgs.CustomScale;
-                DebugLogger.Log(message:$"use custom");
             }
             else
             {
                 backImage.rectTransform.localScale = Vector3.one;
                 messageText.rectTransform.localScale = Vector3.one;
-                DebugLogger.Log(message:$"dont use custom");
             }
             
             SetContent(currentArgs.Message);
