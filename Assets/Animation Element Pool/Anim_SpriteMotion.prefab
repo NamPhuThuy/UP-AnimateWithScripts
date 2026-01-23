@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.ObjClockwiseAnimAuto
   startIn: 0
-  duration: 0.5
+  duration: 0.15
   startAngle: {x: 0, y: 0, z: -15}
   endAngle: {x: 0, y: 0, z: 15}
   ease: 4
@@ -193,7 +193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8410bebaa7d4296458e282c685ef9ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.Anim_SpriteMotion
-  autoDisable: 1
   isPlaying: 0
   motionType: 0
   interactTransform: {fileID: 6003060778477507236}
@@ -208,3 +207,8 @@ MonoBehaviour:
     worldSpaceStartPosi: {x: 0, y: 0, z: 0}
     motionType: 0
     customDuration: 0
+    customDelay: 0
+    customSortingLayer: 
+    customSortingOrder: 0
+  sortingLayerName: 
+  sortingOrder: 0
