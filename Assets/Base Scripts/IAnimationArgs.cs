@@ -55,6 +55,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public Vector3 CustomAnchoredPos;
         public Transform CustomParent;
         public float CustomScale;
+        public bool customEnableBackImage;
     }
 
     [Serializable]

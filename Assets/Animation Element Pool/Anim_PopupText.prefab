@@ -68,7 +68,8 @@ MonoBehaviour:
   m_text: Warning
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20921b77c6f7efc41b920a88f62c4a08, type: 2}
-  m_sharedMaterial: {fileID: 7829428503920298276, guid: 20921b77c6f7efc41b920a88f62c4a08, type: 2}
+  m_sharedMaterial: {fileID: 7829428503920298276, guid: 20921b77c6f7efc41b920a88f62c4a08,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -170,9 +172,9 @@ RectTransform:
   - {fileID: 2946241859982090152}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -448}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 832}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &6683221631010279429
@@ -199,9 +201,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28e6acf7b3ee9a24997cce03ec11b333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoDisable: 1
   isPlaying: 0
-  duration: 1
+  currentArgs:
+    Message: 
+    TextColor: {r: 0, g: 0, b: 0, a: 0}
+    TextFont: {fileID: 0}
+    customDuration: 0
+    CustomAnchoredPos: {x: 0, y: 0, z: 0}
+    CustomParent: {fileID: 0}
+    CustomScale: 0
+    customEnableBackImage: 0
   messageText: {fileID: 4031627747225518682}
   backImage: {fileID: 6714918850751644749}
   ignoreTimeScale: 1

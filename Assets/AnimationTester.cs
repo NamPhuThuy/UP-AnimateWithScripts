@@ -45,7 +45,7 @@ namespace NamPhuThuy.AnimateWithScripts
 #if UNITY_EDITOR
 
     [CustomEditor(typeof(AnimationTester))]
-    public class VFXTesterEditor : Editor
+    public class AnimationTesterEditor : Editor
     {
         private AnimationTester _script;
         private Texture2D frogIcon;
@@ -90,7 +90,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
             EditorGUILayout.Space(5);
 
-            ButtonPlayPopupText();
+            ButtonPopupText();
             ButtonPopupImage();
             ButtonPlayItemFly();
             ButtonStatChange();
@@ -107,7 +107,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region VFX-Buttons
 
-        private void ButtonPlayPopupText()
+        private void ButtonPopupText()
         {
             if (GUILayout.Button(new GUIContent("Play Popup Text", frogIcon)))
             {
