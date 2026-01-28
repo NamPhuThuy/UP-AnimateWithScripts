@@ -168,6 +168,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     CustomColor = Color.yellow,
                     RectTransformOffset = Vector2.zero,
                     MoveDistance = new Vector2(0f, 30f),
+                    isUseAnchoredPos = false,
                     TargetObject = coinText.gameObject,
                 };
 

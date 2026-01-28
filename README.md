@@ -35,10 +35,12 @@
 <!-- ABOUT THE PROJECT -->
 # About The Project
 
-This is the short description about the project. Technologies, tools be used 
- :smile:
+This project purpose is to pre-create frequent use effect, such as: 
+- Multiples coins fly toward a target
+- A popup text shows up on the screen to inform player
+- An number popup to show the stat changes
 
-Native Spine-package: version 4.1
+This project use PrimeTween as the native Tween behaviour
 
 ## Features
 
@@ -48,14 +50,11 @@ Native Spine-package: version 4.1
 
 ### PopupText
 
-## Particle System
+# Note
+- This method in PrimeTween/Editor/CodeGenerator.cs is commented because error 
+```// Assert.IsTrue(System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(methodName), $"Method name is invalid: {methodName}.");```
 
 
-
-
-### Built With
-* [![Unity][Unity.com]][Unity-url]
-* [![CSharp][CSharp.com]][CSharp-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

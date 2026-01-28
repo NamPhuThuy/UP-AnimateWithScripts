@@ -88,6 +88,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public bool IsBold;
         public float Duration;
         public Color CustomColor;
+        public bool isUseAnchoredPos;
         
         public Vector2 RectTransformOffset;
         public Vector2 MoveDistance;

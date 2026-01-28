@@ -8,8 +8,9 @@ namespace NamPhuThuy.AnimateWithScripts
     public class Anim_StatChangeText : AnimationBase
     {
         [Header("Components")]
-        [SerializeField] private TextMeshProUGUI animText;
+        [SerializeField] private TextMeshProUGUI nativeText;
         [SerializeField] private TextMeshProUGUI targetText;
+        [SerializeField] private RectTransform rectTransform;
         [SerializeField] private GameObject targetObject;
         [SerializeField] private Vector3 targetPosition;
 
@@ -18,13 +19,6 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private float duration = 1f;
         [SerializeField] private float textSizeMul = 1.3f;
         [SerializeField]  private StatChangeTextArgs currentArgs;
-
-        private Transform _initialParent;
-
-        void Awake()
-        {
-            _initialParent = transform.parent;
-        }
 
         #region Override Methods
         
@@ -55,7 +49,7 @@ namespace NamPhuThuy.AnimateWithScripts
             targetText = targetObject.GetComponent<TextMeshProUGUI>();
             if (targetText != null)
             {
-                animText.CopyProperties(targetText);
+                nativeText.CopyProperties(targetText);
                 
                 var targetRect = targetText.GetComponent<RectTransform>();
                 var vfxRect = GetComponent<RectTransform>();
@@ -67,39 +61,38 @@ namespace NamPhuThuy.AnimateWithScripts
                 vfxRect.pivot = targetRect.pivot;
             }
             
-            _initialParent = currentArgs.TargetObject.transform;
-            
             // Set Text Properties
             
-            animText.fontSize *= textSizeMul;
-            animText.enableAutoSizing = false;
+            nativeText.enableAutoSizing = false;
+            nativeText.fontSize *= textSizeMul;
+            
            
             // Set Text Color
-            if (currentArgs.Amount >= 0)
+            /*if (currentArgs.Amount >= 0)
             {
                 animText.text = $"+{currentArgs.Amount}{currentArgs.AdditionalIconText}";
                 animText.color = Color.green;
             }
             else
             {
-                animText.text = $"-{currentArgs.Amount}{currentArgs.AdditionalIconText}";
+                animText.text = $"{currentArgs.Amount}{currentArgs.AdditionalIconText}";
                 animText.color = Color.red;
-            }
+            }*/
 
             if (currentArgs.IsBold)
             {   
-                animText.fontStyle |= FontStyles.Bold;
+                nativeText.fontStyle |= FontStyles.Bold;
             }
 
-            if (currentArgs.CustomColor != default)
+            /*if (currentArgs.CustomColor != default)
             {
                 animText.color = currentArgs.CustomColor;
-            }
+            }*/
         }
 
         protected override void ResetValues()
         {
-            animText.fontStyle &= ~FontStyles.Bold;
+            nativeText.fontStyle &= ~FontStyles.Bold;
         }
 
         #endregion
@@ -117,10 +110,65 @@ namespace NamPhuThuy.AnimateWithScripts
         private Vector2 endPosition;
         private void PlayStatChangeText()
         {
+            Canvas canvas = GetComponentInParent<Canvas>();
+    
+            // Convert world position to canvas position
+            Vector2 canvasPosition;
+            /*if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
+                canvasPosition = new Vector2(screenPos.x, screenPos.y);
+            }
+            else
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    canvas.transform as RectTransform,
+                    Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position),
+                    canvas.worldCamera,
+                    out canvasPosition
+                );
+            }*/
+            
+            
+            
+            if (currentArgs.isUseAnchoredPos)
+            {
+                // rectTransform.anchoredPosition = currentArgs.anchoredPos;
+            }
+            else
+            {
+                rectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
+            }
+            
+            DebugLogger.Log(message:$"Canvas Rendermode: {canvas.renderMode}");
             // transform.SetParent(targetObject.transform.parent, true);
 
+            // Apply offsets
+            // startPosition = canvasPosition + currentArgs.RectTransformOffset;
+            // Vector2 randomOffset = Vector2Helper.RandomPointInRange(35f, preferHorizontal: true);
+            // startPosition += randomOffset;
+    
+            // endPosition = /*startPosition*/rectTransform.position + currentArgs.MoveDistance;
+    
+            // Set position using anchoredPosition
+            // rectTransform.anchoredPosition = startPosition;
+    
+            nativeText.DOFade(1f, 0f);
+            gameObject.SetActive(true);
+
+            Sequence seq = DOTween.Sequence();
+            // seq.Append(rectTransform.DOAnchorPos(endPosition, duration));
+            seq.Join(nativeText.DOFade(0f, duration));
+            seq.OnComplete(() =>
+            {
+                currentArgs.OnComplete?.Invoke();
+                ResetValues();
+                Recycle();
+            });
             
-            // Convert targetObject's world position to screen position
+            
+            
+            /*// Convert targetObject's world position to screen position
             Vector3 screenPos = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
             Debug.Log(message:$"screenPos: {screenPos}");
             startPosition = new Vector2(screenPos.x, screenPos.y) + currentArgs.RectTransformOffset;
@@ -130,11 +178,11 @@ namespace NamPhuThuy.AnimateWithScripts
             
             // Set initial anchored position
             RectTransform rt = GetComponent<RectTransform>();
-            rt.position = startPosition;
+            rt.anchoredPosition/*position#1# = startPosition;
             
             Vector2 offset = Vector2Helper.RandomPointInRange(35f, preferHorizontal:true);
             
-            rt.position += (Vector3)offset/*currentArgs.RectTransformOffset*/;
+            rt.position += (Vector3)offset/*currentArgs.RectTransformOffset#1#;
             
             animText.DOFade(1f, 0f);
             gameObject.SetActive(true);
@@ -149,7 +197,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 currentArgs.OnComplete?.Invoke();
                 ResetValues();
                 Recycle();
-            });
+            });*/
         }
     }
 }
