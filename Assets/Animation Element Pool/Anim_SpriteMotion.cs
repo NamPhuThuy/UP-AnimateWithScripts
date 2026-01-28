@@ -53,7 +53,7 @@ namespace NamPhuThuy.AnimateWithScripts
             interactTransform.position = worldSpaceStartPosi;
 
             _sequence = DOTween.Sequence();
-            _sequence.AppendInterval(duration).OnComplete(Stop);
+            _sequence.AppendInterval(duration).OnComplete(EndFast);
 
             switch (motionType)
             {
@@ -70,18 +70,6 @@ namespace NamPhuThuy.AnimateWithScripts
                     break;
             }
             
-        }
-
-        /// <summary>
-        /// Immediately stops any running animation and deactivates the GameObject.
-        /// Should be called by the object pool when the item is despawned.
-        /// </summary>
-        public void Stop()
-        {
-            DebugLogger.Log();
-            _sequence?.Kill();
-            ResetValues();
-            Recycle();
         }
 
 
@@ -107,6 +95,13 @@ namespace NamPhuThuy.AnimateWithScripts
                 DebugLogger.LogError(message:$"Sprite is missing");
             }
             spriteRenderer.sprite = currentArgs.sprite;
+
+            if (currentArgs.customVerticalSize != 0)
+            {
+                DebugLogger.Log(message:$"currentArgs.customVerticalSize: {currentArgs.customVerticalSize}, spriteRenderer.sprite.textureRect.height: {spriteRenderer.sprite.textureRect.height}, spriteRenderer.sprite.pixelsPerUnit: {spriteRenderer.sprite.pixelsPerUnit}; res = {currentArgs.customVerticalSize / (spriteRenderer.sprite.textureRect.height / spriteRenderer.sprite.pixelsPerUnit)}");
+                float multiply = currentArgs.customVerticalSize / (spriteRenderer.sprite.textureRect.height / spriteRenderer.sprite.pixelsPerUnit);
+                transform.localScale = new Vector3(multiply, multiply, multiply);
+            }
 
             motionType = currentArgs.motionType;
             worldSpaceStartPosi = currentArgs.worldSpaceStartPosi;
@@ -140,6 +135,14 @@ namespace NamPhuThuy.AnimateWithScripts
             objClockwiseAnimAuto.Stop();
             objRotateAuto.Stop();
             objScaleAuto.Stop();
+        }
+        
+        public override void EndFast()
+        {
+            // DebugLogger.Log();
+            base.EndFast();
+            _sequence?.Kill();
+            ResetValues();
         }
 
         #endregion

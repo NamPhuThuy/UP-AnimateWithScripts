@@ -90,15 +90,15 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region Public Methods
         
-        public T Play<T>(T args) where T : struct, IAnimationArgs
+        public AnimationBase Play<T>(T args) where T : struct, IAnimationArgs
         {
             AnimationBase animationBase = Get(args.Type);
-            if (!animationBase) return args;
+            if (!animationBase) return null;
 
             // Play with type-safe arguments
             animationBase.Play(args);
             
-            return args;
+            return animationBase;
         }
 
         #endregion

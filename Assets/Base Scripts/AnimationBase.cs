@@ -62,7 +62,6 @@ namespace NamPhuThuy.AnimateWithScripts
         
         public virtual void EndFast()
         {
-            CancelInvoke(nameof(Recycle));
             isPlaying = false;
             KillTweens();
             
