@@ -16,34 +16,34 @@ MonoBehaviour:
   - type: 1
     prefab: {fileID: 4587091639683192124, guid: 647a24c2a7aaef1479099bb291ded614,
       type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10
   - type: 2
     prefab: {fileID: 6670669583149072350, guid: 610e2a3ee3ffabc4fb89245daf5ca7ff,
       type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10
   - type: 3
     prefab: {fileID: 658901984484033640, guid: cb082a1bca56cbe4a8550a3fff281d63, type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10
   - type: 4
     prefab: {fileID: 9145777501125222086, guid: 3386109ecf5f03844880768592fe24ee,
       type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10
   - type: 6
     prefab: {fileID: 3712385461926560693, guid: 3b9595dac36d1cc4d85299badc1f7cd6,
       type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10
   - type: 8
     prefab: {fileID: 4789579475207930383, guid: 8015cda007eda2940ae60468b9727f97,
       type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10
   - type: 10
     prefab: {fileID: 7042315290174004435, guid: 95cccbe5b9ec91c4d83827728af8b435,
       type: 3}
-    preload: 3
+    preload: 2
     softMaxAliveSeconds: 10

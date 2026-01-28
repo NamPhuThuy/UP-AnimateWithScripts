@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using Spine;
@@ -140,5 +141,6 @@ namespace NamPhuThuy.AnimateWithScripts
             GUILayout.EndHorizontal();
         }
     }
-    #endif*/
+    #endif#1#
 }
+*/

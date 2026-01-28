@@ -2,7 +2,6 @@
 Github: https://github.com/NamPhuThuy
 */
 
-using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,10 +29,10 @@ namespace NamPhuThuy.AnimateWithScripts
         public Sprite[] itemSprites;
 
         [Header("SPINE CONTROL")] 
-        public SkeletonAnimation skeletonAnimation;
-        public SkeletonGraphic skeletonGraphic;
+        /*public SkeletonAnimation skeletonAnimation;
+        public SkeletonGraphic skeletonGraphic;*/
         public string animationName;
-        public Anim_SpineControl.SpineType spineType;
+        // public Anim_SpineControl.SpineType spineType;
 
         [Header("PARTICLE SYSTEM")] 
         public ParticleSystem particleSystem;
@@ -248,7 +247,7 @@ namespace NamPhuThuy.AnimateWithScripts
         
         private void ButtonSpineControl()
         {
-            if (GUILayout.Button(new GUIContent("Play Spine Control", frogIcon)))
+            /*if (GUILayout.Button(new GUIContent("Play Spine Control", frogIcon)))
             {
                 var args = new SpineControlArgs()
                 {
@@ -259,7 +258,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 };
 
                 AnimationManager.Ins.Play(args);
-            }
+            }*/
         }
 
         #endregion

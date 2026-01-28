@@ -1,3 +1,4 @@
+/*
 using System;
 using Spine;
 using Spine.Unity;
@@ -22,3 +23,4 @@ namespace NamPhuThuy.AnimateWithScripts
         // Custom values
     }
 }
+*/

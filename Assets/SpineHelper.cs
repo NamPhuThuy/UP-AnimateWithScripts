@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using Spine.Unity;
 using UnityEngine;
 
@@ -80,4 +80,4 @@ namespace NamPhuThuy.AnimateWithScripts
         #endregion
     }
 
-}
+}*/
