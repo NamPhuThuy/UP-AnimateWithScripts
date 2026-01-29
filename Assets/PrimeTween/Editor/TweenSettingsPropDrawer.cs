@@ -1,9 +1,12 @@
 using JetBrains.Annotations;
 using PrimeTween;
-using UnityEditor;
+
 using UnityEngine;
 using Mathf = UnityEngine.Mathf;
 
+#if UNITY_EDITOR
+
+using UnityEditor;
 [CustomPropertyDrawer(typeof(TweenSettings))]
 internal class TweenSettingsPropDrawer : PropertyDrawer {
     static GUIContent updateTypeGuiContent;
@@ -184,3 +187,5 @@ class UpdateTypePropDrawer : PropertyDrawer {
         EditorGUI.PropertyField(pos, prop, label);
     }
 }
+
+#endif

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
+[assembly: InternalsVisibleTo("NamPhuThuy.AnimateWithScripts.PrimeTween.Tests")]
 namespace PrimeTween {
     public partial struct Tween : IEnumerator {
         /// <summary>Use this method to wait for a Tween in coroutines.</summary>

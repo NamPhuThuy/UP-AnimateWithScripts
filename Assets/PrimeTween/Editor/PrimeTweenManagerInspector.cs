@@ -1,8 +1,12 @@
 using JetBrains.Annotations;
 using PrimeTween;
-using UnityEditor;
+
 using UnityEngine;
 
+#if UNITY_EDITOR
+
+
+using UnityEditor;
 [CustomEditor(typeof(PrimeTweenManager))]
 internal class PrimeTweenManagerInspector : Editor {
     SerializedProperty tweensProp;
@@ -84,3 +88,4 @@ internal class PrimeTweenManagerInspector : Editor {
         }
     }
 }
+#endif

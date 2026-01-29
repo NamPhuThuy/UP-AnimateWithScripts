@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("NamPhuThuy.AnimateWithScripts.PrimeTween.Editor")]
 namespace PrimeTween {
     internal enum PropType : byte {
         None = 0,

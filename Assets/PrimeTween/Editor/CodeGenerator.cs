@@ -5,12 +5,15 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using PrimeTween;
-using UnityEditor;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
 using TweenType = PrimeTween.TweenAnimation.TweenType;
 
-internal class CodeGenerator : ScriptableObject {
+#if UNITY_EDITOR
+using UnityEditor;
+
+internal class CodeGenerator : ScriptableObject
+{
     [SerializeField] MonoScript methodsScript;
     [SerializeField] MonoScript dotweenMethodsScript;
     [SerializeField] MonoScript tweenComponentScript;
@@ -33,21 +36,25 @@ internal class CodeGenerator : ScriptableObject {
     }*/
 
     [Serializable]
-    class AdditiveMethodsGenerator {
+    class AdditiveMethodsGenerator
+    {
         [SerializeField] AdditiveMethodsGeneratorData[] additiveMethods;
 
         [Serializable]
-        class AdditiveMethodsGeneratorData {
+        class AdditiveMethodsGeneratorData
+        {
             [SerializeField] internal string methodName;
             [SerializeField] internal PropType propertyType;
             [SerializeField] internal string setter;
         }
 
         [NotNull]
-        internal string Generate() {
+        internal string Generate()
+        {
             string result = @"
 #if PRIME_TWEEN_EXPERIMENTAL";
-            foreach (var data in additiveMethods) {
+            foreach (var data in additiveMethods)
+            {
                 const string template = @"        
         public static Tween PositionAdditive([NotNull] UnityEngine.Transform target, Single deltaValue, float duration, Ease ease = Ease.Default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false) 
             => PositionAdditive(target, deltaValue, new TweenSettings(duration, ease, cycles, cycleMode, startDelay, endDelay, useUnscaledTime));
@@ -60,25 +67,31 @@ internal class CodeGenerator : ScriptableObject {
                     .Replace("PositionAdditive", data.methodName)
                     .Replace("additiveTweenSetter()", data.setter);
             }
+
             result += "#endif";
             return result;
         }
     }
 
     [ContextMenu(nameof(Generate))]
-    internal void Generate() {
-        #if !PRIME_TWEEN_EXPERIMENTAL
+    internal void Generate()
+    {
+#if !PRIME_TWEEN_EXPERIMENTAL
         throw new Exception("add PRIME_TWEEN_EXPERIMENTAL to defines");
-        #endif
+#endif
         generateMethods();
         generateDotweenMethods();
     }
 
     const string generatorBeginLabel = "// CODE GENERATOR BEGIN";
 
-    void GenerateTweenComponent(Dictionary<MethodGenerationData, string> methodDataToEnumName, List<string> manualTweenTypes) {
-        if (tweenComponentScript == null) {
-            Debug.LogError("Not generating TweenAnimationComponent script because this component is only available in PrimeTween PRO.");
+    void GenerateTweenComponent(Dictionary<MethodGenerationData, string> methodDataToEnumName,
+        List<string> manualTweenTypes)
+    {
+        if (tweenComponentScript == null)
+        {
+            Debug.LogError(
+                "Not generating TweenAnimationComponent script because this component is only available in PrimeTween PRO.");
             return;
         }
 
@@ -94,15 +107,21 @@ internal class CodeGenerator : ScriptableObject {
             .ToArray();
 
         Dependency dependency = Dependency.None;
-        for (var i = 0; i < generationData.Length; i++) {
+        for (var i = 0; i < generationData.Length; i++)
+        {
             var data = generationData[i];
-            if (dependency != data.dependency) {
-                if (shouldWrapInDefine(dependency)) {
+            if (dependency != data.dependency)
+            {
+                if (shouldWrapInDefine(dependency))
+                {
                     str += "                    #endif\n";
                 }
+
                 dependency = data.dependency;
-                if (shouldWrapInDefine(dependency)) {
-                    switch (dependency) {
+                if (shouldWrapInDefine(dependency))
+                {
+                    switch (dependency)
+                    {
                         case Dependency.PRIME_TWEEN_EXPERIMENTAL:
                         case Dependency.UI_ELEMENTS_MODULE_INSTALLED:
                         case Dependency.TEXT_MESH_PRO_INSTALLED:
@@ -114,18 +133,27 @@ internal class CodeGenerator : ScriptableObject {
                     }
                 }
             }
-            if (!methodDataToEnumName.TryGetValue(data, out string tweenType)) {
+
+            if (!methodDataToEnumName.TryGetValue(data, out string tweenType))
+            {
                 continue;
             }
-            if (manualTweenTypes.Contains(tweenType)) {
+
+            if (manualTweenTypes.Contains(tweenType))
+            {
                 continue;
             }
-            if (data.dependency == Dependency.UI_ELEMENTS_MODULE_INSTALLED || data.targetType.Contains("PrimeTween.")) { // skip both TweenTimeScale
+
+            if (data.dependency == Dependency.UI_ELEMENTS_MODULE_INSTALLED || data.targetType.Contains("PrimeTween."))
+            {
+                // skip both TweenTimeScale
                 continue;
             }
+
             Assert.IsTrue(tweenType.Contains(data.methodName), $"{i}, {tweenType}, {data.methodName}");
 
-            var template = "                    case TweenType.Position: { return GetUnityTarget<Transform>(out var tweenTarget, ref err) ? Tween.Position(tweenTarget, settingsVector3) : default; }";
+            var template =
+                "                    case TweenType.Position: { return GetUnityTarget<Transform>(out var tweenTarget, ref err) ? Tween.Position(tweenTarget, settingsVector3) : default; }";
             template = template.Replace("TweenType.Position", $"TweenType.{tweenType}");
             template = template.Replace("Transform", getTypeByName(data.targetType).Name);
             template = template.Replace("Tween.Position", $"Tween.{getPrefix()}{data.methodName}");
@@ -134,9 +162,12 @@ internal class CodeGenerator : ScriptableObject {
 
             string getPrefix() => data.placeInGlobalScope ? null : getMethodPrefix(data.dependency);
         }
-        if (shouldWrapInDefine(dependency)) {
+
+        if (shouldWrapInDefine(dependency))
+        {
             str += "                    #endif\n";
         }
+
         str += @"                    default:
                         throw new Exception();
                 }
@@ -148,18 +179,22 @@ internal class CodeGenerator : ScriptableObject {
         SaveScript(tweenComponentScript, str);
     }
 
-    static void SaveScript(MonoScript script, string text) {
+    static void SaveScript(MonoScript script, string text)
+    {
         var path = AssetDatabase.GetAssetPath(script);
-        if (text == File.ReadAllText(path)) {
+        if (text == File.ReadAllText(path))
+        {
             return;
         }
+
         File.WriteAllText(path, text);
         EditorUtility.SetDirty(script);
         AssetDatabase.Refresh();
         AssetDatabase.SaveAssets();
     }
 
-    void generateDotweenMethods() {
+    void generateDotweenMethods()
+    {
         // p2 todo combine adapter files into one file
         var str = @"#if PRIME_TWEEN_DOTWEEN_ADAPTER
 // This file is generated by CodeGenerator.cs
@@ -169,11 +204,15 @@ using System;
 namespace PrimeTween {
     [PublicAPI]
     public static partial class DOTweenAdapter {";
-        const string dotweenOverload = "        public static Tween DOTWEEN_METHOD_NAME([NotNull] this UnityEngine.Camera target, Single endValue, float duration) => Tween.METHOD_NAME(target, endValue, duration);";
-        str += generateWithDefines(data => {
-            if (!data.dotweenMethodName.Any()) {
+        const string dotweenOverload =
+            "        public static Tween DOTWEEN_METHOD_NAME([NotNull] this UnityEngine.Camera target, Single endValue, float duration) => Tween.METHOD_NAME(target, endValue, duration);";
+        str += generateWithDefines(data =>
+        {
+            if (!data.dotweenMethodName.Any())
+            {
                 return string.Empty;
             }
+
             Assert.IsTrue(data.dotweenMethodName.Any());
             string result = "";
             result += "\n";
@@ -188,8 +227,10 @@ namespace PrimeTween {
     }
 
     [CanBeNull]
-    static string getMethodPrefix(Dependency dep) {
-        switch (dep) {
+    static string getMethodPrefix(Dependency dep)
+    {
+        switch (dep)
+        {
             case Dependency.UNITY_UGUI_INSTALLED:
                 return "UI";
             case Dependency.AUDIO_MODULE_INSTALLED:
@@ -203,11 +244,14 @@ namespace PrimeTween {
             case Dependency.TEXT_MESH_PRO_INSTALLED:
                 return null;
         }
+
         return dep.ToString();
     }
 
-    static bool shouldWrapInDefine(Dependency d) {
-        switch (d) {
+    static bool shouldWrapInDefine(Dependency d)
+    {
+        switch (d)
+        {
             case Dependency.UNITY_UGUI_INSTALLED:
             case Dependency.AUDIO_MODULE_INSTALLED:
             case Dependency.PHYSICS_MODULE_INSTALLED:
@@ -217,11 +261,12 @@ namespace PrimeTween {
             case Dependency.TEXT_MESH_PRO_INSTALLED:
                 return true;
         }
+
         return false;
     }
 
     const string overloadTemplateTo =
-@"        public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, Single endValue, float duration, Easing ease = default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
+        @"        public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, Single endValue, float duration, Easing ease = default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => METHOD_NAME(target, new TweenSettings<float>(endValue, new TweenSettings(duration, ease, cycles, cycleMode, startDelay, endDelay, useUnscaledTime)));
         public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, Single startValue, Single endValue, float duration, Easing ease = default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => METHOD_NAME(target, new TweenSettings<float>(startValue, endValue, new TweenSettings(duration, ease, cycles, cycleMode, startDelay, endDelay, useUnscaledTime)));
@@ -229,18 +274,21 @@ namespace PrimeTween {
         public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, Single endValue, TweenSettings settings) => METHOD_NAME(target, new TweenSettings<float>(endValue, settings));
         [EditorBrowsable(EditorBrowsableState.Never)] [Obsolete(ObsoleteMessages.tweenSettingsOverloadStartEndValue)]
         public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, Single startValue, Single endValue, TweenSettings settings) => METHOD_NAME(target, new TweenSettings<float>(startValue, endValue, settings));";
+
     const string fullTemplate =
-@"        public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, TweenSettings<float> settings)
+        @"        public static Tween METHOD_NAME([NotNull] UnityEngine.Camera target, TweenSettings<float> settings)
             => animate(target, ref settings, TweenType.CameraOrthographicSize);";
 
-    void generateMethods() {
+    void generateMethods()
+    {
         var text = methodsScript.text;
         var searchIndex = text.IndexOf(generatorBeginLabel, StringComparison.Ordinal);
         Assert.AreNotEqual(-1, searchIndex);
         text = text.Substring(0, searchIndex + generatorBeginLabel.Length) + "\n";
 
         var methodDataToEnumName = new Dictionary<MethodGenerationData, string>();
-        var manualTweenTypes = new List<string> {
+        var manualTweenTypes = new List<string>
+        {
             "MainSequence",
             "NestedSequence",
             "TweenAnimationComponent",
@@ -275,35 +323,46 @@ namespace PrimeTween {
             "LocalEulerAngles",
             "GlobalTimeScale"
         };
-        { // generate enums
+        {
+            // generate enums
             var enums = new List<string>(manualTweenTypes);
-            foreach (var group in methodsData.GroupBy(_ => _.dependency)) {
-                foreach (var data in group) {
+            foreach (var group in methodsData.GroupBy(_ => _.dependency))
+            {
+                foreach (var data in group)
+                {
                     string enumName = GetTweenTypeEnumName(data);
-                    if (methodDataToEnumName.Values.Contains(enumName)) {
+                    if (methodDataToEnumName.Values.Contains(enumName))
+                    {
                         // skip duplicates like VisualElementColor_VisualElement / Color_VisualElement and VisualElementOpacity_VisualElement / Alpha_VisualElement
                         // Debug.Log($"skip duplicate {enumName}");
                         continue;
                     }
+
                     methodDataToEnumName.Add(data, enumName);
                     enums.Add(enumName);
                 }
             }
+
             enums.Sort();
             enums.Insert(0, "Disabled");
-            for (int i = 0; i < enums.Count; i++) {
+            for (int i = 0; i < enums.Count; i++)
+            {
                 string enumName = enums[i];
                 bool isDouble = enumName == "CustomDouble";
-                if (isDouble) {
+                if (isDouble)
+                {
                     text += @"            #if PRIME_TWEEN_EXPERIMENTAL
 ";
                 }
+
                 text += $"            {enumName} = {i},\n";
-                if (isDouble) {
+                if (isDouble)
+                {
                     text += @"            #endif
 ";
                 }
             }
+
             text += @"        }
     }
 
@@ -323,10 +382,13 @@ namespace PrimeTween {
                 string afterEnd = utilsText.Substring(endIndex);
                 utilsText = utilsText.Substring(0, startIndex + generatorBeginLabel.Length) + "\n";
                 {
-                    foreach (var group in methodsData.GroupBy(x => x.dependency)) {
+                    foreach (var group in methodsData.GroupBy(x => x.dependency))
+                    {
                         Dependency dependency = group.Key;
-                        if (shouldWrapInDefine(dependency)) {
-                            switch (dependency) {
+                        if (shouldWrapInDefine(dependency))
+                        {
+                            switch (dependency)
+                            {
                                 case Dependency.PRIME_TWEEN_EXPERIMENTAL:
                                 case Dependency.UI_ELEMENTS_MODULE_INSTALLED:
                                 case Dependency.TEXT_MESH_PRO_INSTALLED:
@@ -337,21 +399,32 @@ namespace PrimeTween {
                                     break;
                             }
                         }
-                        foreach (MethodGenerationData data in group) {
-                            if (!data.generateOnlyOverloads && methodDataToEnumName.TryGetValue(data, out string enumName)) {
+
+                        foreach (MethodGenerationData data in group)
+                        {
+                            if (!data.generateOnlyOverloads &&
+                                methodDataToEnumName.TryGetValue(data, out string enumName))
+                            {
                                 string propNameOrGetter;
-                                if (data.propertyName.Any()) {
+                                if (data.propertyName.Any())
+                                {
                                     CheckFieldOrProp(data);
                                     propNameOrGetter = data.propertyName;
-                                } else {
+                                }
+                                else
+                                {
                                     Assert.IsTrue(data.propertyGetter.Any());
                                     propNameOrGetter = data.propertyGetter;
                                 }
-                                utilsText += $@"            case TweenType.{enumName}: return (target as {getTypeByName(data.targetType).FullName}).{propNameOrGetter}.ToContainer();
+
+                                utilsText +=
+                                    $@"            case TweenType.{enumName}: return (target as {getTypeByName(data.targetType).FullName}).{propNameOrGetter}.ToContainer();
 ";
                             }
                         }
-                        if (shouldWrapInDefine(dependency)) {
+
+                        if (shouldWrapInDefine(dependency))
+                        {
                             utilsText += "            #endif\n";
                         }
                     }
@@ -362,14 +435,18 @@ namespace PrimeTween {
             {
                 // generate SetAnimatedValue()
                 // p2 todo combine Utils class with TweenGenerated or Extensions file
-                startIndex = utilsText.IndexOf(generatorBeginLabel, startIndex + generatorBeginLabel.Length, StringComparison.Ordinal);
+                startIndex = utilsText.IndexOf(generatorBeginLabel, startIndex + generatorBeginLabel.Length,
+                    StringComparison.Ordinal);
                 Assert.AreNotEqual(-1, startIndex);
                 utilsText = utilsText.Substring(0, startIndex + generatorBeginLabel.Length) + "\n";
 
-                foreach (var group in methodsData.GroupBy(x => x.dependency)) {
+                foreach (var group in methodsData.GroupBy(x => x.dependency))
+                {
                     Dependency dependency = group.Key;
-                    if (shouldWrapInDefine(dependency)) {
-                        switch (dependency) {
+                    if (shouldWrapInDefine(dependency))
+                    {
+                        switch (dependency)
+                        {
                             case Dependency.PRIME_TWEEN_EXPERIMENTAL:
                             case Dependency.UI_ELEMENTS_MODULE_INSTALLED:
                             case Dependency.TEXT_MESH_PRO_INSTALLED:
@@ -380,13 +457,20 @@ namespace PrimeTween {
                                 break;
                         }
                     }
-                    foreach (MethodGenerationData data in group) {
-                        if (!data.generateOnlyOverloads && methodDataToEnumName.TryGetValue(data, out string enumName)) {
-                            if (data.propertyName.Any()) {
+
+                    foreach (MethodGenerationData data in group)
+                    {
+                        if (!data.generateOnlyOverloads && methodDataToEnumName.TryGetValue(data, out string enumName))
+                        {
+                            if (data.propertyName.Any())
+                            {
                                 CheckFieldOrProp(data);
-                                utilsText += $@"            case TweenType.{enumName}: (target as {getTypeByName(data.targetType).FullName}).{data.propertyName} = {data.propertyType}Val(); break;
+                                utilsText +=
+                                    $@"            case TweenType.{enumName}: (target as {getTypeByName(data.targetType).FullName}).{data.propertyName} = {data.propertyType}Val(); break;
 ";
-                            } else {
+                            }
+                            else
+                            {
                                 Assert.IsTrue(data.propertySetter.Any());
                                 utilsText += $@"            case TweenType.{enumName}: {{
                 var _target = target as {getTypeByName(data.targetType).FullName};
@@ -398,7 +482,9 @@ namespace PrimeTween {
                             }
                         }
                     }
-                    if (shouldWrapInDefine(dependency)) {
+
+                    if (shouldWrapInDefine(dependency))
+                    {
                         utilsText += "            #endif\n";
                     }
                 }
@@ -406,7 +492,7 @@ namespace PrimeTween {
 
             // generate TweenTypeToTweenData()
             utilsText +=
-@"            default: {
+                @"            default: {
                 rt.cold.onValueChange(ref rt, ref d);
                 break;
             }
@@ -417,10 +503,13 @@ namespace PrimeTween {
     internal static (PropType, Type) TweenTypeToTweenData(TweenType tweenType) {
         switch (tweenType) {
 ";
-            foreach (var group in methodsData.GroupBy(x => x.dependency)) {
+            foreach (var group in methodsData.GroupBy(x => x.dependency))
+            {
                 var dependency = group.Key;
-                if (shouldWrapInDefine(dependency)) {
-                    switch (dependency) {
+                if (shouldWrapInDefine(dependency))
+                {
+                    switch (dependency)
+                    {
                         case Dependency.PRIME_TWEEN_EXPERIMENTAL:
                         case Dependency.UI_ELEMENTS_MODULE_INSTALLED:
                         case Dependency.TEXT_MESH_PRO_INSTALLED:
@@ -431,17 +520,26 @@ namespace PrimeTween {
                             break;
                     }
                 }
-                foreach (var data in group) {
-                    if (!methodDataToEnumName.TryGetValue(data, out string enumName)) {
+
+                foreach (var data in group)
+                {
+                    if (!methodDataToEnumName.TryGetValue(data, out string enumName))
+                    {
                         continue;
                     }
-                    utilsText += $"            case TweenType.{enumName}: return (PropType.{data.propertyType}, typeof({getTypeByName(data.targetType).FullName}));\n";
+
+                    utilsText +=
+                        $"            case TweenType.{enumName}: return (PropType.{data.propertyType}, typeof({getTypeByName(data.targetType).FullName}));\n";
                 }
-                if (shouldWrapInDefine(dependency)) {
+
+                if (shouldWrapInDefine(dependency))
+                {
                     utilsText += "            #endif\n";
                 }
             }
-            var tweenData = new List<(TweenType, PropType, Type)> {
+
+            var tweenData = new List<(TweenType, PropType, Type)>
+            {
                 (TweenType.Disabled, PropType.Float, null), // dead sequence turns into Disabled
                 (TweenType.Delay, PropType.Float, null),
                 (TweenType.Callback, PropType.Float, null),
@@ -457,9 +555,9 @@ namespace PrimeTween {
                 (TweenType.CustomVector4, PropType.Vector4, null),
                 (TweenType.CustomQuaternion, PropType.Quaternion, null),
                 (TweenType.CustomRect, PropType.Rect, null),
-                #if PRIME_TWEEN_EXPERIMENTAL
+#if PRIME_TWEEN_EXPERIMENTAL
                 (TweenType.CustomDouble, PropType.Double, null),
-                #endif
+#endif
                 (TweenType.MaterialColorProperty, PropType.Color, typeof(Material)),
                 (TweenType.MaterialProperty, PropType.Float, typeof(Material)),
                 (TweenType.MaterialAlphaProperty, PropType.Float, typeof(Material)),
@@ -473,29 +571,38 @@ namespace PrimeTween {
                 (TweenType.NestedSequence, PropType.Float, null),
                 (TweenType.TweenAwaiter, PropType.Float, null)
             };
-            foreach (var tuple in tweenData) {
+            foreach (var tuple in tweenData)
+            {
                 bool isDouble = tuple.Item1.ToString() == "CustomDouble";
-                if (isDouble) {
+                if (isDouble)
+                {
                     utilsText += @"            #if PRIME_TWEEN_EXPERIMENTAL
 ";
                 }
+
                 string typeStr = tuple.Item3 == null ? "null" : $"typeof({tuple.Item3})";
                 utilsText += $"            case TweenType.{tuple.Item1}: return (PropType.{tuple.Item2}, {typeStr});\n";
-                if (isDouble) {
+                if (isDouble)
+                {
                     utilsText += @"            #endif
 ";
                 }
             }
-            bool isPro() {
+
+            bool isPro()
+            {
                 return false;
             }
-            if (isPro()) {
+
+            if (isPro())
+            {
                 utilsText +=
-@"            #if PRIME_TWEEN_PRO
+                    @"            #if PRIME_TWEEN_PRO
             case TweenType.TweenAnimationComponent: return (PropType.None, typeof(PrimeTween.TweenAnimationComponent));
             #endif
 ";
             }
+
             utilsText += @"            default:
                 throw new Exception();
         }
@@ -518,80 +625,116 @@ namespace PrimeTween {
         GenerateTweenComponent(methodDataToEnumName, manualTweenTypes);
     }
 
-    static void CheckFieldOrProp(MethodGenerationData data) {
+    static void CheckFieldOrProp(MethodGenerationData data)
+    {
         var type = getTypeByName(data.targetType);
         Assert.IsNotNull(type);
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
         var prop = type.GetProperty(data.propertyName, flags);
         Type expectedPropType;
-        if (data.propertyType == PropType.Float) {
+        if (data.propertyType == PropType.Float)
+        {
             expectedPropType = typeof(float);
-        } else if (data.propertyType == PropType.Int) {
+        }
+        else if (data.propertyType == PropType.Int)
+        {
             expectedPropType = typeof(int);
-        } else {
+        }
+        else
+        {
             var typeName = $"{data.propertyType.ToFullTypeName()}, UnityEngine.CoreModule";
             expectedPropType = Type.GetType(typeName);
             Assert.IsNotNull(expectedPropType, typeName);
         }
-        if (prop != null) {
+
+        if (prop != null)
+        {
             Assert.AreEqual(expectedPropType, prop.PropertyType);
             return;
         }
 
         var field = type.GetField(data.propertyName, flags);
-        if (field != null) {
+        if (field != null)
+        {
             Assert.AreEqual(expectedPropType, field.FieldType, "Field type is incorrect.");
             return;
         }
 
-        throw new Exception($"Field or property with name ({data.propertyName}) not found for type {type.FullName}. Generation data name: {data.description}.");
+        throw new Exception(
+            $"Field or property with name ({data.propertyName}) not found for type {type.FullName}. Generation data name: {data.description}.");
     }
 
-    static string GetTweenTypeEnumName(MethodGenerationData data) {
+    static string GetTweenTypeEnumName(MethodGenerationData data)
+    {
         string result = "";
         var dependency = data.dependency;
-        if (dependency == Dependency.UI_ELEMENTS_MODULE_INSTALLED) {
-            if (data.methodName == "Alpha") {
+        if (dependency == Dependency.UI_ELEMENTS_MODULE_INSTALLED)
+        {
+            if (data.methodName == "Alpha")
+            {
                 return "VisualElementOpacity";
             }
         }
 
-        if (dependency != Dependency.None) {
+        if (dependency != Dependency.None)
+        {
             result += getMethodPrefix(dependency);
         }
-        if (dependency == Dependency.UI_ELEMENTS_MODULE_INSTALLED && !data.methodName.Contains("VisualElement")) {
+
+        if (dependency == Dependency.UI_ELEMENTS_MODULE_INSTALLED && !data.methodName.Contains("VisualElement"))
+        {
             result += "VisualElement";
         }
+
         result += data.methodName;
-        if ((data.methodName == "Alpha" || data.methodName == "Color") && dependency == Dependency.UNITY_UGUI_INSTALLED) {
+        if ((data.methodName == "Alpha" || data.methodName == "Color") && dependency == Dependency.UNITY_UGUI_INSTALLED)
+        {
             result += getTypeByName(data.targetType).Name;
-        } else if (data.methodName == "Scale" && data.propertyType == PropType.Float) {
+        }
+        else if (data.methodName == "Scale" && data.propertyType == PropType.Float)
+        {
             result += "Uniform";
-        } else if ((data.methodName == "Rotation" || data.methodName == "LocalRotation" || (data.methodName == "MoveRotation" && data.targetType == "UnityEngine.Rigidbody")) && data.propertyType == PropType.Quaternion) {
+        }
+        else if ((data.methodName == "Rotation" || data.methodName == "LocalRotation" ||
+                  (data.methodName == "MoveRotation" && data.targetType == "UnityEngine.Rigidbody")) &&
+                 data.propertyType == PropType.Quaternion)
+        {
             result += "Quaternion";
-        } else if (data.targetType == "PrimeTween.Sequence") {
+        }
+        else if (data.targetType == "PrimeTween.Sequence")
+        {
             result += "Sequence";
-        } else if (data.targetType == "UnityEngine.Rigidbody2D") {
+        }
+        else if (data.targetType == "UnityEngine.Rigidbody2D")
+        {
             result += "2D";
         }
+
         return result;
     }
 
     [NotNull]
-    string generateWithDefines([NotNull] Func<MethodGenerationData, string> generator) {
+    string generateWithDefines([NotNull] Func<MethodGenerationData, string> generator)
+    {
         string result = "";
-        foreach (var group in methodsData.GroupBy(_ => _.dependency)) {
+        foreach (var group in methodsData.GroupBy(_ => _.dependency))
+        {
             result += generateWithDefines(generator, group);
         }
+
         return result;
     }
 
     [NotNull]
-    static string generateWithDefines([NotNull] Func<MethodGenerationData, string> generator, [NotNull] IGrouping<Dependency, MethodGenerationData> group) {
+    static string generateWithDefines([NotNull] Func<MethodGenerationData, string> generator,
+        [NotNull] IGrouping<Dependency, MethodGenerationData> group)
+    {
         var result = "";
         var dependency = group.Key;
-        if (shouldWrapInDefine(dependency)) {
-            switch (dependency) {
+        if (shouldWrapInDefine(dependency))
+        {
+            switch (dependency)
+            {
                 case Dependency.PRIME_TWEEN_EXPERIMENTAL:
                 case Dependency.UI_ELEMENTS_MODULE_INSTALLED:
                 case Dependency.TEXT_MESH_PRO_INSTALLED:
@@ -602,21 +745,28 @@ namespace PrimeTween {
                     break;
             }
         }
-        foreach (var method in group) {
+
+        foreach (var method in group)
+        {
             var generated = generator(method);
-            if (!string.IsNullOrEmpty(generated)) {
+            if (!string.IsNullOrEmpty(generated))
+            {
                 result += generated;
                 result += "\n";
             }
         }
-        if (shouldWrapInDefine(dependency)) {
+
+        if (shouldWrapInDefine(dependency))
+        {
             result += "\n        #endif";
         }
+
         return result;
     }
 
     [NotNull]
-    static Type getTypeByName(string targetType) {
+    static Type getTypeByName(string targetType)
+    {
         var types = AppDomain.CurrentDomain
             .GetAssemblies()
             .Select(_ => _.GetType(targetType))
@@ -624,7 +774,8 @@ namespace PrimeTween {
             .Where(_ => _.FullName == targetType)
             .Distinct()
             .ToArray();
-        switch (types.Length) {
+        switch (types.Length)
+        {
             case 0:
                 throw new Exception($"target type ({targetType}) not found in any of the assemblies.\n" +
                                     "Please specify the full name of the type. For example, instead of 'Transform', use 'UnityEngine.Transform'.\n" +
@@ -633,15 +784,19 @@ namespace PrimeTween {
                 break;
             default:
                 throw new Exception($"More than one type found that match {targetType}. Found:\n"
-                                    + string.Join("\n", types.Select(_ => $"{_.AssemblyQualifiedName}\n{_.Assembly.GetName().FullName}")));
+                                    + string.Join("\n",
+                                        types.Select(_ =>
+                                            $"{_.AssemblyQualifiedName}\n{_.Assembly.GetName().FullName}")));
         }
+
         var type = types.Single();
         Assert.IsNotNull(type, $"targetType ({targetType}) wasn't found in any assembly.");
         return type;
     }
 
     [NotNull]
-    static string generate([NotNull] MethodGenerationData data) {
+    static string generate([NotNull] MethodGenerationData data)
+    {
         var methodName = data.methodName;
         // Assert.IsTrue(System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(methodName), $"Method name is invalid: {methodName}.");
         var propertyName = data.propertyName;
@@ -650,10 +805,13 @@ namespace PrimeTween {
         var full = populateTemplate(fullTemplate, data);
         const string templatePropName = "orthographicSize";
         string replaced = "";
-        if (data.generateOnlyOverloads) {
+        if (data.generateOnlyOverloads)
+        {
             replaced += "\n";
             replaced += overload;
-        } else if (propertyName.Any()) {
+        }
+        else if (propertyName.Any())
+        {
             CheckFieldOrProp(data);
             Assert.IsFalse(data.propertyGetter.Any());
             Assert.IsFalse(data.propertySetter.Any());
@@ -662,9 +820,12 @@ namespace PrimeTween {
             replaced += "\n";
             replaced += full;
             replaced = replaced.Replace(templatePropName, propertyName);
-        } else {
+        }
+        else
+        {
             Assert.IsTrue(data.propertySetter.Any());
-            if (data.propertyGetter.Any()) {
+            if (data.propertyGetter.Any())
+            {
                 replaced += "\n";
                 replaced += replaceGetter(overload);
             }
@@ -673,42 +834,54 @@ namespace PrimeTween {
             full = replaceSetter(full);
             replaced += replaceGetter(full);
 
-            string replaceGetter(string str) {
-                while (true) {
+            string replaceGetter(string str)
+            {
+                while (true)
+                {
                     var j = str.IndexOf(templatePropName, StringComparison.Ordinal);
-                    if (j == -1) {
+                    if (j == -1)
+                    {
                         break;
                     }
+
                     Assert.AreNotEqual(-1, j);
                     str = str.Remove(j, templatePropName.Length);
                     str = str.Insert(j, data.propertyGetter);
                 }
+
                 return str;
             }
 
             // ReSharper disable once AnnotateNotNullTypeMember
-            string replaceSetter(string str) {
-                while (true) {
+            string replaceSetter(string str)
+            {
+                while (true)
+                {
                     var k = str.IndexOf("orthographicSize =", StringComparison.Ordinal);
-                    if (k == -1) {
+                    if (k == -1)
+                    {
                         break;
                     }
+
                     Assert.AreNotEqual(-1, k);
                     var endIndex = str.IndexOf(";", k, StringComparison.Ordinal);
                     Assert.AreNotEqual(-1, endIndex);
                     str = str.Remove(k, endIndex - k);
                     str = str.Insert(k, data.propertySetter);
                 }
+
                 return str;
             }
         }
+
         return replaced;
     }
 
     [NotNull]
-    static string addCustomAnimationMethods(string text) {
+    static string addCustomAnimationMethods(string text)
+    {
         const string template =
-@"        public static Tween Custom_TEMPLATE(Single startValue, Single endValue, float duration, [NotNull] Action<Single> onValueChange, Ease ease = Ease.Default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
+            @"        public static Tween Custom_TEMPLATE(Single startValue, Single endValue, float duration, [NotNull] Action<Single> onValueChange, Ease ease = Ease.Default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => Custom_TEMPLATE(new TweenSettings<float>(startValue, endValue, new TweenSettings(duration, ease, cycles, cycleMode, startDelay, endDelay, useUnscaledTime)), onValueChange);
         public static Tween Custom_TEMPLATE(Single startValue, Single endValue, float duration, [NotNull] Action<Single> onValueChange, Easing ease, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => Custom_TEMPLATE(new TweenSettings<float>(startValue, endValue, new TweenSettings(duration, ease, cycles, cycleMode, startDelay, endDelay, useUnscaledTime)), onValueChange);
@@ -841,13 +1014,19 @@ namespace PrimeTween {
             return PrimeTweenManager.Animate(ref rt, ref d);
         }";
 
-        var types = new[] { typeof(float), typeof(Color), typeof(Vector2), typeof(Vector3), typeof(Vector4), typeof(Quaternion), typeof(Rect) };
-        foreach (var type in types) {
+        var types = new[]
+        {
+            typeof(float), typeof(Color), typeof(Vector2), typeof(Vector3), typeof(Vector4), typeof(Quaternion),
+            typeof(Rect)
+        };
+        foreach (var type in types)
+        {
             text += "\n\n";
             var isFloat = type == typeof(float);
             var replaced = template;
             replaced = replaced.Replace("Single", isFloat ? "float" : type.FullName);
-            if (!isFloat) {
+            if (!isFloat)
+            {
                 replaced = replaced.Replace("TweenSettings<float>", $"TweenSettings<{type.FullName}>");
                 replaced = replaced.Replace("prevVal.single", $"prevVal.{type.Name.ToLower()}");
                 replaced = replaced.Replace(".FloatVal", $".{type.Name}Val");
@@ -855,42 +1034,55 @@ namespace PrimeTween {
                 replaced = replaced.Replace("PropType.Float", $"PropType.{type.Name}");
                 replaced = replaced.Replace("TweenType.CustomFloat", $"TweenType.Custom{type.Name}");
             }
+
             replaced = replaced.Replace("Custom_TEMPLATE", "Custom");
             text += replaced;
         }
+
         return text;
     }
 
     [NotNull]
-    static string populateTemplate([NotNull] string str, [NotNull] MethodGenerationData data) {
+    static string populateTemplate([NotNull] string str, [NotNull] MethodGenerationData data)
+    {
         var methodName = data.methodName;
         var prefix = getMethodPrefix(data.dependency);
-        if (prefix != null && !data.placeInGlobalScope) {
+        if (prefix != null && !data.placeInGlobalScope)
+        {
             methodName = prefix + methodName;
         }
+
         var targetType = data.targetType;
-        if (string.IsNullOrEmpty(targetType)) {
+        if (string.IsNullOrEmpty(targetType))
+        {
             str = str.Replace("[NotNull] UnityEngine.Camera target, ", "")
                 .Replace("METHOD_NAME(target, ", "METHOD_NAME(");
-        } else {
+        }
+        else
+        {
             str = str.Replace("UnityEngine.Camera", targetType);
         }
-        str = str.Replace("METHOD_NAME",  methodName);
-        str = str.Replace("TweenType.CameraOrthographicSize",  $"TweenType.{GetTweenTypeEnumName(data)}");
-        if (data.propertyType != PropType.Float) {
+
+        str = str.Replace("METHOD_NAME", methodName);
+        str = str.Replace("TweenType.CameraOrthographicSize", $"TweenType.{GetTweenTypeEnumName(data)}");
+        if (data.propertyType != PropType.Float)
+        {
             str = str.Replace("Single", data.propertyType.ToFullTypeName());
             str = str.Replace("_tween.FloatVal", $"_tween.{data.propertyType.ToString()}Val");
             str = str.Replace("TweenSettings<float>", $"TweenSettings<{data.propertyType.ToFullTypeName()}>");
         }
+
         return str;
     }
 
     [Serializable]
-    internal class SpeedBasedMethodsGenerator {
+    internal class SpeedBasedMethodsGenerator
+    {
         [SerializeField] Data[] data;
 
         [Serializable]
-        class Data {
+        class Data
+        {
             [SerializeField] internal string methodName;
             [SerializeField] internal PropType propType;
             [SerializeField] internal string propName;
@@ -898,9 +1090,11 @@ namespace PrimeTween {
         }
 
         [NotNull]
-        internal string Generate() {
+        internal string Generate()
+        {
             string result = "";
-            foreach (var d in data) {
+            foreach (var d in data)
+            {
                 const string template = @"
         public static Tween PositionAtSpeed([NotNull] UnityEngine.Transform target, UnityEngine.Vector3 endValue, float averageSpeed, Easing ease = default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart, float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => PositionAtSpeed(target, new TweenSettings<UnityEngine.Vector3>(endValue, new TweenSettings(averageSpeed, ease, cycles, cycleMode, startDelay, endDelay, useUnscaledTime)));
@@ -921,19 +1115,21 @@ namespace PrimeTween {
         }
 ";
                 result += template.Replace("PositionAtSpeed", $"{d.methodName}AtSpeed")
-                    .Replace("UnityEngine.Vector3", d.propType.ToFullTypeName())
-                    .Replace("Tween.Position", $"{d.methodName}")
-                    .Replace("target.position", $"target.{d.propName}")
-                    .Replace("averageSpeed", $"{d.speedParamName}")
+                        .Replace("UnityEngine.Vector3", d.propType.ToFullTypeName())
+                        .Replace("Tween.Position", $"{d.methodName}")
+                        .Replace("target.position", $"target.{d.propName}")
+                        .Replace("averageSpeed", $"{d.speedParamName}")
                     ;
             }
+
             return result;
         }
     }
 }
 
 [Serializable]
-class MethodGenerationData {
+class MethodGenerationData
+{
     public string description;
     public string methodName;
     public string targetType;
@@ -950,7 +1146,8 @@ class MethodGenerationData {
 }
 
 [PublicAPI]
-enum Dependency {
+enum Dependency
+{
     None,
     UNITY_UGUI_INSTALLED,
     AUDIO_MODULE_INSTALLED,
@@ -964,13 +1161,19 @@ enum Dependency {
     TEXT_MESH_PRO_INSTALLED
 }
 
-static class Ext {
+static class Ext
+{
     [NotNull]
-    internal static string ToFullTypeName(this PropType type) {
+    internal static string ToFullTypeName(this PropType type)
+    {
         Assert.AreNotEqual(PropType.Float, type);
-        if (type == PropType.Int) {
+        if (type == PropType.Int)
+        {
             return "int";
         }
+
         return $"UnityEngine.{type}";
     }
 }
+
+#endif

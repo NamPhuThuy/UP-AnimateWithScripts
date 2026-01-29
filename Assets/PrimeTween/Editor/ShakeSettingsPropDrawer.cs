@@ -1,7 +1,10 @@
 using JetBrains.Annotations;
 using PrimeTween;
-using UnityEditor;
+
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
 using static UnityEditor.EditorGUI;
 using static UnityEditor.EditorGUIUtility;
 
@@ -116,3 +119,5 @@ internal class ShakeSettingsPropDrawer : PropertyDrawer {
         }
     }
 }
+
+#endif

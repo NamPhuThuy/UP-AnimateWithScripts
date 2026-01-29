@@ -8,6 +8,7 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         [Header("Components")]
         [SerializeField] private ParticleSystem particleSystem;
+        [SerializeField] private ParticleSystem[] childParticles;
 
         [Header("Custom Material")]
         [Tooltip("If set, overrides the material on all ParticleSystemRenderers under this VFX instance.")]
@@ -75,10 +76,9 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void SetValues()
         {
-           
-
             ParticleSystem ps = Instantiate(currentArgs.particleSystem).GetComponent<ParticleSystem>();
             particleSystem = ps;
+            childParticles = particleSystem.GetComponentsInChildren<ParticleSystem>(true);
             
             customMaterial = currentArgs.customMaterial;
             
@@ -95,11 +95,19 @@ namespace NamPhuThuy.AnimateWithScripts
                     particleSystem.transform.position.z
                 );
             }
+
+            // Rotate the particles
+            DebugLogger.Log(message:$"currentArgs.eulerAngle: {currentArgs.eulerAngle}");
+            particleSystem.transform.localRotation = Quaternion.Euler(currentArgs.eulerAngle);
+            /*foreach (ParticleSystem particle in childParticles)
+            {
+                particle.transform.localRotation = Quaternion.Euler(currentArgs.eulerAngle);
+            }*/
             
             // Custom Values
             if (currentArgs.customTexture != null)
             {
-                PSRenderers =  PSRenderers = particleSystem.GetComponentsInChildren<ParticleSystemRenderer>(true);
+                PSRenderers = particleSystem.GetComponentsInChildren<ParticleSystemRenderer>(true);
                 DebugLogger.Log(message:$"PSRenderer: {PSRenderers.Length}");
                 
                 _materialPropertyBlock = new MaterialPropertyBlock();

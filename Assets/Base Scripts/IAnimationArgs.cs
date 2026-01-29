@@ -126,6 +126,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         // Used when fromWorld == false
         public Vector2 anchoredPos;
+        public Vector3 eulerAngle;
 
         // Custom values
         // Optional custom parent (e.g., a specific canvas or UI layer)
@@ -134,6 +135,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public Color customColor;
 
         public Texture customTexture;
+        
         // Optional behavior
         public bool ignoreTimeScale;
     }
