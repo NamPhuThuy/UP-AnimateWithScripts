@@ -117,7 +117,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     TextColor = Color.white,
                     customDuration = 1f,
                 };
-                AnimationManager.Ins.Play<PopupTextArgs>(args);
+                AnimationManager.Ins.Play(args);
             }
         }
         

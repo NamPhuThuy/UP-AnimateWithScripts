@@ -39,6 +39,7 @@ This project purpose is to pre-create frequent use effect, such as:
 - Multiples coins fly toward a target
 - A popup text shows up on the screen to inform player
 - An number popup to show the stat changes
+- An image show on screen to perform as a vfx
 
 This project use PrimeTween as the native Tween behaviour
 
@@ -64,11 +65,11 @@ This project use PrimeTween as the native Tween behaviour
 ### UNITY PACKAGE MANAGER
 - Step 1: From Unity Editor -> Window -> Package Management -> Package Manager
 - Step 2: Press the plus (+) icon in the top-left of Window
-- Step 3: Select **Install package from git URL** -> paste the <git-URL> (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git) and choose Install
+- Step 3: Select **Install package from git URL** -> paste the git-URL (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git) and choose Install
 
 
 ### THROUGH GIT
-- Step 1: Copy the <git-URL> (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git)
+- Step 1: Copy the git-URL (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git)
 - Step 2: Open Git CLI and type: git install https://github.com/NamPhuThuy/UP-AnimateWithScripts.git
 - Step 3: Enter and wait
 - Step 4: Make sure you have install the package TextMeshProUGUI in the Unity Project
@@ -81,9 +82,16 @@ This project use PrimeTween as the native Tween behaviour
 
 <!-- CONTACT -->
 ## Contact
-[![LinkedIn][linkedin-shield]][linkedin-url]  
-[![Facebook][facebook-shield]][facebook-url]  
-[![Github][github-shield]][github-url]  
+<div align="left">
+  <a href="https://github.com/NamPhuThuy">
+    <img src="images/github.gif" width="100" alt="Click to Play Demo">
+  </a>
+
+  <a href="https://www.facebook.com/namphuthuy957">
+    <img src="images/facebook.gif" width="100" alt="Click to Play Demo">
+  </a>
+</div>
+
 [![Itch][itch-shield]][itch-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -103,12 +111,6 @@ This project use PrimeTween as the native Tween behaviour
 [license-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/blob/main/LICENSE
 
 <!-- Contact -->
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/trinh-nam/
-[facebook-shield]: https://img.shields.io/badge/-Facebook-blue.svg?style=for-the-badge&logo=facebook&colorB=3842c6
-[facebook-url]: https://www.facebook.com/namphuthuy957
-[github-shield]: https://img.shields.io/badge/-Github-blue.svg?style=for-the-badge&logo=github&colorB=252525
-[github-url]: https://github.com/NamPhuThuy
 [itch-shield]: https://img.shields.io/badge/-itch.io-blue.svg?style=for-the-badge&logo=itch.io&colorB=f5f5f5
 [itch-url]: https://namphuthuy.itch.io/
 
