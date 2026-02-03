@@ -15,8 +15,14 @@ namespace NamPhuThuy.AnimateWithScripts
         
         [SerializeField] private float scaleMultiplier = 0.9f;
         
-        [SerializeField] private float time = 0.5f;
-        [SerializeField] private float time2 = 0.5f;
+        [SerializeField] 
+        [Tooltip("Scale-up duration")]
+        private float time = 0.5f;
+        
+        
+        [SerializeField] 
+        [Tooltip("Scale-down duration")]
+        private float time2 = 0.5f;
 
         [Header("Behavior")] 
         private Sequence currentSequence;
