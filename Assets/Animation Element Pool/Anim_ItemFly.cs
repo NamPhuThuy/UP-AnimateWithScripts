@@ -97,12 +97,12 @@ namespace NamPhuThuy.AnimateWithScripts
         protected override void SetValues()
         {
             // COMPONENTS
-            realResourceText = currentArgs.Target.GetComponent<TextMeshProUGUI>();
+            realResourceText = currentArgs.TargetText.GetComponent<TextMeshProUGUI>();
             targetInteractTransform = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform : null;
             itemSprite = currentArgs.ItemSprite ?? itemSprite;
             
             
-            targetPosition = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform.transform.position : currentArgs.Target.position;
+            targetPosition = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform.transform.position : currentArgs.TargetText.position;
             
             // VALUES
             totalAmount = currentArgs.AddValue;
@@ -257,8 +257,12 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void UpdateFakeResourceText()
         {
+            DebugLogger.Log();
             if (IsHaveRealText)
+            {
+                DebugLogger.Log(message:$"Update fake text: {prevValue + totalAmount - _remainingItems * _unitValue}");
                 fakeResourceText.text = $"{prevValue + totalAmount - _remainingItems * _unitValue}";
+            }
         }
 
         private void ApllyPunchEffect()

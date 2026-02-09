@@ -148,7 +148,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 {
                     AddValue = testAmount,
                     PrevValue = 0,
-                    Target = coinText.transform,
+                    TargetText = coinText.transform,
                     StartPosition = AnimationManager.Ins.transform.position,
                     TargetInteractTransform = coinPanel.transform, // For positioning the target
                     ItemAmount = _script.itemAmount,

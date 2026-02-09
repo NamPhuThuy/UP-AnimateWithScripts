@@ -33,7 +33,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public float DelayBetweenItems;
         
         [Tooltip("Transform that contain TextMeshProUGUI")]
-        public Transform Target;
+        public Transform TargetText;
         public Transform TargetInteractTransform;
         public Sprite ItemSprite;
         public Vector3 StartPosition;
