@@ -102,6 +102,22 @@ namespace NamPhuThuy.AnimateWithScripts
         }
 
         #endregion
+
+        #region Default Effects Calls
+
+        public void PlayBasicPopupText(string message)
+        {
+            var args = new PopupTextArgs
+            {
+                Message = message,
+                CustomAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
+                TextColor = Color.white,
+                customDuration = 0.5f,
+            };
+            Play(args);
+        }
+
+        #endregion
     }
 
 }
