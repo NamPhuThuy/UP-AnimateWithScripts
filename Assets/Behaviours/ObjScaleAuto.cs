@@ -47,12 +47,13 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public override void Play()
         {
+            DebugLogger.Log();
+            // FIX: Kill existing sequence to prevent stacking animations if Play() is called multiple times
+            currentSequence?.Kill();
+            
             currentSequence = DOTween.Sequence();
             currentSequence.AppendInterval(delayBeforeStart);
-            currentSequence.AppendCallback(() =>
-            {
-                CreateLoopSequence();
-            });
+            currentSequence.AppendCallback(CreateLoopSequence);
         }
 
         public override void Stop()
@@ -63,6 +64,9 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void OnValidate()
         {
+            // FIX: Prevent overwriting originalScale with the animated value during runtime
+            if (Application.isPlaying) return;
+            
             originalScale = transform.localScale;
             targetScale = originalScale * scaleMultiplier;
         }
@@ -77,7 +81,9 @@ namespace NamPhuThuy.AnimateWithScripts
         
         private void CreateLoopSequence()
         {
-            currentSequence?.Kill();
+            DebugLogger.Log();
+            // Note: No need to kill currentSequence here if Play() handles it, 
+            // but we overwrite the reference to the new loop sequence.
             
             currentSequence = DOTween.Sequence();
             currentSequence.Append(transform.DOScale(targetScale, time).SetEase(Ease.InOutSine));
