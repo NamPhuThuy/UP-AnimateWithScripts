@@ -5,6 +5,7 @@ namespace NamPhuThuy.AnimateWithScripts
     public static class AnimationConst
     {
         public static Vector2 UPPER_ANCHORED_POS = new Vector2(0f, 730f);
+        public static Vector2 UPPER_MIDDLE_ANCHORED_POS = new Vector2(0f, 450f);
         public static Vector2 BELOW_ANCHORED_POS = new Vector2(0f, -300f);
         public const float UPPER_ANCHORED_PERCENT = 0.6f; // 60%
         public const float BELOW_ANCHORED_PERCENT = 0.3f; // 30%
