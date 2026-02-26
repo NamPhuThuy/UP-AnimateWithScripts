@@ -14,9 +14,6 @@ namespace NamPhuThuy.AnimateWithScripts
         [Header("Components")]
         [SerializeField] private AnimationCatalog animationCatalog;
         
-        [SerializeField] private TMP_FontAsset defaultFont;
-        public TMP_FontAsset DefaultFont => defaultFont;
-        
         // type -> pooled objects
         private readonly Dictionary<AnimationType, Queue<AnimationBase>> _pool = new();
         private readonly Dictionary<AnimationBase, AnimationType> _reverse = new();

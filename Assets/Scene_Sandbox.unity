@@ -625,7 +625,7 @@ GameObject:
   - component: {fileID: 624557310}
   - component: {fileID: 624557311}
   m_Layer: 0
-  m_Name: VFXManager
+  m_Name: Animation Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -663,7 +663,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationCatalog: {fileID: 11400000, guid: acfa961d03b4e4b4ebd7306479e380eb, type: 2}
-  defaultFont: {fileID: 11400000, guid: 20921b77c6f7efc41b920a88f62c4a08, type: 2}
 --- !u!114 &624557311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1131,9 +1130,9 @@ MonoBehaviour:
   positionType: 2
   targetPosition: {x: 0, y: 0, z: 0}
   liveUpdate: 0
-  transformPosition: {x: 400.08, y: 1853.2799, z: 0}
+  transformPosition: {x: 322.08, y: 1962.2799, z: 0}
   transformLocalPosi: {x: -319.92, y: 573.2799, z: 0}
-  rectTransformPosition: {x: 400.08, y: 1853.2799, z: 0}
+  rectTransformPosition: {x: 322.08, y: 1962.2799, z: 0}
   rectTransformAnchoredPosition: {x: -319.92, y: 573.2799, z: 0}
   rectTransformAnchoredPosition3D: {x: -319.92, y: 573.2799, z: 0}
   rectTransformLocalPosi: {x: -319.92, y: 573.2799, z: 0}

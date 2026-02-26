@@ -88,11 +88,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 messageText.font = currentArgs.TextFont; // Apply custom font
             }
-            else
-            {
-                messageText.font = AnimationManager.Ins.DefaultFont;
-            }
-            
+          
             if (currentArgs.CustomParent != null)
             {
                 transform.parent = currentArgs.CustomParent.transform;
