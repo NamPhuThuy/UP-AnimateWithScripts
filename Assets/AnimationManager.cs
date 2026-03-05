@@ -104,7 +104,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public void PlayBasicPopupText(string message)
         {
-            var args = new PopupTextArgs
+            var args = new ToastArgs
             {
                 Message = message,
                 CustomAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,

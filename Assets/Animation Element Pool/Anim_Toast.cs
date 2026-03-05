@@ -8,10 +8,10 @@ using UnityEngine.UI;
 namespace NamPhuThuy.AnimateWithScripts
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class Anim_PopupText : AnimationBase
+    public class Anim_Toast : AnimationBase
     {
         [Header("Stats")] 
-        [SerializeField] private PopupTextArgs currentArgs;
+        [SerializeField] private ToastArgs currentArgs;
         
         [Header("Components")]
         private CanvasGroup _canvasGroup;
@@ -66,7 +66,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public override void Play<T>(T args)
         {
-            if (args is PopupTextArgs popupArgs)
+            if (args is ToastArgs popupArgs)
             {
                 currentArgs = popupArgs;
                 gameObject.SetActive(true);

@@ -40,9 +40,9 @@ namespace NamPhuThuy.AnimateWithScripts
     }
     
     [Serializable]
-    public struct PopupTextArgs : IAnimationArgs
+    public struct ToastArgs : IAnimationArgs
     {
-        public AnimationType Type => AnimationType.POPUP_TEXT;
+        public AnimationType Type => AnimationType.TOAST;
         public Action OnComplete { get; set; }
 
         // Must-have Values

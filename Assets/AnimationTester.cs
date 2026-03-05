@@ -110,7 +110,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (GUILayout.Button(new GUIContent("Play Popup Text", frogIcon)))
             {
-                var args = new PopupTextArgs
+                var args = new ToastArgs
                 {
                     Message = "Hello!",
                     CustomAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,

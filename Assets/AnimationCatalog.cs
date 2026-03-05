@@ -12,7 +12,7 @@ namespace NamPhuThuy.AnimateWithScripts
     public enum AnimationType
     {
         NONE = 0,
-        POPUP_TEXT = 1,
+        TOAST = 1,
         ITEM_FLY = 2,
         STAT_CHANGE_TEXT = 3,
         SCREEN_SHAKE = 4,
