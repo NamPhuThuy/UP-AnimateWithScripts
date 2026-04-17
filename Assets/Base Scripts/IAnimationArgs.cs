@@ -25,18 +25,18 @@ namespace NamPhuThuy.AnimateWithScripts
         public System.Action OnItemInteract;
 
         [Tooltip("The value to add to the preValue")]
-        public int AddValue;
+        public int addValue;
         
         [Tooltip("The value before adding")]
-        public int PrevValue;
-        public int ItemAmount;
-        public float DelayBetweenItems;
+        public int prevValue;
+        public int itemAmount;
+        public float delayBetweenItems;
         
         [Tooltip("Transform that contain TextMeshProUGUI")]
-        public Transform TargetText;
-        public Transform TargetInteractTransform;
-        public Sprite ItemSprite;
-        public Vector3 StartPosition;
+        public Transform targetText;
+        public Transform targetInteractTransform;
+        public Sprite itemSprite;
+        public Vector3 startPosition;
     }
     
     [Serializable]
@@ -46,16 +46,20 @@ namespace NamPhuThuy.AnimateWithScripts
         public Action OnComplete { get; set; }
 
         // Must-have Values
-        public string Message;
-        public Color TextColor; // default is (0f, 0f, 0f, 0f)
-        public TMP_FontAsset TextFont;
+        public string message;
+        public Color textColor; // default is (0f, 0f, 0f, 0f)
+        public TMP_FontAsset textFont;
         
         // Custom Values
         public float customDuration;
-        public Vector3 CustomAnchoredPos;
-        public Transform CustomParent;
-        public float CustomScale;
+        public Vector3 customAnchoredPos;
+        public Transform customParent;
+        public float customScale;
         public bool customEnableBackImage;
+        
+        // New percentage-based positioning
+        public bool useScreenPercentage;
+        public Vector2 screenPercentage; // e.g., (50, 50) for center
     }
 
     [Serializable]
@@ -66,9 +70,14 @@ namespace NamPhuThuy.AnimateWithScripts
         
         // Must have values
         public Sprite sprite;
-        public Vector2 anchoredPos;
-        public bool isUseAnchoredPos;
         
+        // Positioning
+        public bool isUseAnchoredPos;
+        public Vector2 anchoredPos;
+        
+        public bool useScreenPercentage;
+        public Vector2 screenPercentage; // e.g., (50, 50) for center
+
         // Custom values
         public Color customFilterColor;
         public float customDuration;
@@ -83,19 +92,19 @@ namespace NamPhuThuy.AnimateWithScripts
         // Events
         public Action OnComplete { get; set; }
 
-        public int Amount;
-        public string AdditionalIconText; // e.g., "%"
-        public bool IsBold;
-        public float Duration;
-        public Color CustomColor;
+        public int amount;
+        public string additionalIconText; // e.g., "%"
+        public bool isBold;
+        public float duration;
+        public Color customColor;
         public bool isUseAnchoredPos;
         
-        public Vector2 RectTransformOffset;
-        public Vector2 MoveDistance;
-        public GameObject TargetObject;
+        public Vector2 rectTransformOffset;
+        public Vector2 moveDistance;
+        public GameObject targetObject;
         
         //Custom Values
-        public TMP_FontAsset CustomFont;
+        public TMP_FontAsset customFont;
     }
     
     [Serializable]
@@ -104,9 +113,9 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationType Type => AnimationType.SCREEN_SHAKE;
         public Action OnComplete { get; set; }
 
-        public float Intensity;
-        public float Duration;
-        public AnimationCurve ShakeCurve;
+        public float intensity;
+        public float duration;
+        public AnimationCurve shakeCurve;
     }
     
     [Serializable]

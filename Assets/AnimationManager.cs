@@ -106,9 +106,9 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             var args = new ToastArgs
             {
-                Message = message,
-                CustomAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
-                TextColor = Color.white,
+                message = message,
+                customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
+                textColor = Color.white,
                 customDuration = 0.5f,
             };
             Play(args);

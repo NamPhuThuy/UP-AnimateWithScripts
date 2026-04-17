@@ -155,7 +155,14 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!particleSystem)
             {
                 StartAutoReturn(0.1f);
-                currentArgs.OnComplete?.Invoke();
+                try
+                {
+                    currentArgs.OnComplete?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    DebugLogger.Log(message:$"Error: {e}, stack-trace: {e.StackTrace}");
+                }
                 return;
             }
 
@@ -182,7 +189,14 @@ namespace NamPhuThuy.AnimateWithScripts
                 yield return null;
             }
 
-            currentArgs.OnComplete?.Invoke();
+            try
+            {
+                currentArgs.OnComplete?.Invoke();
+            }
+            catch (Exception e)
+            {
+                DebugLogger.Log(message:$"Error: {e}, stack-trace: {e.StackTrace}");
+            }
             StartAutoReturn(0.05f);
         }
 

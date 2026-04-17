@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class ScreenShake : AnimationBase
+    public class Anim_ScreenShake : AnimationBase
     {
         [SerializeField] private Camera targetCamera;
         [SerializeField] private ScreenShakeArgs currentArgs;
@@ -26,7 +26,6 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!targetCamera)
                 targetCamera = Camera.main;
         }
-        
 
         #endregion
         #region Override Methods
@@ -35,9 +34,9 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (args is ScreenShakeArgs shakeArgs)
             {
-                shakeIntensity = shakeArgs.Intensity;
-                shakeDuration = shakeArgs.Duration;
-                shakeCurve = shakeArgs.ShakeCurve ?? AnimationCurve.EaseInOut(0, 1, 1, 0);
+                shakeIntensity = shakeArgs.intensity;
+                shakeDuration = shakeArgs.duration;
+                shakeCurve = shakeArgs.shakeCurve ?? AnimationCurve.EaseInOut(0, 1, 1, 0);
                 
                 if (targetCamera)
                 {
@@ -58,15 +57,16 @@ namespace NamPhuThuy.AnimateWithScripts
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        public void StopImmediate()
+        public override void EndFast()
         {
+            base.EndFast();
             if (targetCamera)
                 targetCamera.transform.localPosition = originalPosition;
             
             gameObject.SetActive(false);
         }
+
+        #endregion
         
         private void Update()
         {

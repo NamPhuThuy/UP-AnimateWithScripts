@@ -34,10 +34,6 @@ namespace NamPhuThuy.AnimateWithScripts
         public string animationName;
         // public Anim_SpineControl.SpineType spineType;
 
-        [Header("PARTICLE SYSTEM")] 
-        public ParticleSystem particleSystem;
-
-
         #endregion
     }
 
@@ -54,6 +50,10 @@ namespace NamPhuThuy.AnimateWithScripts
         private int testAmount = 100;
         private string testMessage = "Test Message";
         private float _testDuration = 2f;
+        
+        // Positioning
+        private bool _useScreenPercentage = false;
+        private Vector2 _screenPercentage = new Vector2(50, 50);
         
         // Sprite Motion
         private ObjActiveAuto.MotionType _motionType;
@@ -84,6 +84,13 @@ namespace NamPhuThuy.AnimateWithScripts
             _testDuration = EditorGUILayout.FloatField("Duration", _testDuration);
             isUseVFXManagerPos = EditorGUILayout.Toggle("Use VFXManager Position", isUseVFXManagerPos);
             
+            EditorGUILayout.LabelField("Positioning", EditorStyles.boldLabel);
+            _useScreenPercentage = EditorGUILayout.Toggle("Use Screen % (Toast/Popup)", _useScreenPercentage);
+            if (_useScreenPercentage)
+            {
+                _screenPercentage = EditorGUILayout.Vector2Field("Screen % (X,Y)", _screenPercentage);
+            }
+            
             EditorGUILayout.LabelField("Sprite Motion", EditorStyles.boldLabel);
             _motionType = (ObjActiveAuto.MotionType)EditorGUILayout.EnumPopup("Motion Type", _motionType);
 
@@ -108,14 +115,16 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void ButtonPopupText()
         {
-            if (GUILayout.Button(new GUIContent("Play Popup Text", frogIcon)))
+            if (GUILayout.Button(new GUIContent("Play Toast", frogIcon)))
             {
                 var args = new ToastArgs
                 {
-                    Message = "Hello!",
-                    CustomAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
-                    TextColor = Color.white,
+                    message = testMessage,
+                    textColor = Color.white,
                     customDuration = 1f,
+                    useScreenPercentage = _useScreenPercentage,
+                    screenPercentage = _screenPercentage,
+                    customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS // Fallback
                 };
                 AnimationManager.Ins.Play(args);
             }
@@ -131,7 +140,10 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new PopupImageArgs()
                 {
                     sprite = _script.itemSprites[randomIndex],
-                    anchoredPos = randAnchoredPosi,
+                    useScreenPercentage = _useScreenPercentage,
+                    screenPercentage = _screenPercentage,
+                    anchoredPos = randAnchoredPosi, // Fallback
+                    isUseAnchoredPos = !_useScreenPercentage
                 };
                 AnimationManager.Ins.Play(args);
             }
@@ -139,22 +151,22 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void ButtonPlayItemFly()
         {
-            if (GUILayout.Button(new GUIContent("Play VFX Item Fly", frogIcon)))
+            if (GUILayout.Button(new GUIContent("Play Item Fly", frogIcon)))
             {
                 var coinPanel = _script.coinImage.transform;
                 var coinText = _script.coinText.transform;
 
                 var args = new ItemFlyArgs
                 {
-                    AddValue = testAmount,
-                    PrevValue = 0,
-                    TargetText = coinText.transform,
-                    StartPosition = AnimationManager.Ins.transform.position,
-                    TargetInteractTransform = coinPanel.transform, // For positioning the target
-                    ItemAmount = _script.itemAmount,
-                    ItemSprite = _script.itemSprites[_script.itemSpriteIndex],
+                    addValue = testAmount,
+                    prevValue = 0,
+                    targetText = coinText.transform,
+                    startPosition = AnimationManager.Ins.transform.position,
+                    targetInteractTransform = coinPanel.transform, // For positioning the target
+                    itemAmount = _script.itemAmount,
+                    itemSprite = _script.itemSprites[_script.itemSpriteIndex],
                     OnItemInteract = () => TurnOnStatChangeVFX(coinText),
-                    OnComplete = () => Debug.Log("Animation complete!")
+                    OnComplete = () => DebugLogger.Log(message:"Animation complete!")
                 };
 
                 AnimationManager.Ins.Play(args);
@@ -162,14 +174,15 @@ namespace NamPhuThuy.AnimateWithScripts
 
             void TurnOnStatChangeVFX(Transform coinText)
             {
+                DebugLogger.Log();
                 var args = new StatChangeTextArgs
                 {
-                    Amount = testAmount / _script.itemAmount,
-                    CustomColor = Color.yellow,
-                    RectTransformOffset = Vector2.zero,
-                    MoveDistance = new Vector2(0f, 30f),
+                    amount = testAmount / _script.itemAmount,
+                    customColor = Color.yellow,
+                    rectTransformOffset = Vector2.zero,
+                    moveDistance = new Vector2(0f, 30f),
                     isUseAnchoredPos = false,
-                    TargetObject = coinText.gameObject,
+                    targetObject = coinText.gameObject,
                 };
 
                 AnimationManager.Ins.Play(args);
@@ -185,11 +198,11 @@ namespace NamPhuThuy.AnimateWithScripts
 
                 var args = new StatChangeTextArgs
                 {
-                    Amount = 5,
-                    CustomColor = Color.yellow,
-                    RectTransformOffset = Vector2.zero,
-                    MoveDistance = new Vector2(0f, 30f),
-                    TargetObject = _script.dummyUGUI.gameObject,
+                    amount = 5,
+                    customColor = Color.yellow,
+                    rectTransformOffset = Vector2.zero,
+                    moveDistance = new Vector2(0f, 30f),
+                    targetObject = _script.dummyUGUI.gameObject,
                     OnComplete = null
                 };
 
@@ -203,9 +216,9 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 AnimationManager.Ins.Play(new ScreenShakeArgs
                 {
-                    Intensity = 0.5f,
-                    Duration = 0.3f,
-                    ShakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0),
+                    intensity = 0.5f,
+                    duration = 0.3f,
+                    shakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0),
                     OnComplete = null
                 });
             }
@@ -235,7 +248,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 int randomIndex = Random.Range(0, _script.itemSprites.Length);
                 var args = new ParticleSystemArgs()
                 {
-                    particleSystem = _script.particleSystem,
+                    particleSystem = _script.GetComponent<ParticleSystem>(),
                     anchoredPos = Vector2.zero,
                     fromWorld = true,
                     customTexture = _script.itemSprites[randomIndex].texture,

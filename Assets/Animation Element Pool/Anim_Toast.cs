@@ -84,29 +84,49 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void SetValues()
         {
-            if (currentArgs.TextFont != null)
+            if (currentArgs.textFont != null)
             {
-                messageText.font = currentArgs.TextFont; // Apply custom font
+                messageText.font = currentArgs.textFont; // Apply custom font
             }
           
-            if (currentArgs.CustomParent != null)
+            if (currentArgs.customParent != null)
             {
-                transform.parent = currentArgs.CustomParent.transform;
+                transform.parent = currentArgs.customParent.transform;
             }
 
-            if (currentArgs.CustomAnchoredPos != default)
+            if (currentArgs.useScreenPercentage)
             {
-                SetAnchoredPos(currentArgs.CustomAnchoredPos);
+                Canvas parentCanvas = GetComponentInParent<Canvas>();
+                if (parentCanvas != null)
+                {
+                    RectTransform canvasRect = parentCanvas.GetComponent<RectTransform>();
+                    
+                    // Instead of changing anchors, we calculate the offset from the current anchors
+                    // This way we respect the prefab's setup and center pivot
+                    float targetX = canvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
+                    float targetY = canvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
+
+                    // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
+                    // We need to shift the target position so (50,50) is (0,0) locally
+                    float finalX = targetX - (canvasRect.rect.width * 0.5f);
+                    float finalY = targetY - (canvasRect.rect.height * 0.5f);
+
+                    SetAnchoredPos(new Vector2(finalX, finalY));
+                }
+            }
+            else if (currentArgs.customAnchoredPos != default)
+            {
+                SetAnchoredPos(currentArgs.customAnchoredPos);
             }
             else
             {
                 SetAnchoredPos(_basePos);
             }
             
-            if (!Mathf.Approximately(currentArgs.CustomScale, 0f))
+            if (!Mathf.Approximately(currentArgs.customScale, 0f))
             {
-                backImage.rectTransform.localScale = Vector3.one * currentArgs.CustomScale;
-                messageText.rectTransform.localScale = Vector3.one * currentArgs.CustomScale;
+                backImage.rectTransform.localScale = Vector3.one * currentArgs.customScale;
+                messageText.rectTransform.localScale = Vector3.one * currentArgs.customScale;
             }
             else
             {
@@ -114,12 +134,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 messageText.rectTransform.localScale = Vector3.one;
             }
             
-            SetContent(currentArgs.Message);
+            SetContent(currentArgs.message);
             SetRandomColor();
 
-            if (currentArgs.TextColor != default) 
+            if (currentArgs.textColor != default) 
             {
-                messageText.color = currentArgs.TextColor;
+                messageText.color = currentArgs.textColor;
             }
             else
             {
@@ -158,7 +178,14 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 ResetValues();
                 Recycle();
-                currentArgs.OnComplete?.Invoke();
+                try
+                {
+                    currentArgs.OnComplete?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in OnComplete callback: {ex.Message}\n{ex.StackTrace}");
+                }
             });
             
             if (currentArgs.customDuration != 0f)

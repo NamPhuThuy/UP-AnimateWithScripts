@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -67,24 +68,48 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 ResetValues();
                 Recycle();
-                currentArgs.OnComplete?.Invoke();
+                try
+                {
+                    currentArgs.OnComplete?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in OnComplete callback: {ex.Message}\n{ex.StackTrace}");
+                }
             });
         }
 
         private void SetPosition()
         {
-            if (currentArgs.isUseAnchoredPos)
+            if (currentArgs.useScreenPercentage)
+            {
+                Canvas parentCanvas = GetComponentInParent<Canvas>();
+                if (parentCanvas != null)
+                {
+                    RectTransform canvasRect = parentCanvas.GetComponent<RectTransform>();
+                    
+                    // Instead of changing anchors, we calculate the offset from the current anchors
+                    // This way we respect the prefab's setup and center pivot
+                    
+                    // Convert percentage to anchored position space based on canvas size
+                    float targetX = canvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
+                    float targetY = canvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
+
+                    // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
+                    // We need to shift the target position so (50,50) is (0,0) locally
+                    float finalX = targetX - (canvasRect.rect.width * 0.5f);
+                    float finalY = targetY - (canvasRect.rect.height * 0.5f);
+
+                    imageRectTransform.anchoredPosition = new Vector2(finalX, finalY);
+                }
+            }
+            else if (currentArgs.isUseAnchoredPos)
             {
                 imageRectTransform.anchoredPosition = currentArgs.anchoredPos;
             }
             else
             {
-                // DebugLogger.Log(message: $"currentArgs.customPosition: {currentArgs.customPosition}, \ncurrentArgs.anchoredPos: {currentArgs.anchoredPos}, transform.position: {transform.position}, imageRectTransform.position: {imageRectTransform.position}");
-                // DebugLogger.Log(message:$"WorldToViewportPoint: {Camera.main.WorldToViewportPoint(currentArgs.customPosition)}, WorldToScreenPoint: {Camera.main.WorldToScreenPoint(currentArgs.customPosition)}");
                 imageRectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.customPosition);
-                // imageRectTransform.position = currentArgs.customPosition;
-                
-                // DebugLogger.Log(message:$"transform.position: {transform.position}: imageRectTransform.position {imageRectTransform.position}");
             }
         }
         
@@ -112,15 +137,11 @@ namespace NamPhuThuy.AnimateWithScripts
             tempColor.a = 1f;
             image.color = tempColor;
             
-            
-            
-            
             // Custom values
             if (currentArgs.customFilterColor != default)
             {
                 image.color = currentArgs.customFilterColor;
             }
-            
         }
 
         protected override void ResetValues()

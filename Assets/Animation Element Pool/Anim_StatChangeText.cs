@@ -7,10 +7,12 @@ namespace NamPhuThuy.AnimateWithScripts
 {
     public class Anim_StatChangeText : AnimationBase
     {
-        [Header("Components")]
-        [SerializeField] private TextMeshProUGUI nativeText;
-        [SerializeField] private TextMeshProUGUI targetText;
+        [Header("Native Components")]
         [SerializeField] private RectTransform rectTransform;
+        [SerializeField] private TextMeshProUGUI nativeText;
+        
+        [Header("External Components")]
+        [SerializeField] private TextMeshProUGUI targetText;
         [SerializeField] private GameObject targetObject;
         [SerializeField] private Vector3 targetPosition;
 
@@ -28,7 +30,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 currentArgs = statArgs;
                 SetValues();
-                PlayStatChangeText();
+                PlayAnim();
             }
             else
             {
@@ -38,13 +40,13 @@ namespace NamPhuThuy.AnimateWithScripts
         
         protected override void SetValues()
         {
-            if (currentArgs.Duration > 0f)
+            if (currentArgs.duration > 0f)
             {
-                duration = currentArgs.Duration;
+                duration = currentArgs.duration;
             }
             
-            moveDistance = currentArgs.MoveDistance;
-            targetObject = currentArgs.TargetObject;
+            moveDistance = currentArgs.moveDistance;
+            targetObject = currentArgs.targetObject;
 
             targetText = targetObject.GetComponent<TextMeshProUGUI>();
             if (targetText != null)
@@ -65,29 +67,11 @@ namespace NamPhuThuy.AnimateWithScripts
             
             nativeText.enableAutoSizing = false;
             nativeText.fontSize *= textSizeMul;
-            
-           
-            // Set Text Color
-            /*if (currentArgs.Amount >= 0)
-            {
-                animText.text = $"+{currentArgs.Amount}{currentArgs.AdditionalIconText}";
-                animText.color = Color.green;
-            }
-            else
-            {
-                animText.text = $"{currentArgs.Amount}{currentArgs.AdditionalIconText}";
-                animText.color = Color.red;
-            }*/
 
-            if (currentArgs.IsBold)
+            if (currentArgs.isBold)
             {   
                 nativeText.fontStyle |= FontStyles.Bold;
             }
-
-            /*if (currentArgs.CustomColor != default)
-            {
-                animText.color = currentArgs.CustomColor;
-            }*/
         }
 
         protected override void ResetValues()
@@ -108,28 +92,13 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private Vector2 startPosition;
         private Vector2 endPosition;
-        private void PlayStatChangeText()
+        private void PlayAnim()
         {
+            DebugLogger.Log();
             Canvas canvas = GetComponentInParent<Canvas>();
     
             // Convert world position to canvas position
             Vector2 canvasPosition;
-            /*if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
-            {
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
-                canvasPosition = new Vector2(screenPos.x, screenPos.y);
-            }
-            else
-            {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    canvas.transform as RectTransform,
-                    Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position),
-                    canvas.worldCamera,
-                    out canvasPosition
-                );
-            }*/
-            
-            
             
             if (currentArgs.isUseAnchoredPos)
             {
@@ -137,67 +106,29 @@ namespace NamPhuThuy.AnimateWithScripts
             }
             else
             {
-                rectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
+                rectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.targetObject.transform.position);
             }
             
             DebugLogger.Log(message:$"Canvas Rendermode: {canvas.renderMode}");
-            // transform.SetParent(targetObject.transform.parent, true);
-
-            // Apply offsets
-            // startPosition = canvasPosition + currentArgs.RectTransformOffset;
-            // Vector2 randomOffset = Vector2Helper.RandomPointInRange(35f, preferHorizontal: true);
-            // startPosition += randomOffset;
-    
-            // endPosition = /*startPosition*/rectTransform.position + currentArgs.MoveDistance;
-    
-            // Set position using anchoredPosition
-            // rectTransform.anchoredPosition = startPosition;
-    
+           
             nativeText.DOFade(1f, 0f);
             gameObject.SetActive(true);
 
             Sequence seq = DOTween.Sequence();
-            // seq.Append(rectTransform.DOAnchorPos(endPosition, duration));
             seq.Join(nativeText.DOFade(0f, duration));
             seq.OnComplete(() =>
             {
-                currentArgs.OnComplete?.Invoke();
+                try
+                {
+                    currentArgs.OnComplete?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in OnComplete callback: {ex.Message}\n{ex.StackTrace}");
+                }
                 ResetValues();
                 Recycle();
             });
-            
-            
-            
-            /*// Convert targetObject's world position to screen position
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(currentArgs.TargetObject.transform.position);
-            Debug.Log(message:$"screenPos: {screenPos}");
-            startPosition = new Vector2(screenPos.x, screenPos.y) + currentArgs.RectTransformOffset;
-            endPosition = startPosition + currentArgs.MoveDistance;
-            
-            Debug.Log(message:$"startPosi: {startPosition}, endPosi: {endPosition}");
-            
-            // Set initial anchored position
-            RectTransform rt = GetComponent<RectTransform>();
-            rt.anchoredPosition/*position#1# = startPosition;
-            
-            Vector2 offset = Vector2Helper.RandomPointInRange(35f, preferHorizontal:true);
-            
-            rt.position += (Vector3)offset/*currentArgs.RectTransformOffset#1#;
-            
-            animText.DOFade(1f, 0f);
-            gameObject.SetActive(true);
-
-            Vector3 moveTarget = transform.position + (Vector3)moveDistance;
-            Sequence seq = DOTween.Sequence();
-            seq.Append(transform.DOMove(moveTarget, duration));
-            seq.Join(animText.DOFade(0f, duration));
-            seq.OnComplete(() =>
-            {
-                // transform.SetParent(_initialParent, true);
-                currentArgs.OnComplete?.Invoke();
-                ResetValues();
-                Recycle();
-            });*/
         }
     }
 }

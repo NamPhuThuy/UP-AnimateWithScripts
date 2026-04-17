@@ -45,10 +45,12 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #endregion
 
+        #region Private Methods
+
         /// <summary>
         /// Plays a simple motion from a start to an end position.
         /// </summary>
-        public void PlayMotion()
+        public void PlayAnim()
         {
             interactTransform.position = worldSpaceStartPosi;
 
@@ -72,6 +74,8 @@ namespace NamPhuThuy.AnimateWithScripts
             
         }
 
+        #endregion
+
 
         #region Override Methods
 
@@ -83,7 +87,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 gameObject.SetActive(true);
                 SetValues();
                 KillTweens();
-                PlayMotion();
+                PlayAnim();
             }
         }
 

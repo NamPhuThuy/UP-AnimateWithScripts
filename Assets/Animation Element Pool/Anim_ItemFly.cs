@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -27,36 +26,36 @@ namespace NamPhuThuy.AnimateWithScripts
         private const float SIZE_RANDOM_MAX = 1.3f;
 
         [Header("Stats")]
-        
         [SerializeField] private Vector3 targetPosition;
         [SerializeField] private int totalAmount;
         [SerializeField] private int prevValue;
-        [SerializeField] private ItemFlyArgs currentArgs;
-
-        [Header("Components")]
-        [SerializeField] private GameObject itemContainer;
-        [SerializeField] private TextMeshProUGUI fakeResourceText;
-        [SerializeField] private TextMeshProUGUI realResourceText;
-        [SerializeField] private Transform targetInteractTransform;
-
-        [Header("VFX")]
-        [SerializeField] private Sprite itemSprite;
-        [SerializeField] private GameObject itemPrefab;
-        [SerializeField] private List<RectTransform> iconList;
-       
-        [SerializeField] private RectTransform rippleFxCointainer;
-        [SerializeField] private ParticleSystem rippleFx;
-        
-        [Header("Timing")]
         [Tooltip("Total duration from first spawn until last item lands")]
         [SerializeField] private float totalVfxDuration = 1.6f;
         [SerializeField] private float bounceDuration = 0.3f;
         [SerializeField] private float pathDuration = 0.4f;
+        
+        [SerializeField] private ItemFlyArgs currentArgs;
+
+        [Header("Native Components")]
+        [SerializeField] private GameObject itemContainer;
+        [SerializeField] private TextMeshProUGUI fakeResourceText;
+        [SerializeField] private GameObject itemPrefab;
+        [SerializeField] private List<RectTransform> itemList;
+
+        [Header("External Components")]
+        [SerializeField] private Sprite itemSprite;
+        [SerializeField] private TextMeshProUGUI realResourceText;
+        [SerializeField] private Transform targetInteractTransform;
+        
        
-        private Tweener _shakeFakeResourceTextTween;
+        [SerializeField] private RectTransform rippleFxCointainer;
+        [SerializeField] private ParticleSystem rippleFx;
+        
+       
 
         #region Private Fields
 
+        private Tweener _shakeFakeResourceTextTween;
         private readonly int _initialPoolSize = 8;
         private int _activeItemCount;
         private int _unitValue;
@@ -86,7 +85,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 gameObject.SetActive(true);
                 SetValues();
                 KillTweens();
-                StartCoroutine(TriggerCollectAnim());
+                StartCoroutine(PlayAnim());
             }
         }
 
@@ -97,23 +96,23 @@ namespace NamPhuThuy.AnimateWithScripts
         protected override void SetValues()
         {
             // COMPONENTS
-            realResourceText = currentArgs.TargetText.GetComponent<TextMeshProUGUI>();
-            targetInteractTransform = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform : null;
-            itemSprite = currentArgs.ItemSprite ?? itemSprite;
+            realResourceText = currentArgs.targetText.GetComponent<TextMeshProUGUI>();
+            targetInteractTransform = currentArgs.targetInteractTransform ? currentArgs.targetInteractTransform : null;
+            itemSprite = currentArgs.itemSprite ?? itemSprite;
             
             
-            targetPosition = currentArgs.TargetInteractTransform ? currentArgs.TargetInteractTransform.transform.position : currentArgs.TargetText.position;
+            targetPosition = currentArgs.targetInteractTransform ? currentArgs.targetInteractTransform.transform.position : currentArgs.targetText.position;
             
             // VALUES
-            totalAmount = currentArgs.AddValue;
-            prevValue = currentArgs.PrevValue;
+            totalAmount = currentArgs.addValue;
+            prevValue = currentArgs.prevValue;
 
-            if (!Mathf.Approximately(currentArgs.DelayBetweenItems, 0))
+            if (!Mathf.Approximately(currentArgs.delayBetweenItems, 0))
             {
-                pathDuration = currentArgs.DelayBetweenItems;
+                pathDuration = currentArgs.delayBetweenItems;
             }
             
-            _activeItemCount = Mathf.Max(1, currentArgs.ItemAmount > 0 ? currentArgs.ItemAmount : _initialPoolSize);
+            _activeItemCount = Mathf.Max(1, currentArgs.itemAmount > 0 ? currentArgs.itemAmount : _initialPoolSize);
             _remainingItems = _activeItemCount;
             _unitValue = totalAmount / _initialPoolSize;
             
@@ -121,8 +120,8 @@ namespace NamPhuThuy.AnimateWithScripts
             float spacingBudget = Mathf.Max(0f, totalVfxDuration - INITIAL_DELAY - bounceDuration - pathDuration);
             _spawnStepDelay = (_activeItemCount > 1) ? spacingBudget / (_activeItemCount - 1) : 0f;
             
-            transform.position = currentArgs.StartPosition;
-            Debug.Log(message:$"start posi: {currentArgs.StartPosition}");
+            transform.position = currentArgs.startPosition;
+            Debug.Log(message:$"start posi: {currentArgs.startPosition}");
             
             EnsurePool(_activeItemCount);
         }
@@ -134,25 +133,25 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void CreatePool()
         {
-            iconList = new List<RectTransform>(_initialPoolSize);
+            itemList = new List<RectTransform>(_initialPoolSize);
             EnsurePool(_initialPoolSize);
         }
 
         private void EnsurePool(int required)
         {
-            while (iconList.Count < required)
+            while (itemList.Count < required)
             {
                 var item = Instantiate(itemPrefab, transform.position, Quaternion.identity).GetComponent<RectTransform>();
                 item.SetParent(itemContainer.transform, true);
                 item.GetComponent<Image>().SetNativeSize();
                 item.gameObject.SetActive(false);
-                iconList.Add(item);
+                itemList.Add(item);
             }
         }
 
         #endregion
 
-        private IEnumerator TriggerCollectAnim()
+        private IEnumerator PlayAnim()
         {
             int itemSizeX = itemSprite.texture.width;
             bool isAllCoinSpawned = false;
@@ -186,7 +185,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private void SetupRewardItem(int index, int itemSizeX, System.Action onLastItem, bool isLast)
         {
             int randomSizeX = (int)(Random.Range(SIZE_RANDOM_MIN, SIZE_RANDOM_MAX) * itemSizeX);
-            var reward = iconList[index];
+            var reward = itemList[index];
             Image image = reward.GetComponent<Image>();
 
             reward.gameObject.SetActive(true);
@@ -210,7 +209,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void AnimateRewardItem(int index, Vector2[] curvePoints)
         {
-            var reward = iconList[index];
+            var reward = itemList[index];
             var startPosition = reward.transform.position;
             var distance = targetPosition - startPosition;
 
@@ -242,12 +241,32 @@ namespace NamPhuThuy.AnimateWithScripts
                         realResourceText.text = $"{prevValue + totalAmount}";
                     }
                     
-                    currentArgs.OnComplete?.Invoke();
+                    try 
+                    {
+                        currentArgs.OnComplete?.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error in OnComplete callback: {ex.Message}\n{ex.StackTrace}");
+                    }
+                    
                     Recycle();
                 }
+
+                DebugLogger.Log(message: $"About trigger some effects");
                 
-                currentArgs.OnItemInteract?.Invoke();
+                try 
+                {
+                    currentArgs.OnItemInteract?.Invoke(); // This will add the methods in events into the call-stack
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in OnItemInteract callback: {ex.Message}\n{ex.StackTrace}");
+                }
+                
+                DebugLogger.Log(message: $"About trigger some effects 2");
                 ApllyPunchEffect();
+                
                 UpdateFakeResourceText();
 
                 reward.gameObject.SetActive(false);
@@ -268,14 +287,16 @@ namespace NamPhuThuy.AnimateWithScripts
         private void ApllyPunchEffect()
         {
             DebugLogger.Log();
+            if (targetInteractTransform == null) return; // Add null check here
+
             if (_shakeFakeResourceTextTween != null && _shakeFakeResourceTextTween.IsActive())
             {
                 _shakeFakeResourceTextTween.Kill();
             }
             targetInteractTransform.localScale = Vector3.one;
             
-            _shakeFakeResourceTextTween = targetInteractTransform
-                .DOPunchScale(0.15f * Vector3.one, 0.3f);
+            // tweens.Add(targetInteractTransform.DOPunchScale(0.15f * Vector3.one, 0.3f));
+            _shakeFakeResourceTextTween = targetInteractTransform.DOPunchScale(0.15f * Vector3.one, 0.3f);
         }
 
         private enum CurveType
