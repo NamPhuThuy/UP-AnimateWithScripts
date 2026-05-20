@@ -97,6 +97,28 @@ This project use PrimeTween as the native Tween behaviour
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## Scripts Documentation
+
+| Script Name | Primary Purpose | Key Public Methods |
+|-------------|-----------------|--------------------|
+| `AnimationManager.cs` | Main Singleton manager for pooling and playing visual effects | `Play<T>(T args)`, `Preload()`, `Release()` |
+| `AnimationBase.cs` | Abstract base class for all pooled animation/VFX elements | `Play<T>(T args)`, `Recycle()`, `EndFast()` |
+| `AnimationCatalog.cs` | ScriptableObject defining animation prefabs for the pool | `GetEntry(AnimationType)` |
+| `Anim_ItemFly.cs` | Animates items (e.g., coins) flying along a Bezier curve to a UI target | `Play(ItemFlyArgs)` |
+| `Anim_ParticleSystem.cs` | Spawns and plays a Unity ParticleSystem from the object pool | `Play(ParticleSystemArgs)` |
+| `Anim_PopupImage.cs` | Displays a popup image sprite with customizable duration/filtering | `Play(PopupImageArgs)` |
+| `Anim_RewardProgress.cs` | Animates a segmented progress bar filling sequentially | `Play(RewardProgressArgs)` |
+| `Anim_ScreenShake.cs` | Applies camera/screen shake using intensity and animation curves | `Play(ScreenShakeArgs)` |
+| `Anim_SpriteMotion.cs` | Moves a 2D sprite through world or UI space automatically | `Play(SpriteMotionArgs)` |
+| `Anim_StatChangeText.cs` | Animates text representing a stat change (e.g., "+5") | `Play(StatChangeTextArgs)` |
+| `Anim_Toast.cs` | Displays a simple temporary notification/toast text message | `Play(ToastArgs)` |
+| `IAnimationArgs.cs` | Interfaces and structs defining parameters for each animation type | N/A (Data Structures) |
+| `ObjActiveAuto.cs` | Automatically enables/disables a GameObject after a delay | N/A (Inspector Driven) |
+| `ObjMoveBetweenAuto.cs` | Automatically pings-pongs an object between a start and end point | N/A (Inspector Driven) |
+| `ObjRotateAuto.cs` | Applies continuous rotation to an object automatically | N/A (Inspector Driven) |
+| `ObjScaleAuto.cs` | Applies automatic pulsing/scaling to an object over time | N/A (Inspector Driven) |
+| `BezierCurveHelper.cs` | Mathematical helper for generating complex Bezier paths | N/A (Static Utils) |
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
