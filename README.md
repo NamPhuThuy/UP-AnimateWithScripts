@@ -1,38 +1,3 @@
-<a id="readme-top"></a>
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage-examples">Usage examples</a></li>
-    <li><a href="#todo">Roadmap</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
-
-<!-- ABOUT THE PROJECT -->
 # About The Project
 
 This project purpose is to pre-create frequent use effect, such as: 
@@ -41,15 +6,63 @@ This project purpose is to pre-create frequent use effect, such as:
 - An number popup to show the stat changes
 - An image show on screen to perform as a vfx
 
-This project use PrimeTween as the native Tween behaviour
+This project use DOTween as the Tween behaviour
 
-## Features
+# Features
 
-### Item Fly
+## Item Fly (`ITEM_FLY`)
+Spawns and animates a cluster of items (e.g., coins, gems) flying along dynamic Bezier paths from a starting position to a target UI text or transform element.
+* **Purpose**: Simulates realistic reward collection/harvesting feedback (e.g. coin collection).
+* **Key Features**: 
+  * Animates multiple items sequentially using **Bezier paths** (exponential, sine, parabolic, linear, or logarithmic curves).
+  * Automatically handles UI resource counters, **incrementing the text value** dynamically as each coin lands.
+  * Triggers **scale-punch feedback** on the target element and custom events (`OnItemInteract`, `OnComplete`) when items land.
+* **Key Parameters**: `addValue` (total amount), `itemAmount` (spawn count), `startPosition`, `targetText`, `targetInteractTransform`, `itemSprite`, `delayBetweenItems`.
 
-### StatChangeText
+---
 
-### PopupText
+## Toast (`TOAST`)
+Displays temporary on-screen notification toast messages with customizable styles and layouts.
+* **Purpose**: Shows user-friendly feedback, status updates, or brief alerts (e.g., "Level Up!").
+* **Key Features**:
+  * Utilizes high-contrast **auto-contrast color pairing** for backplate and text.
+  * Supports custom fonts, scale multiplier, background visibility, and custom duration.
+  * Flexibly positioned via screen-percentage (e.g., `50, 50` for center) or absolute anchored coordinates.
+* **Key Parameters**: `message` (content), `textColor`, `textFont`, `customDuration`, `customScale`, `useScreenPercentage`, `screenPercentage`.
+
+---
+
+## Stat Change Text (`STAT_CHANGE_TEXT`)
+Animates temporary floating numbers indicating changes in player stats (e.g., `+100 XP`, `-50 HP`).
+* **Purpose**: Delivers instant feedback for numeric increments, decrements, or damage numbers.
+* **Key Features**:
+  * Copies standard layout properties of a target TextMeshProUGUI element automatically.
+  * Supports font style customization (boldness, color, size multiplier) and custom offsets.
+  * Spawns directly at the screen position of a 3D/2D world object using **world-to-screen conversion**.
+  * Fades out smoothly after a designated duration.
+* **Key Parameters**: `amount` (value), `additionalIconText` (e.g., `%`, `XP`), `isBold`, `duration`, `rectTransformOffset`, `moveDistance`, `targetObject`.
+
+---
+
+## Popup Image (`POPUP_IMAGE`)
+Displays highly customizable 2D popups (e.g., visual achievements, emojis, reward icons) at specified positions.
+* **Purpose**: Shows key image prompts or illustrative achievements cleanly.
+* **Key Features**:
+  * Uses sleek scale-in sequences followed by high-rise fade-out transitions.
+  * Positioned using screen percentage, coordinates, or world targets.
+  * Allows customizable filter tint colors and duration parameters.
+* **Key Parameters**: `sprite`, `useScreenPercentage`, `screenPercentage`, `anchoredPos`, `customFilterColor`, `customDuration`.
+
+---
+
+## Sprite Motion (`SPRITE_MOTION`)
+Applies continuous rotation, scaling, or clock-like periodic motions to simple 2D sprites.
+* **Purpose**: Automates minor decorative UI animations or moving environmental sprites.
+* **Key Features**:
+  * Features customizable motion categories: **Clockwise rotation**, **Continuous spin**, or **Pulsing scale**.
+  * Adjusts starting sorting layer and order dynamically for proper layering.
+  * Recycles itself automatically after a specified lifecycle duration.
+* **Key Parameters**: `sprite`, `motionType` (`CLOCK`, `ROTATE`, `SCALE`), `worldSpaceStartPosi`, `customDuration`, `customSortingLayer`, `customSortingOrder`.
 
 # Note
 - This method in PrimeTween/Editor/CodeGenerator.cs is commented because error 
@@ -57,44 +70,19 @@ This project use PrimeTween as the native Tween behaviour
 
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+# INSTALLATION
 
-<!-- INSTALLATION -->
-## INSTALLATION
-
-### UNITY PACKAGE MANAGER
+## UNITY PACKAGE MANAGER
 - Step 1: From Unity Editor -> Window -> Package Management -> Package Manager
 - Step 2: Press the plus (+) icon in the top-left of Window
 - Step 3: Select **Install package from git URL** -> paste the git-URL (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git) and choose Install
 
 
-### THROUGH GIT
+## THROUGH GIT
 - Step 1: Copy the git-URL (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git)
 - Step 2: Open Git CLI and type: git install https://github.com/NamPhuThuy/UP-AnimateWithScripts.git
 - Step 3: Enter and wait
 - Step 4: Make sure you have install the package TextMeshProUGUI in the Unity Project
-
-
-<!-- USAGE EXAMPLES -->
-## Usage examples
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-## Contact
-<div align="left">
-  <a href="https://github.com/NamPhuThuy">
-    <img src="images/github.gif" width="100" alt="Click to Play Demo">
-  </a>
-
-  <a href="https://www.facebook.com/namphuthuy957">
-    <img src="images/facebook.gif" width="100" alt="Click to Play Demo">
-  </a>
-</div>
-
-[![Itch][itch-shield]][itch-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## Scripts Documentation
@@ -118,37 +106,3 @@ This project use PrimeTween as the native Tween behaviour
 | `ObjRotateAuto.cs` | Applies continuous rotation to an object automatically | N/A (Inspector Driven) |
 | `ObjScaleAuto.cs` | Applies automatic pulsing/scaling to an object over time | N/A (Inspector Driven) |
 | `BezierCurveHelper.cs` | Mathematical helper for generating complex Bezier paths | N/A (Static Utils) |
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
-[contributors-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
-[forks-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/network/members
-[stars-shield]: https://img.shields.io/github/stars/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
-[stars-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/stargazers
-[issues-shield]: https://img.shields.io/github/issues/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
-[issues-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/issues
-[license-shield]: https://img.shields.io/github/license/NamPhuThuy/UP-AnimateWithScripts.svg?style=for-the-badge
-[license-url]: https://github.com/NamPhuThuy/UP-AnimateWithScripts/blob/main/LICENSE
-
-<!-- Contact -->
-[itch-shield]: https://img.shields.io/badge/-itch.io-blue.svg?style=for-the-badge&logo=itch.io&colorB=f5f5f5
-[itch-url]: https://namphuthuy.itch.io/
-
-
-<!-- Mock Up -->
-[product-screenshot]: images/avatar_510x540.png
-
-<!-- Tech Stack -->
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
-[Unity.com]: https://img.shields.io/badge/Unity-61DBFB?style=for-the-badge&logo=unity&logoColor=white&labelColor=black&color=black
-[Unity-url]: https://unity.com/
-[CSharp.com]: https://img.shields.io/badge/C%23-61DBFB?style=for-the-badge&logo=c%23&logoColor=white&labelColor=magenta&color=purple
-
-[CSharp-url]: https://learn.microsoft.com/en-us/dotnet/csharp/
