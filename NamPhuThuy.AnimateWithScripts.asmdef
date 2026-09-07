@@ -2,9 +2,9 @@
     "name": "NamPhuThuy.AnimateWithScripts",
     "rootNamespace": "NamPhuThuy.AnimateWithScripts",
     "references": [
-        "UnityEngine.UI",
-        "Unity.TextMeshPro",
-        "DOTween.Modules"
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:9bc2f4a745116a44e949a2a8bd565049"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
