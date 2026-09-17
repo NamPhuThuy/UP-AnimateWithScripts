@@ -143,30 +143,6 @@ namespace NamPhuThuy.AnimateWithScripts
                     targetTransform = toastArgs.customParent
                 };
             }
-            else if (args is StatChangeTextArgs statArgs)
-            {
-                string msg = statArgs.amount != 0
-                    ? (statArgs.amount > 0 ? $"+{statArgs.amount}" : $"{statArgs.amount}") + statArgs.additionalIconText
-                    : statArgs.additionalIconText;
-
-                Vector3 startPos = statArgs.targetObject != null
-                    ? statArgs.targetObject.transform.position
-                    : Vector3.zero;
-
-                currentArgs = new ToastWorldSpaceArgs
-                {
-                    OnComplete = statArgs.OnComplete,
-                    message = msg,
-                    textColor = statArgs.customColor != default ? statArgs.customColor : Color.white,
-                    textFont = statArgs.customFont,
-                    customDuration = statArgs.duration,
-                    worldPosition = startPos,
-                    worldOffset = new Vector3(statArgs.rectTransformOffset.x, statArgs.rectTransformOffset.y, 0f),
-                    isCustomUpDistance = statArgs.moveDistance.y != 0,
-                    customUpDistance = statArgs.moveDistance.y > 5f ? statArgs.moveDistance.y / 30f : statArgs.moveDistance.y,
-                    toastType = ToastType.FLASH
-                };
-            }
             else
             {
                 throw new ArgumentException("Invalid argument type for Anim_Toast_WorldSpace");

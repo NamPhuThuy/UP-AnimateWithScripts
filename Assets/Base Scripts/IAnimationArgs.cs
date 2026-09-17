@@ -133,40 +133,6 @@ namespace NamPhuThuy.AnimateWithScripts
         public bool isCustomHoldDuration;
         public float customHoldDuration;
     }
-
-    [Serializable]
-    public struct StatChangeTextArgs : IAnimationArgs
-    {
-        public AnimationType Type => AnimationType.STAT_CHANGE_TEXT;
-        
-        // Events
-        public Action OnComplete { get; set; }
-
-        public int amount;
-        public string additionalIconText; // e.g., "%"
-        public bool isBold;
-        public float duration;
-        public Color customColor;
-        public bool isUseAnchoredPos;
-        
-        public Vector2 rectTransformOffset;
-        public Vector2 moveDistance;
-        public GameObject targetObject;
-        
-        //Custom Values
-        public TMP_FontAsset customFont;
-    }
-    
-    [Serializable]
-    public struct ScreenShakeArgs : IAnimationArgs
-    {
-        public AnimationType Type => AnimationType.SCREEN_SHAKE;
-        public Action OnComplete { get; set; }
-
-        public float intensity;
-        public float duration;
-        public AnimationCurve shakeCurve;
-    }
     
     [Serializable]
     public struct SpriteMotionArgs : IAnimationArgs
@@ -187,31 +153,4 @@ namespace NamPhuThuy.AnimateWithScripts
         public string customSortingLayer;
         public int customSortingOrder;
     }
-
-    [Serializable]
-    public struct RewardProgressArgs : IAnimationArgs
-    {
-        public AnimationType Type => AnimationType.SEGMENT_REWARD_PROGRESS;
-        public Action OnComplete { get; set; }
-        public Action<int> OnSegmentComplete { get; set; }  // Callback with segment index
-        
-        // Must have values
-        public Sprite prizeSprite;
-        public int totalSegmentNum;
-        public int currentSegmentNum;
-        public int targetSegmentNum;
-        
-        // Option values
-        public string customMessage;
-        public Sprite customSegmentSprite;
-        public Sprite customBackgroundSprite;
-        public Sprite customEndpointSprite;
-        
-        // Animation settings
-        public float segmentFillDuration;
-        public float delayBetweenSegments;
-        public bool playSound;
-        public bool showParticles;
-    }
-   
 }

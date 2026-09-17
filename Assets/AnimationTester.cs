@@ -28,12 +28,6 @@ namespace NamPhuThuy.AnimateWithScripts
         public int itemSpriteIndex = 0;
         public Sprite[] itemSprites;
 
-        [Header("SPINE CONTROL")] 
-        /*public SkeletonAnimation skeletonAnimation;
-        public SkeletonGraphic skeletonGraphic;*/
-        public string animationName;
-        // public Anim_SpineControl.SpineType spineType;
-
         #endregion
     }
 
@@ -101,7 +95,6 @@ namespace NamPhuThuy.AnimateWithScripts
             ButtonPlayItemFly();
             ButtonStatChange();
             ButtonSpriteMotion();
-            ButtonSpineControl();
 
             // Quick test all VFX types
             EditorGUILayout.Space(5);
@@ -175,14 +168,14 @@ namespace NamPhuThuy.AnimateWithScripts
             void TurnOnStatChangeVFX(Transform coinText)
             {
                 DebugLogger.Log();
-                var args = new StatChangeTextArgs
+                var args = new ToastWorldSpaceArgs
                 {
-                    amount = testAmount / _script.itemAmount,
-                    customColor = Color.yellow,
-                    rectTransformOffset = Vector2.zero,
-                    moveDistance = new Vector2(0f, 30f),
-                    isUseAnchoredPos = false,
-                    targetObject = coinText.gameObject,
+                    message = $"+{testAmount / _script.itemAmount}",
+                    textColor = Color.yellow,
+                    targetTransform = coinText,
+                    worldPosition = coinText.position,
+                    customDuration = 0.5f,
+                    toastType = ToastType.FLASH
                 };
 
                 AnimationManager.Ins.Play(args);
@@ -227,24 +220,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 AnimationManager.Ins.Play(args);
             }
         }
-   
-        
-        private void ButtonSpineControl()
-        {
-            /*if (GUILayout.Button(new GUIContent("Play Spine Control", frogIcon)))
-            {
-                var args = new SpineControlArgs()
-                {
-                    skeletonAnimation = _script.skeletonAnimation,
-                    activeAnimName = _script.animationName,
-                    spineType = _script.spineType,
-                    OnComplete = null
-                };
-
-                AnimationManager.Ins.Play(args);
-            }*/
-        }
-
         #endregion
     }
 #endif

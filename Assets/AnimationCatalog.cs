@@ -13,15 +13,10 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         NONE = 0,
         TOAST = 1,
-        ITEM_FLY = 2,
-        TOAST_WORLD_SPACE = 3,
-        STAT_CHANGE_TEXT = 3,
-        SCREEN_SHAKE = 4,
-        PARTICLE_SYSTEM = 6,
+        TOAST_WORLD_SPACE = 2,
+        TOAST_IMAGE = 3,
         SPRITE_MOTION = 8,
-        SPINE_CONTROL = 9,
-        TOAST_IMAGE = 10,
-        SEGMENT_REWARD_PROGRESS = 11,
+        ITEM_FLY = 11,
     }
 
     [CreateAssetMenu(fileName = "AnimationCatalog", menuName = "NamPhuThuy_AnimateWithScripts/Animation Catalog")]
