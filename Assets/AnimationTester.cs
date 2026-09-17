@@ -97,7 +97,7 @@ namespace NamPhuThuy.AnimateWithScripts
             EditorGUILayout.Space(5);
 
             ButtonPopupText();
-            ButtonPopupImage();
+            ButtonToastImage();
             ButtonPlayItemFly();
             ButtonStatChange();
             ButtonSpriteMotion();
@@ -128,20 +128,22 @@ namespace NamPhuThuy.AnimateWithScripts
             }
         }
         
-        private void ButtonPopupImage()
+        private void ButtonToastImage()
         {
-            if (GUILayout.Button(new GUIContent("Play Popup Image", frogIcon)))
+            if (GUILayout.Button(new GUIContent("Play Toast Image", frogIcon)))
             {
                 int randomIndex = Random.Range(0, _script.itemSprites.Length);
                 Vector2 randAnchoredPosi = new Vector2(Random.Range(-500f, 500f), Random.Range(-700f, 700f));
                 
-                var args = new PopupImageArgs()
+                var args = new ToastImageArgs
                 {
                     sprite = _script.itemSprites[randomIndex],
                     useScreenPercentage = _useScreenPercentage,
                     screenPercentage = _screenPercentage,
-                    anchoredPos = randAnchoredPosi, // Fallback
-                    isUseAnchoredPos = !_useScreenPercentage
+                    anchoredPos = randAnchoredPosi,
+                    isUseAnchoredPos = !_useScreenPercentage,
+                    customDuration = _testDuration,
+                    toastType = ToastType.FLASH
                 };
                 AnimationManager.Ins.Play(args);
             }

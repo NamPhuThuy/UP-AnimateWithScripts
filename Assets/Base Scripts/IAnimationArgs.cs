@@ -76,25 +76,31 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
     [Serializable]
-    public struct PopupImageArgs : IAnimationArgs
+    public struct ToastImageArgs : IAnimationArgs
     {
-        public AnimationType Type => AnimationType.POPUP_IMAGE;
+        public AnimationType Type => AnimationType.TOAST_IMAGE;
         public Action OnComplete { get; set; }
         
         // Must have values
         public Sprite sprite;
         
         // Positioning
-        public bool isUseAnchoredPos;
-        public Vector2 anchoredPos;
-        
         public bool useScreenPercentage;
         public Vector2 screenPercentage; // e.g., (50, 50) for center
-
-        // Custom values
-        public Color customFilterColor;
-        public float customDuration;
+        public bool isUseAnchoredPos;
+        public Vector2 anchoredPos;
         public Vector2 customPosition;
+        public Transform customParent;
+
+        // Custom styling & animation values
+        public ToastType toastType;
+        public Color customFilterColor;
+        public float customScale;
+        public float customDuration;
+        public bool isCustomUpDistance;
+        public float customUpDistance;
+        public bool isCustomHoldDuration;
+        public float customHoldDuration;
     }
     
     [Serializable]

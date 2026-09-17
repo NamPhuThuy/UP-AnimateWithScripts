@@ -22,7 +22,7 @@ namespace NamPhuThuy.AnimateWithScripts
         [Header("Buttons")] 
         [SerializeField] private Button itemFlyButton; 
         [SerializeField] private Button popupTextButton; 
-        [SerializeField] private Button popupImageButton; 
+        [SerializeField] private Button toastImageButton; 
 
         #endregion
 

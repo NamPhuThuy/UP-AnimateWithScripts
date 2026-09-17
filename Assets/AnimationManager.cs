@@ -186,6 +186,18 @@ namespace NamPhuThuy.AnimateWithScripts
             Play(args);
         }
 
+        public void PlayBasicToastImage(Sprite sprite, Vector2 screenPercentage, float duration = 0f)
+        {
+            var args = new ToastImageArgs
+            {
+                sprite = sprite,
+                useScreenPercentage = true,
+                screenPercentage = screenPercentage,
+                customDuration = duration,
+            };
+            Play(args);
+        }
+
         #endregion
     }
 

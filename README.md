@@ -45,14 +45,14 @@ Displays floating notification toast text or numeric popups in 3D world space us
 
 ---
 
-## Popup Image (`POPUP_IMAGE`)
-Displays highly customizable 2D popups (e.g., visual achievements, emojis, reward icons) at specified positions.
-* **Purpose**: Shows key image prompts or illustrative achievements cleanly.
+## Toast Image (`TOAST_IMAGE`)
+Displays highly customizable 2D popup/toast images (e.g., visual achievements, reward badges, emojis, item icons) in UI space.
+* **Purpose**: Shows key image prompts or illustrative notifications cleanly.
 * **Key Features**:
-  * Uses sleek scale-in sequences followed by high-rise fade-out transitions.
-  * Positioned using screen percentage, coordinates, or world targets.
-  * Allows customizable filter tint colors and duration parameters.
-* **Key Parameters**: `sprite`, `useScreenPercentage`, `screenPercentage`, `anchoredPos`, `customFilterColor`, `customDuration`.
+  * Features two distinct animation styles: **FLASH** (scale-pop, hold, float up, scale/fade out) and **FLOAT** (fade-in, continuous float-up, hold, fade-out).
+  * Positioned using screen percentage, anchored coordinates, custom parent, or converted world coordinates.
+  * Allows customizable filter tint colors, scale multiplier, up-distance, hold duration, and auto-return duration.
+* **Key Parameters**: `sprite`, `toastType`, `useScreenPercentage`, `screenPercentage`, `anchoredPos`, `customFilterColor`, `customScale`, `customDuration`, `customUpDistance`, `customHoldDuration`.
 
 ---
 
@@ -102,7 +102,7 @@ Add the package to your Unity project's `Packages/manifest.json` file under `"de
 | `AnimationCatalog.cs` | ScriptableObject defining animation prefabs for the pool | `GetEntry(AnimationType)` |
 | `Anim_ItemFly.cs` | Animates items (e.g., coins) flying along a Bezier curve to a UI target | `Play(ItemFlyArgs)` |
 | `Anim_ParticleSystem.cs` | Spawns and plays a Unity ParticleSystem from the object pool | `Play(ParticleSystemArgs)` |
-| `Anim_PopupImage.cs` | Displays a popup image sprite with customizable duration/filtering | `Play(PopupImageArgs)` |
+| `Anim_Toast_Image.cs` | Displays temporary toast/popup image sprites with customizable duration/filtering/scale | `Play(ToastImageArgs)` |
 | `Anim_RewardProgress.cs` | Animates a segmented progress bar filling sequentially | `Play(RewardProgressArgs)` |
 | `Anim_ScreenShake.cs` | Applies camera/screen shake using intensity and animation curves | `Play(ScreenShakeArgs)` |
 | `Anim_SpriteMotion.cs` | Moves a 2D sprite through world or UI space automatically | `Play(SpriteMotionArgs)` |
