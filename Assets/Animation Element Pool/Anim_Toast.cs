@@ -74,6 +74,10 @@ namespace NamPhuThuy.AnimateWithScripts
             set => customHoldDuration = value;
         }
 
+        private Canvas _defaultCanvas;
+        private RectTransform _defaultCanvasRect;
+        private Canvas _parentCanvas;
+        private RectTransform _parentCanvasRect;
         private Sequence _seq;
         private Vector2 _basePos;
         private Color _defaultBackColor;
@@ -87,6 +91,10 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!_canvasGroup) _canvasGroup = GetComponent<CanvasGroup>();
             if (!_rectTransform) _rectTransform = GetComponent<RectTransform>();
             if (backImage) _defaultBackColor = backImage.color;
+            _defaultCanvas = GetComponentInParent<Canvas>();
+            _defaultCanvasRect = _defaultCanvas.GetComponent<RectTransform>();
+            _parentCanvas = _defaultCanvas;
+            _parentCanvasRect = _defaultCanvasRect;
             _basePos = _rectTransform.anchoredPosition;
             _canvasGroup.alpha = 0f;
             gameObject.SetActive(false);
@@ -136,27 +144,23 @@ namespace NamPhuThuy.AnimateWithScripts
             if (currentArgs.customParent != null)
             {
                 transform.parent = currentArgs.customParent.transform;
+                _parentCanvas = GetComponentInParent<Canvas>();
+                _parentCanvasRect = _parentCanvas.GetComponent<RectTransform>();
             }
 
             if (currentArgs.useScreenPercentage)
             {
-                Canvas parentCanvas = GetComponentInParent<Canvas>();
-                if (parentCanvas != null)
-                {
-                    RectTransform canvasRect = parentCanvas.GetComponent<RectTransform>();
-                    
-                    // Instead of changing anchors, we calculate the offset from the current anchors
-                    // This way we respect the prefab's setup and center pivot
-                    float targetX = canvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
-                    float targetY = canvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
+                // Instead of changing anchors, we calculate the offset from the current anchors
+                // This way we respect the prefab's setup and center pivot
+                float targetX = _parentCanvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
+                float targetY = _parentCanvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
 
-                    // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
-                    // We need to shift the target position so (50,50) is (0,0) locally
-                    float finalX = targetX - (canvasRect.rect.width * 0.5f);
-                    float finalY = targetY - (canvasRect.rect.height * 0.5f);
+                // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
+                // We need to shift the target position so (50,50) is (0,0) locally
+                float finalX = targetX - (_parentCanvasRect.rect.width * 0.5f);
+                float finalY = targetY - (_parentCanvasRect.rect.height * 0.5f);
 
-                    SetAnchoredPos(new Vector2(finalX, finalY));
-                }
+                SetAnchoredPos(new Vector2(finalX, finalY));
             }
             else if (currentArgs.customAnchoredPos != default)
             {
@@ -205,6 +209,8 @@ namespace NamPhuThuy.AnimateWithScripts
             gameObject.SetActive(false);
             _rectTransform.anchoredPosition = _basePos;
             _canvasGroup.alpha = 0f;
+            _parentCanvas = _defaultCanvas;
+            _parentCanvasRect = _defaultCanvasRect;
         }
 
         #endregion

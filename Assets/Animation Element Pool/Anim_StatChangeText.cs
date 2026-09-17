@@ -20,7 +20,27 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private Vector2 moveDistance;
         [SerializeField] private float duration = 1f;
         [SerializeField] private float textSizeMul = 1.3f;
-        [SerializeField]  private StatChangeTextArgs currentArgs;
+        [SerializeField] private StatChangeTextArgs currentArgs;
+
+        private Canvas _parentCanvas;
+        private Camera _mainCamera;
+        private Sequence _seq;
+
+        #region MonoBehaviour Callbacks
+
+        private void Awake()
+        {
+            _parentCanvas = GetComponentInParent<Canvas>();
+            _mainCamera = Camera.main;
+        }
+
+        private void OnDisable()
+        {
+            _seq?.Kill(false);
+            _seq = null;
+        }
+
+        #endregion
 
         #region Override Methods
         
@@ -76,6 +96,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected override void ResetValues()
         {
+            _seq?.Kill(false);
+            _seq = null;
             nativeText.fontStyle &= ~FontStyles.Bold;
         }
 
@@ -95,7 +117,6 @@ namespace NamPhuThuy.AnimateWithScripts
         private void PlayAnim()
         {
             DebugLogger.Log();
-            Canvas canvas = GetComponentInParent<Canvas>();
     
             // Convert world position to canvas position
             Vector2 canvasPosition;
@@ -106,17 +127,20 @@ namespace NamPhuThuy.AnimateWithScripts
             }
             else
             {
-                rectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.targetObject.transform.position);
+                var cam = _mainCamera ? _mainCamera : (_mainCamera = Camera.main);
+                rectTransform.position = cam.WorldToScreenPoint(currentArgs.targetObject.transform.position);
             }
             
-            DebugLogger.Log(message:$"Canvas Rendermode: {canvas.renderMode}");
+            DebugLogger.Log(message:$"Canvas Rendermode: {_parentCanvas.renderMode}");
            
+            _seq?.Kill(false);
+            nativeText.DOKill(false);
             nativeText.DOFade(1f, 0f);
             gameObject.SetActive(true);
 
-            Sequence seq = DOTween.Sequence();
-            seq.Join(nativeText.DOFade(0f, duration));
-            seq.OnComplete(() =>
+            _seq = DOTween.Sequence();
+            _seq.Join(nativeText.DOFade(0f, duration));
+            _seq.OnComplete(() =>
             {
                 try
                 {

@@ -29,6 +29,9 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region Private Fields
 
+        private Canvas _parentCanvas;
+        private RectTransform _canvasRect;
+        private Camera _mainCamera;
         private Sequence _seq;
         
         private readonly float _inDuration = 0.25f;
@@ -40,6 +43,17 @@ namespace NamPhuThuy.AnimateWithScripts
         private readonly Ease _upEase = Ease.OutQuad;
         private readonly Ease _downEase = Ease.InCubic;
         
+        #endregion
+
+        #region MonoBehaviour Callbacks
+
+        private void Awake()
+        {
+            _parentCanvas = GetComponentInParent<Canvas>();
+            _canvasRect = _parentCanvas.GetComponent<RectTransform>();
+            _mainCamera = Camera.main;
+        }
+
         #endregion
 
         #region Public Methods
@@ -83,25 +97,19 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (currentArgs.useScreenPercentage)
             {
-                Canvas parentCanvas = GetComponentInParent<Canvas>();
-                if (parentCanvas != null)
-                {
-                    RectTransform canvasRect = parentCanvas.GetComponent<RectTransform>();
-                    
-                    // Instead of changing anchors, we calculate the offset from the current anchors
-                    // This way we respect the prefab's setup and center pivot
-                    
-                    // Convert percentage to anchored position space based on canvas size
-                    float targetX = canvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
-                    float targetY = canvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
+                // Instead of changing anchors, we calculate the offset from the current anchors
+                // This way we respect the prefab's setup and center pivot
+                
+                // Convert percentage to anchored position space based on canvas size
+                float targetX = _canvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
+                float targetY = _canvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
 
-                    // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
-                    // We need to shift the target position so (50,50) is (0,0) locally
-                    float finalX = targetX - (canvasRect.rect.width * 0.5f);
-                    float finalY = targetY - (canvasRect.rect.height * 0.5f);
+                // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
+                // We need to shift the target position so (50,50) is (0,0) locally
+                float finalX = targetX - (_canvasRect.rect.width * 0.5f);
+                float finalY = targetY - (_canvasRect.rect.height * 0.5f);
 
-                    imageRectTransform.anchoredPosition = new Vector2(finalX, finalY);
-                }
+                imageRectTransform.anchoredPosition = new Vector2(finalX, finalY);
             }
             else if (currentArgs.isUseAnchoredPos)
             {
@@ -109,7 +117,8 @@ namespace NamPhuThuy.AnimateWithScripts
             }
             else
             {
-                imageRectTransform.position = Camera.main.WorldToScreenPoint(currentArgs.customPosition);
+                var cam = _mainCamera ? _mainCamera : (_mainCamera = Camera.main);
+                imageRectTransform.position = cam.WorldToScreenPoint(currentArgs.customPosition);
             }
         }
         
