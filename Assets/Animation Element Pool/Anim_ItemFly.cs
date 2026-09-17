@@ -24,6 +24,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private const float SCALE_MAX = 1.2f;
         private const float SIZE_RANDOM_MIN = 1.1f;
         private const float SIZE_RANDOM_MAX = 1.3f;
+        private const string NUMBER_FORMAT = "{0}";
 
         [Header("Stats")]
         [SerializeField] private Vector3 targetPosition;
@@ -61,6 +62,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private int _unitValue;
         private int _remainingItems;
         private float _spawnStepDelay;
+        private readonly List<Vector3[]> _pathBuffers = new();
+        private readonly List<Image> _itemImages = new();
         
         private bool IsHaveRealText => realResourceText != null;
         
@@ -85,7 +88,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 gameObject.SetActive(true);
                 SetValues();
                 KillTweens();
-                StartCoroutine(PlayAnim());
+                PlayAnim();
             }
         }
 
@@ -134,6 +137,8 @@ namespace NamPhuThuy.AnimateWithScripts
         private void CreatePool()
         {
             itemList = new List<RectTransform>(_initialPoolSize);
+            _pathBuffers.Capacity = _initialPoolSize;
+            _itemImages.Capacity = _initialPoolSize;
             EnsurePool(_initialPoolSize);
         }
 
@@ -143,50 +148,41 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var item = Instantiate(itemPrefab, transform.position, Quaternion.identity).GetComponent<RectTransform>();
                 item.SetParent(itemContainer.transform, true);
-                item.GetComponent<Image>().SetNativeSize();
+                var image = item.GetComponent<Image>();
+                image.SetNativeSize();
                 item.gameObject.SetActive(false);
                 itemList.Add(item);
+                _itemImages.Add(image);
+            }
+
+            while (_itemImages.Count < itemList.Count)
+            {
+                _itemImages.Add(itemList[_itemImages.Count].GetComponent<Image>());
+            }
+
+            while (_pathBuffers.Count < itemList.Count)
+            {
+                _pathBuffers.Add(new Vector3[CURVE_POINT_COUNT]);
             }
         }
 
         #endregion
 
-        private IEnumerator PlayAnim()
+        private void PlayAnim()
         {
             int itemSizeX = itemSprite.texture.width;
-            bool isAllCoinSpawned = false;
 
             for (int i = 0; i < _activeItemCount; i++)
             {
-                SetupRewardItem(i, itemSizeX, () => isAllCoinSpawned = true, i == _activeItemCount - 1);
-            }
-
-            while (!isAllCoinSpawned)
-                yield return new WaitForSeconds(1f / 30);
-
-            AutoFindResourceDisplay();
-
-            if (IsHaveRealText)
-            {
-                realResourceText.gameObject.SetActive(false);
-                fakeResourceText.gameObject.SetActive(true);
-                fakeResourceText.text = prevValue.ToString();
-            }
-            
-
-            for (int i = 0; i < _activeItemCount; i++)
-            {
-                var curvePoints = GenerateCurvePoints(i);
-                AnimateRewardItem(i, curvePoints);
+                SetupRewardItem(i, itemSizeX);
             }
         }
 
-        // Change SetupRewardItem signature:
-        private void SetupRewardItem(int index, int itemSizeX, System.Action onLastItem, bool isLast)
+        private void SetupRewardItem(int index, int itemSizeX)
         {
             int randomSizeX = (int)(Random.Range(SIZE_RANDOM_MIN, SIZE_RANDOM_MAX) * itemSizeX);
             var reward = itemList[index];
-            Image image = reward.GetComponent<Image>();
+            var image = _itemImages[index];
 
             reward.gameObject.SetActive(true);
             image.SetSizeKeepRatioY(randomSizeX);
@@ -200,22 +196,39 @@ namespace NamPhuThuy.AnimateWithScripts
 
             var sequence = DOTween.Sequence();
             sequence.Append(reward.transform.DOScale(randomScale * 1.2f, 0.3f).SetEase(Ease.InOutSine));
-            sequence.Append(reward.transform.DOScale(randomScale, 0.2f).SetEase(Ease.InOutSine).OnComplete(() =>
+            sequence.Append(reward.transform.DOScale(randomScale, 0.2f).SetEase(Ease.InOutSine));
+
+            if (index == _activeItemCount - 1)
             {
-                if (isLast)
-                    onLastItem?.Invoke();
-            }));
+                sequence.OnComplete(OnAllCoinsSpawned);
+            }
         }
 
-        private void AnimateRewardItem(int index, Vector2[] curvePoints)
+        private void OnAllCoinsSpawned()
+        {
+            AutoFindResourceDisplay();
+
+            if (IsHaveRealText)
+            {
+                realResourceText.gameObject.SetActive(false);
+                fakeResourceText.gameObject.SetActive(true);
+                fakeResourceText.SetText(NUMBER_FORMAT, prevValue);
+            }
+
+            for (int i = 0; i < _activeItemCount; i++)
+            {
+                AnimateRewardItem(i);
+            }
+        }
+
+        private void AnimateRewardItem(int index)
         {
             var reward = itemList[index];
             var startPosition = reward.transform.position;
             var distance = targetPosition - startPosition;
 
-            var path = new Vector3[CURVE_POINT_COUNT];
-            for (int j = 0; j < CURVE_POINT_COUNT; j++)
-                path[j] = startPosition + new Vector3(curvePoints[j].x * distance.x, curvePoints[j].y * distance.y);
+            var path = _pathBuffers[index];
+            FillCurvePath(index, startPosition, distance, path);
 
             var randomBouncePosition = reward.localPosition - new Vector3(0, Random.Range(BOUNCE_MIN, BOUNCE_MAX), 0);
 
@@ -238,7 +251,7 @@ namespace NamPhuThuy.AnimateWithScripts
                         realResourceText.gameObject.SetActive(true);
                         fakeResourceText.gameObject.SetActive(false);
                         fakeResourceText.transform.SetParent(transform);
-                        realResourceText.text = $"{prevValue + totalAmount}";
+                        realResourceText.SetText(NUMBER_FORMAT, prevValue + totalAmount);
                     }
                     
                     try 
@@ -280,7 +293,7 @@ namespace NamPhuThuy.AnimateWithScripts
             if (IsHaveRealText)
             {
                 DebugLogger.Log(message:$"Update fake text: {prevValue + totalAmount - _remainingItems * _unitValue}");
-                fakeResourceText.text = $"{prevValue + totalAmount - _remainingItems * _unitValue}";
+                fakeResourceText.SetText(NUMBER_FORMAT, prevValue + totalAmount - _remainingItems * _unitValue);
             }
         }
 
@@ -309,14 +322,13 @@ namespace NamPhuThuy.AnimateWithScripts
             // BOUNCE = 5,
             /*ZIGZAG = 6,
             CIRCULAR = 7*/
+            COUNT
         }
         
-        private Vector2[] GenerateCurvePoints(int coinIndex)
+        private void FillCurvePath(int coinIndex, Vector3 startPosition, Vector3 distance, Vector3[] path)
         {
-            var points = new Vector2[CURVE_POINT_COUNT];
-    
             // Create different curve types based on coin index
-            CurveType curveType = (CurveType)(coinIndex % Enum.GetValues(typeof(CurveType)).Length);
+            CurveType curveType = (CurveType)(coinIndex % (int)CurveType.COUNT);
     
             for (int j = 0; j < CURVE_POINT_COUNT; j++)
             {
@@ -355,9 +367,8 @@ namespace NamPhuThuy.AnimateWithScripts
                 float randomOffset = Random.Range(-0.1f, 0.1f);
                 y = Mathf.Clamp01(y + randomOffset);
         
-                points[j] = new Vector2(x, y);
+                path[j] = new Vector3(startPosition.x + x * distance.x, startPosition.y + y * distance.y, startPosition.z);
             }
-            return points;
         }
 
         // Exponential saturation curve: y = maxY * (1 - e^(-k * x))

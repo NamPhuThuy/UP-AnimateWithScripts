@@ -28,11 +28,6 @@ MonoBehaviour:
     preload: 2
     limit: 5
     softMaxAliveSeconds: 10
-  - type: 4
-    prefab: {fileID: 9145777501125222086, guid: 3386109ecf5f03844880768592fe24ee, type: 3}
-    preload: 2
-    limit: 5
-    softMaxAliveSeconds: 10
   - type: 8
     prefab: {fileID: 4789579475207930383, guid: 8015cda007eda2940ae60468b9727f97, type: 3}
     preload: 2
