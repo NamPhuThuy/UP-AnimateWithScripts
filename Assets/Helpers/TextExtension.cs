@@ -27,7 +27,6 @@ namespace NamPhuThuy.AnimateWithScripts
 
             // Font and material
             target.font = source.font;
-            target.fontMaterial = source.fontMaterial;
             target.fontSharedMaterial = source.fontSharedMaterial;
             target.fontStyle = source.fontStyle;
             
@@ -56,7 +55,6 @@ namespace NamPhuThuy.AnimateWithScripts
             target.faceColor = source.faceColor;
             target.outlineColor = source.outlineColor;
             target.outlineWidth = source.outlineWidth;
-            target.fontMaterial = source.fontMaterial;
             
             // Margins and geometry
             target.margin = source.margin;
@@ -72,7 +70,6 @@ namespace NamPhuThuy.AnimateWithScripts
             target.isOverlay = source.isOverlay;
             
             // Auto layout (optional)
-            target.enableAutoSizing = source.enableAutoSizing;
             target.wordWrappingRatios = source.wordWrappingRatios;
 
             // Update the text mesh after applying changes

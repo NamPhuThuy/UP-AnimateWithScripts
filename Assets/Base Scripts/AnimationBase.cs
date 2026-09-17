@@ -21,6 +21,8 @@ namespace NamPhuThuy.AnimateWithScripts
         protected readonly List<Tween> tweens = new();
         [SerializeField] protected bool isPlaying;
         
+        public bool IsInPool { get; internal set; }
+
         #endregion
 
         #region Private Methods
@@ -30,11 +32,14 @@ namespace NamPhuThuy.AnimateWithScripts
             for (int i = 0; i < tweens.Count; i++) tweens[i]?.Kill();
             tweens.Clear();
         }
-        
-        private IEnumerator AutoReturnAfter(float seconds)
+
+        protected void KillAutoReturn()
         {
-            yield return new WaitForSeconds(seconds);
-            AnimationManager.Ins.Release(this);
+            if (_autoReturnTween != null && _autoReturnTween.IsActive())
+            {
+                _autoReturnTween.Kill();
+            }
+            _autoReturnTween = null;
         }
         
         #endregion
@@ -50,11 +55,12 @@ namespace NamPhuThuy.AnimateWithScripts
         #endregion
 
         #region Public Methods
-        protected Coroutine _autoReturnCoroutine;
+        protected Tween _autoReturnTween;
         
         public virtual void Recycle()
         {
             isPlaying = false;
+            KillAutoReturn();
             KillTweens();
 
             AnimationManager.Ins.Release(this);
@@ -63,13 +69,9 @@ namespace NamPhuThuy.AnimateWithScripts
         public virtual void EndFast()
         {
             isPlaying = false;
+            KillAutoReturn();
             KillTweens();
             
-            if (_autoReturnCoroutine != null)
-            {
-                StopCoroutine(_autoReturnCoroutine);
-                _autoReturnCoroutine = null;
-            }
             AnimationManager.Ins.Release(this);
         }
         
@@ -79,8 +81,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
         protected void StartAutoReturn(float duration)
         {
-            if (_autoReturnCoroutine != null) StopCoroutine(_autoReturnCoroutine);
-            _autoReturnCoroutine = StartCoroutine(AutoReturnAfter(duration));
+            KillAutoReturn();
+            _autoReturnTween = DOVirtual.DelayedCall(duration, () => AnimationManager.Ins.Release(this), ignoreTimeScale: false);
         }
 
         #endregion

@@ -53,6 +53,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var go = Instantiate(entry.prefab, transform);
                 go.gameObject.SetActive(false);
+                go.IsInPool = true;
                 q.Enqueue(go);
                 
                 _reverse[go] = type;
@@ -73,8 +74,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 _active[type] = activeList;
             }
 
-            // Clean up any destroyed references
-            activeList.RemoveAll(item => item == null);
+            // Clean up any destroyed references without delegate allocation
+            for (int i = activeList.Count - 1; i >= 0; i--)
+            {
+                if (activeList[i] == null)
+                    activeList.RemoveAt(i);
+            }
 
             var entry = animationCatalog.GetEntry(type);
             if (entry == null || !entry.prefab)
@@ -87,6 +92,7 @@ namespace NamPhuThuy.AnimateWithScripts
             if (poolQueue.Count > 0)
             {
                 var pooledInst = poolQueue.Dequeue();
+                pooledInst.IsInPool = false;
                 activeList.Add(pooledInst);
                 return pooledInst;
             }
@@ -101,12 +107,14 @@ namespace NamPhuThuy.AnimateWithScripts
                 earliest.EndFast();
 
                 AnimationBase inst = (poolQueue.Count > 0) ? poolQueue.Dequeue() : earliest;
+                inst.IsInPool = false;
                 activeList.Add(inst);
                 return inst;
             }
 
             // 3. Otherwise instantiate a new instance up to the limit
             var newInst = Instantiate(entry.prefab, transform);
+            newInst.IsInPool = false;
             _reverse[newInst] = type;
             activeList.Add(newInst);
             return newInst;
@@ -114,8 +122,10 @@ namespace NamPhuThuy.AnimateWithScripts
         
         public void Release(AnimationBase animation)
         {
-            if (!animation) return;
+            if (!animation || animation.IsInPool) return;
             if (!_reverse.TryGetValue(animation, out var type)) return;
+
+            animation.IsInPool = true;
 
             if (_active.TryGetValue(type, out var activeList))
             {
@@ -131,10 +141,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 _pool[type] = poolQueue;
             }
 
-            if (!poolQueue.Contains(animation))
-            {
-                poolQueue.Enqueue(animation);
-            }
+            poolQueue.Enqueue(animation);
         }
 
 

@@ -100,7 +100,6 @@ namespace NamPhuThuy.AnimateWithScripts
             ButtonPopupImage();
             ButtonPlayItemFly();
             ButtonStatChange();
-            ButtonScreenShake();
             ButtonSpriteMotion();
             ButtonSpineControl();
 
@@ -206,20 +205,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 };
 
                 AnimationManager.Ins.Play(args);
-            }
-        }
-
-        private void ButtonScreenShake()
-        {
-            if (GUILayout.Button(new GUIContent("Play Screen Shake", frogIcon)))
-            {
-                AnimationManager.Ins.Play(new ScreenShakeArgs
-                {
-                    intensity = 0.5f,
-                    duration = 0.3f,
-                    shakeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0),
-                    OnComplete = null
-                });
             }
         }
 
