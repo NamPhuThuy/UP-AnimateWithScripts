@@ -189,19 +189,20 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void ButtonStatChange()
         {
-            if (GUILayout.Button(new GUIContent("Play State Change Text", frogIcon)))
+            if (GUILayout.Button(new GUIContent("Play Toast WorldSpace", frogIcon)))
             {
-                var coinPanel = _script.coinImage.transform;
-                var coinText = _script.coinText.transform;
+                var worldPos = _script.dummySprite != null 
+                    ? _script.dummySprite.position 
+                    : testPosition;
 
-                var args = new StatChangeTextArgs
+                var args = new ToastWorldSpaceArgs
                 {
-                    amount = 5,
-                    customColor = Color.yellow,
-                    rectTransformOffset = Vector2.zero,
-                    moveDistance = new Vector2(0f, 30f),
-                    targetObject = _script.dummyUGUI.gameObject,
-                    OnComplete = null
+                    message = testMessage,
+                    worldPosition = worldPos,
+                    textColor = Color.yellow,
+                    customDuration = _testDuration,
+                    customUpDistance = 1.0f,
+                    toastType = ToastType.FLASH
                 };
 
                 AnimationManager.Ins.Play(args);

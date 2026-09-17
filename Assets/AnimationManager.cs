@@ -174,6 +174,18 @@ namespace NamPhuThuy.AnimateWithScripts
             Play(args);
         }
 
+        public void PlayBasicWorldToast(string message, Vector3 worldPosition, float duration = 0f)
+        {
+            var args = new ToastWorldSpaceArgs
+            {
+                message = message,
+                worldPosition = worldPosition,
+                textColor = Color.white,
+                customDuration = duration,
+            };
+            Play(args);
+        }
+
         #endregion
     }
 

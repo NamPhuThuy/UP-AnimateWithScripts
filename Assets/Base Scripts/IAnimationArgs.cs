@@ -98,6 +98,37 @@ namespace NamPhuThuy.AnimateWithScripts
     }
     
     [Serializable]
+    public struct ToastWorldSpaceArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.TOAST_WORLD_SPACE;
+        public Action OnComplete { get; set; }
+
+        // Must-have Values
+        public string message;
+        public Vector3 worldPosition;
+
+        // Target / Offset
+        public Transform targetTransform;
+        public Vector3 worldOffset;
+        public Camera customCamera;
+
+        // Styling
+        public Color textColor;
+        public TMP_FontAsset textFont;
+        public float textSize;
+
+        // Custom Values
+        public ToastType toastType;
+        public float customDuration;
+        public float customScale;
+        public bool isChangeColor;
+        public bool isCustomUpDistance;
+        public float customUpDistance;
+        public bool isCustomHoldDuration;
+        public float customHoldDuration;
+    }
+
+    [Serializable]
     public struct StatChangeTextArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.STAT_CHANGE_TEXT;

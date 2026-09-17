@@ -33,15 +33,15 @@ Displays temporary on-screen notification toast messages with customizable style
 
 ---
 
-## Stat Change Text (`STAT_CHANGE_TEXT`)
-Animates temporary floating numbers indicating changes in player stats (e.g., `+100 XP`, `-50 HP`).
-* **Purpose**: Delivers instant feedback for numeric increments, decrements, or damage numbers.
+## Toast World Space (`TOAST_WORLD_SPACE`)
+Displays floating notification toast text or numeric popups in 3D world space using a 3D TextMeshPro component.
+* **Purpose**: In-world feedback, combat/damage floating text, or floating object status notifications.
 * **Key Features**:
-  * Copies standard layout properties of a target TextMeshProUGUI element automatically.
-  * Supports font style customization (boldness, color, size multiplier) and custom offsets.
-  * Spawns directly at the screen position of a 3D/2D world object using **world-to-screen conversion**.
-  * Fades out smoothly after a designated duration.
-* **Key Parameters**: `amount` (value), `additionalIconText` (e.g., `%`, `XP`), `isBold`, `duration`, `rectTransformOffset`, `moveDistance`, `targetObject`.
+  * Employs 3D `TextMeshPro` mesh text with optional sprite backplate.
+  * Features two distinct animation styles: **FLASH** (scale-pop, hold, float, scale-down fade) and **FLOAT** (fade-in, continuous float-up, hold, fade-out).
+  * Auto-billboard support (`faceCamera = true`) to stay cleanly oriented toward the active Camera.
+  * Supports target tracking, custom world offsets, font asset, scaling, and auto-contrast color palettes.
+* **Key Parameters**: `message`, `worldPosition`, `targetTransform`, `worldOffset`, `textColor`, `textFont`, `toastType`, `customDuration`, `customScale`, `customUpDistance`.
 
 ---
 
@@ -106,7 +106,7 @@ Add the package to your Unity project's `Packages/manifest.json` file under `"de
 | `Anim_RewardProgress.cs` | Animates a segmented progress bar filling sequentially | `Play(RewardProgressArgs)` |
 | `Anim_ScreenShake.cs` | Applies camera/screen shake using intensity and animation curves | `Play(ScreenShakeArgs)` |
 | `Anim_SpriteMotion.cs` | Moves a 2D sprite through world or UI space automatically | `Play(SpriteMotionArgs)` |
-| `Anim_StatChangeText.cs` | Animates text representing a stat change (e.g., "+5") | `Play(StatChangeTextArgs)` |
+| `Anim_Toast_WorldSpace.cs` | Displays temporary floating text messages in 3D world space | `Play(ToastWorldSpaceArgs)` |
 | `Anim_Toast.cs` | Displays a simple temporary notification/toast text message | `Play(ToastArgs)` |
 | `IAnimationArgs.cs` | Interfaces and structs defining parameters for each animation type | N/A (Data Structures) |
 | `ObjActiveAuto.cs` | Automatically enables/disables a GameObject after a delay | N/A (Inspector Driven) |
