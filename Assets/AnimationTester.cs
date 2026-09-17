@@ -95,6 +95,7 @@ namespace NamPhuThuy.AnimateWithScripts
             ButtonPlayItemFly();
             ButtonStatChange();
             ButtonSpriteMotion();
+            ButtonItemFlyWS();
 
             // Quick test all VFX types
             EditorGUILayout.Space(5);
@@ -215,6 +216,32 @@ namespace NamPhuThuy.AnimateWithScripts
                     worldSpaceStartPosi = _script.mainCamera.ScreenToWorldPoint(_script.dummyUGUI.position),
                     customDuration = _testDuration,
                     OnComplete = null
+                };
+
+                AnimationManager.Ins.Play(args);
+            }
+        }
+
+        private void ButtonItemFlyWS()
+        {
+            if (GUILayout.Button(new GUIContent("Play Item Fly WS", frogIcon)))
+            {
+                var targetTransform = _script.dummySprite;
+                var startPos = isUseVFXManagerPos ? AnimationManager.Ins.transform.position : testPosition;
+
+                var args = new ItemFlyWSArgs
+                {
+                    itemSprite = _script.itemSprites[_script.itemSpriteIndex],
+                    startWorldPosition = startPos,
+                    targetWorldPosition = targetTransform.position,
+                    targetTransform = targetTransform,
+                    itemAmount = _script.itemAmount,
+                    faceCamera = true,
+                    punchTarget = true,
+                    arcHeight = 2f,
+                    scatterRadius = 1f,
+                    OnItemArrive = () => DebugLogger.Log(message: "Item arrived!"),
+                    OnComplete = () => DebugLogger.Log(message: "All items arrived!")
                 };
 
                 AnimationManager.Ins.Play(args);

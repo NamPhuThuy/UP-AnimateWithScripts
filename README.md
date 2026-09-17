@@ -101,6 +101,7 @@ Add the package to your Unity project's `Packages/manifest.json` file under `"de
 | `AnimationBase.cs` | Abstract base class for all pooled animation/VFX elements | `Play<T>(T args)`, `Recycle()`, `EndFast()` |
 | `AnimationCatalog.cs` | ScriptableObject defining animation prefabs for the pool | `GetEntry(AnimationType)` |
 | `Anim_ItemFly.cs` | Animates items (e.g., coins) flying along a Bezier curve to a UI target | `Play(ItemFlyArgs)` |
+| `Anim_ItemFly_WS.cs` | Animates items (e.g., coins/drops) flying along 3D Bezier arcs in world space to a target | `Play(ItemFlyWSArgs)` |
 | `Anim_ParticleSystem.cs` | Spawns and plays a Unity ParticleSystem from the object pool | `Play(ParticleSystemArgs)` |
 | `Anim_Toast_Image.cs` | Displays temporary toast/popup image sprites with customizable duration/filtering/scale | `Play(ToastImageArgs)` |
 | `Anim_RewardProgress.cs` | Animates a segmented progress bar filling sequentially | `Play(RewardProgressArgs)` |

@@ -17,6 +17,7 @@ namespace NamPhuThuy.AnimateWithScripts
         TOAST_IMAGE = 3,
         SPRITE_MOTION = 8,
         ITEM_FLY = 11,
+        ITEM_FLY_WS = 12,
     }
 
     [CreateAssetMenu(fileName = "AnimationCatalog", menuName = "NamPhuThuy_AnimateWithScripts/Animation Catalog")]

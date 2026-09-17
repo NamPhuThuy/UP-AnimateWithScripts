@@ -19,12 +19,12 @@ MonoBehaviour:
     limit: 2
     softMaxAliveSeconds: 10
   - type: 2
-    prefab: {fileID: 6670669583149072350, guid: 610e2a3ee3ffabc4fb89245daf5ca7ff, type: 3}
+    prefab: {fileID: 658901984484033640, guid: cb082a1bca56cbe4a8550a3fff281d63, type: 3}
     preload: 2
-    limit: 10
+    limit: 5
     softMaxAliveSeconds: 10
   - type: 3
-    prefab: {fileID: 658901984484033640, guid: cb082a1bca56cbe4a8550a3fff281d63, type: 3}
+    prefab: {fileID: 7042315290174004435, guid: 95cccbe5b9ec91c4d83827728af8b435, type: 3}
     preload: 2
     limit: 5
     softMaxAliveSeconds: 10
@@ -33,8 +33,13 @@ MonoBehaviour:
     preload: 2
     limit: 5
     softMaxAliveSeconds: 10
-  - type: 10
-    prefab: {fileID: 7042315290174004435, guid: 95cccbe5b9ec91c4d83827728af8b435, type: 3}
+  - type: 11
+    prefab: {fileID: 6670669583149072350, guid: 610e2a3ee3ffabc4fb89245daf5ca7ff, type: 3}
     preload: 2
-    limit: 5
+    limit: 10
+    softMaxAliveSeconds: 10
+  - type: 12
+    prefab: {fileID: 480832246749210830, guid: 38330582a19d8ff4d8e2ac15502f28f6, type: 3}
+    preload: 2
+    limit: 8
     softMaxAliveSeconds: 10

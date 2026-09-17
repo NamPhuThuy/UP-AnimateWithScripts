@@ -34,7 +34,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void Start()
         {
-            
+                        
         }
 
         private void Update()

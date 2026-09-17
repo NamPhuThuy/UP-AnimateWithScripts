@@ -153,4 +153,37 @@ namespace NamPhuThuy.AnimateWithScripts
         public string customSortingLayer;
         public int customSortingOrder;
     }
+
+    [Serializable]
+    public struct ItemFlyWSArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.ITEM_FLY_WS;
+
+        // Events
+        public Action OnComplete { get; set; }
+        public Action OnItemArrive;
+
+        // Must-have values
+        public Sprite itemSprite;
+        public Vector3 startWorldPosition;
+        public Vector3 targetWorldPosition;
+        public Transform targetTransform; // if set, overrides targetWorldPosition each frame
+
+        // Spawn
+        public int itemAmount;
+
+        // Timing
+        public float totalDuration;       // total time from first spawn to last arrival
+        public float pathDuration;        // per-item flight duration along Bezier
+
+        // Visual
+        public float itemScale;           // world-space scale multiplier (0 = default 1)
+        public float scatterRadius;       // initial scatter radius (world meters)
+        public float arcHeight;           // Bezier arc height (world meters)
+        public bool faceCamera;
+        public Camera customCamera;
+
+        // Target punch
+        public bool punchTarget;
+    }
 }
