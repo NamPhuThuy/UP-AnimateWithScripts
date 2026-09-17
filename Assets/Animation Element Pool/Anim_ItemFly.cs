@@ -56,7 +56,16 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region Private Fields
 
-        private Tweener _shakeFakeResourceTextTween;
+        #region Target Punch Scale Management
+
+        private static readonly Dictionary<Transform, Vector3> s_OriginalScales = new();
+        private static readonly Dictionary<Transform, float> s_LastPunchTime = new();
+        private const float PUNCH_THROTTLE_INTERVAL = 0.05f;
+        private const float PUNCH_SCALE_MULTIPLIER = 0.15f;
+        private const float PUNCH_DURATION = 0.25f;
+
+        #endregion
+
         private readonly int _initialPoolSize = 8;
         private int _activeItemCount;
         private int _unitValue;
@@ -300,16 +309,42 @@ namespace NamPhuThuy.AnimateWithScripts
         private void ApllyPunchEffect()
         {
             DebugLogger.Log();
-            if (targetInteractTransform == null) return; // Add null check here
+            if (targetInteractTransform == null) return;
 
-            if (_shakeFakeResourceTextTween != null && _shakeFakeResourceTextTween.IsActive())
+            float now = Time.time;
+            if (s_LastPunchTime.TryGetValue(targetInteractTransform, out float lastTime) && (now - lastTime) < PUNCH_THROTTLE_INTERVAL)
             {
-                _shakeFakeResourceTextTween.Kill();
+                return;
             }
-            targetInteractTransform.localScale = Vector3.one;
-            
-            // tweens.Add(targetInteractTransform.DOPunchScale(0.15f * Vector3.one, 0.3f));
-            _shakeFakeResourceTextTween = targetInteractTransform.DOPunchScale(0.15f * Vector3.one, 0.3f);
+            s_LastPunchTime[targetInteractTransform] = now;
+
+            if (!s_OriginalScales.TryGetValue(targetInteractTransform, out Vector3 baseScale))
+            {
+                baseScale = targetInteractTransform.localScale;
+                s_OriginalScales[targetInteractTransform] = baseScale;
+            }
+
+            targetInteractTransform.DOKill(false);
+            targetInteractTransform.localScale = baseScale;
+
+            targetInteractTransform.DOPunchScale(baseScale * PUNCH_SCALE_MULTIPLIER, PUNCH_DURATION, vibrato: 6, elasticity: 0.5f)
+                .SetTarget(targetInteractTransform)
+                .OnComplete(() =>
+                {
+                    if (targetInteractTransform != null)
+                    {
+                        targetInteractTransform.localScale = baseScale;
+                        s_OriginalScales.Remove(targetInteractTransform);
+                        s_LastPunchTime.Remove(targetInteractTransform);
+                    }
+                })
+                .OnKill(() =>
+                {
+                    if (targetInteractTransform != null)
+                    {
+                        targetInteractTransform.localScale = baseScale;
+                    }
+                });
         }
 
         private enum CurveType

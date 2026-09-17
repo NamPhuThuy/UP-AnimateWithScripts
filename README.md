@@ -17,6 +17,7 @@ Spawns and animates a cluster of items (e.g., coins, gems) flying along dynamic 
   * Animates multiple items sequentially using **Bezier paths** (exponential, sine, parabolic, linear, or logarithmic curves).
   * Automatically handles UI resource counters, **incrementing the text value** dynamically as each coin lands.
   * Triggers **scale-punch feedback** on the target element and custom events (`OnItemInteract`, `OnComplete`) when items land.
+  * **Scale-Drift & Multi-Instance Protection**: Target-centric resting scale cache (`baseScale`), target-scoped `DOKill`, and 50ms throttle prevent concurrent scale inflation.
 * **Key Parameters**: `addValue` (total amount), `itemAmount` (spawn count), `startPosition`, `targetText`, `targetInteractTransform`, `itemSprite`, `delayBetweenItems`.
 
 ---
