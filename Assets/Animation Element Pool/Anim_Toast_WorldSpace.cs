@@ -278,8 +278,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
             _seq.Append(_transform.DOMoveY(_baseWorldPos.y + upDist, _upDuration).SetEase(_upEase));
             _seq.Append(_transform.DOScale(1.1f * _targetScale, 0.3f * _downFadeDuration).SetEase(_downEase));
-            _seq.Join(messageText.DOFade(0f, 0.7f * _downFadeDuration));
-            if (backSprite) _seq.Join(backSprite.DOFade(0f, 0.7f * _downFadeDuration));
+            _seq.Join(TweenTextAlpha(messageText, 0f, 0.7f * _downFadeDuration));
+            if (backSprite) _seq.Join(TweenSpriteAlpha(backSprite, 0f, 0.7f * _downFadeDuration));
             _seq.Append(_transform.DOScale(0f, 0.7f * _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
         }
@@ -293,12 +293,30 @@ namespace NamPhuThuy.AnimateWithScripts
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
             _seq.Append(_transform.DOMoveY(_baseWorldPos.y + upDist, totalDuration).SetEase(_upEase));
-            _seq.Insert(0f, messageText.DOFade(1f, _inDuration).SetEase(_inEase));
-            if (backSprite) _seq.Insert(0f, backSprite.DOFade(1f, _inDuration).SetEase(_inEase));
+            _seq.Insert(0f, TweenTextAlpha(messageText, 1f, _inDuration).SetEase(_inEase));
+            if (backSprite) _seq.Insert(0f, TweenSpriteAlpha(backSprite, 1f, _inDuration).SetEase(_inEase));
             _seq.Insert(0f, _transform.DOScale(Vector3.one * _targetScale, _inDuration).SetEase(_inEase));
-            _seq.Insert(_inDuration + holdTime, messageText.DOFade(0f, _downFadeDuration).SetEase(_downEase));
-            if (backSprite) _seq.Insert(_inDuration + holdTime, backSprite.DOFade(0f, _downFadeDuration).SetEase(_downEase));
+            _seq.Insert(_inDuration + holdTime, TweenTextAlpha(messageText, 0f, _downFadeDuration).SetEase(_downEase));
+            if (backSprite) _seq.Insert(_inDuration + holdTime, TweenSpriteAlpha(backSprite, 0f, _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
+        }
+
+        private static Tween TweenTextAlpha(TextMeshPro target, float endValue, float duration)
+        {
+            return DOTween.To(
+                () => target.color,
+                value => target.color = value,
+                new Color(target.color.r, target.color.g, target.color.b, endValue),
+                duration);
+        }
+
+        private static Tween TweenSpriteAlpha(SpriteRenderer target, float endValue, float duration)
+        {
+            return DOTween.To(
+                () => target.color,
+                value => target.color = value,
+                new Color(target.color.r, target.color.g, target.color.b, endValue),
+                duration);
         }
 
         private void OnAnimationComplete()

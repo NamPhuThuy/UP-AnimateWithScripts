@@ -255,9 +255,9 @@ namespace NamPhuThuy.AnimateWithScripts
             
             if (holdTime > 0f) _seq.AppendInterval(holdTime);
             
-            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, _upDuration).SetEase(_upEase));
+            _seq.Append(TweenAnchorPosY(_rectTransform, _rectTransform.anchoredPosition.y + upDist, _upDuration).SetEase(_upEase));
             _seq.Append(_rectTransform.DOScale(1.1f, 0.3f * _downFadeDuration).SetEase(_downEase));
-            _seq.Join(_canvasGroup.DOFade(0f, 0.7f * _downFadeDuration));
+            _seq.Join(TweenCanvasGroupAlpha(_canvasGroup, 0f, 0.7f * _downFadeDuration));
             _seq.Append(_rectTransform.DOScale(0, 0.7f * _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
         }
@@ -270,11 +270,25 @@ namespace NamPhuThuy.AnimateWithScripts
             float totalDuration = _inDuration + holdTime + _downFadeDuration;
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
-            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
-            _seq.Insert(0f, _canvasGroup.DOFade(1f, _inDuration).SetEase(_inEase));
+            _seq.Append(TweenAnchorPosY(_rectTransform, _rectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
+            _seq.Insert(0f, TweenCanvasGroupAlpha(_canvasGroup, 1f, _inDuration).SetEase(_inEase));
             _seq.Insert(0f, _rectTransform.DOScale(Vector3.one, _inDuration).SetEase(_inEase));
-            _seq.Insert(_inDuration + holdTime, _canvasGroup.DOFade(0f, _downFadeDuration).SetEase(_downEase));
+            _seq.Insert(_inDuration + holdTime, TweenCanvasGroupAlpha(_canvasGroup, 0f, _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
+        }
+
+        private static Tween TweenAnchorPosY(RectTransform target, float endValue, float duration)
+        {
+            return DOTween.To(
+                () => target.anchoredPosition,
+                value => target.anchoredPosition = value,
+                new Vector2(target.anchoredPosition.x, endValue),
+                duration);
+        }
+
+        private static Tween TweenCanvasGroupAlpha(CanvasGroup target, float endValue, float duration)
+        {
+            return DOTween.To(() => target.alpha, value => target.alpha = value, endValue, duration);
         }
 
         private void OnAnimationComplete()

@@ -281,10 +281,10 @@ namespace NamPhuThuy.AnimateWithScripts
 
             if (holdTime > 0f) _seq.AppendInterval(holdTime);
 
-            _seq.Append(imageRectTransform.DOAnchorPosY(imageRectTransform.anchoredPosition.y + upDist, _upDuration).SetEase(_upEase));
+            _seq.Append(TweenAnchorPosY(imageRectTransform, imageRectTransform.anchoredPosition.y + upDist, _upDuration).SetEase(_upEase));
             _seq.Append(imageRectTransform.DOScale(1.1f * _targetScale, 0.3f * _downFadeDuration).SetEase(_downEase));
-            _seq.Join(image.DOFade(0f, 0.7f * _downFadeDuration));
-            if (backImage) _seq.Join(backImage.DOFade(0f, 0.7f * _downFadeDuration));
+            _seq.Join(TweenImageAlpha(image, 0f, 0.7f * _downFadeDuration));
+            if (backImage) _seq.Join(TweenImageAlpha(backImage, 0f, 0.7f * _downFadeDuration));
             _seq.Append(imageRectTransform.DOScale(0f, 0.7f * _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
         }
@@ -297,13 +297,31 @@ namespace NamPhuThuy.AnimateWithScripts
             float totalDuration = _inDuration + holdTime + _downFadeDuration;
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
-            _seq.Append(imageRectTransform.DOAnchorPosY(imageRectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
-            _seq.Insert(0f, image.DOFade(1f, _inDuration).SetEase(_inEase));
-            if (backImage) _seq.Insert(0f, backImage.DOFade(1f, _inDuration).SetEase(_inEase));
+            _seq.Append(TweenAnchorPosY(imageRectTransform, imageRectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
+            _seq.Insert(0f, TweenImageAlpha(image, 1f, _inDuration).SetEase(_inEase));
+            if (backImage) _seq.Insert(0f, TweenImageAlpha(backImage, 1f, _inDuration).SetEase(_inEase));
             _seq.Insert(0f, imageRectTransform.DOScale(Vector3.one * _targetScale, _inDuration).SetEase(_inEase));
-            _seq.Insert(_inDuration + holdTime, image.DOFade(0f, _downFadeDuration).SetEase(_downEase));
-            if (backImage) _seq.Insert(_inDuration + holdTime, backImage.DOFade(0f, _downFadeDuration).SetEase(_downEase));
+            _seq.Insert(_inDuration + holdTime, TweenImageAlpha(image, 0f, _downFadeDuration).SetEase(_downEase));
+            if (backImage) _seq.Insert(_inDuration + holdTime, TweenImageAlpha(backImage, 0f, _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
+        }
+
+        private static Tween TweenAnchorPosY(RectTransform target, float endValue, float duration)
+        {
+            return DOTween.To(
+                () => target.anchoredPosition,
+                value => target.anchoredPosition = value,
+                new Vector2(target.anchoredPosition.x, endValue),
+                duration);
+        }
+
+        private static Tween TweenImageAlpha(Image target, float endValue, float duration)
+        {
+            return DOTween.To(
+                () => target.color,
+                value => target.color = value,
+                new Color(target.color.r, target.color.g, target.color.b, endValue),
+                duration);
         }
 
         private void OnAnimationComplete()
