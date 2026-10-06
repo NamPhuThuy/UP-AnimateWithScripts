@@ -43,3 +43,8 @@ MonoBehaviour:
     preload: 2
     limit: 8
     softMaxAliveSeconds: 10
+  - type: 4
+    prefab: {fileID: 1779754764910653779, guid: 724926da3ad16b0438e065cdb017c24d, type: 3}
+    preload: 1
+    limit: 2
+    softMaxAliveSeconds: 10

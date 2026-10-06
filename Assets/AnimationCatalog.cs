@@ -15,6 +15,7 @@ namespace NamPhuThuy.AnimateWithScripts
         TOAST = 1,
         TOAST_WORLD_SPACE = 2,
         TOAST_IMAGE = 3,
+        TOAST_STAT = 4,
         SPRITE_MOTION = 8,
         ITEM_FLY = 11,
         ITEM_FLY_WS = 12,

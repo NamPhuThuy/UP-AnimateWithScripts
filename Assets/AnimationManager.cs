@@ -198,6 +198,19 @@ namespace NamPhuThuy.AnimateWithScripts
             Play(args);
         }
 
+        public void PlayBasicToastStat(Sprite icon, string statType, string statValue, Color textColor = default, float duration = 0f)
+        {
+            var args = new ToastStatArgs
+            {
+                iconSprite = icon,
+                statType = statType,
+                statValue = statValue,
+                textColor = textColor != default ? textColor : Color.white,
+                customDuration = duration,
+            };
+            Play(args);
+        }
+
         #endregion
     }
 

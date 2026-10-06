@@ -76,6 +76,37 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
     [Serializable]
+    public struct ToastStatArgs : IAnimationArgs
+    {
+        public AnimationType Type => AnimationType.TOAST_STAT;
+        public Action OnComplete { get; set; }
+
+        // Must-have / Stat Values
+        public Sprite iconSprite;
+        public string statType;
+        public string statValue;
+        public Color textColor;
+        public TMP_FontAsset textFont;
+
+        // Custom Values
+        public ToastType toastType;
+        public float customDuration;
+        public Vector3 customAnchoredPos;
+        public Transform customParent;
+        public float customScale;
+        public bool customEnableBackImage;
+        public bool isChangeColor;
+        public bool isCustomUpDistance;
+        public float customUpDistance;
+        public bool isCustomHoldDuration;
+        public float customHoldDuration;
+
+        // Positioning
+        public bool useScreenPercentage;
+        public Vector2 screenPercentage;
+    }
+
+    [Serializable]
     public struct ToastImageArgs : IAnimationArgs
     {
         public AnimationType Type => AnimationType.TOAST_IMAGE;
