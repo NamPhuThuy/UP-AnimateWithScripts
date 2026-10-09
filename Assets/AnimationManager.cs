@@ -168,8 +168,6 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 message = message,
                 customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
-                textColor = Color.white,
-                customDuration = duration,
             };
             Play(args);
         }

@@ -40,36 +40,6 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private bool isCustomHoldDuration = false;
         [SerializeField] private float customHoldDuration = 0.8f;
 
-        public ToastType ToastType
-        {
-            get => toastType;
-            set => toastType = value;
-        }
-
-        public bool IsCustomUpDistance
-        {
-            get => isCustomUpDistance;
-            set => isCustomUpDistance = value;
-        }
-
-        public float CustomUpDistance
-        {
-            get => customUpDistance;
-            set => customUpDistance = value;
-        }
-
-        public bool IsCustomHoldDuration
-        {
-            get => isCustomHoldDuration;
-            set => isCustomHoldDuration = value;
-        }
-
-        public float CustomHoldDuration
-        {
-            get => customHoldDuration;
-            set => customHoldDuration = value;
-        }
-
         private Canvas _defaultCanvas;
         private RectTransform _defaultCanvasRect;
         private Canvas _parentCanvas;
@@ -120,18 +90,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 currentArgs = new ToastStatArgs
                 {
                     statValue = toastArgs.message,
-                    textColor = toastArgs.textColor,
                     textFont = toastArgs.textFont,
                     toastType = toastArgs.toastType,
-                    customDuration = toastArgs.customDuration,
                     customAnchoredPos = toastArgs.customAnchoredPos,
-                    customParent = toastArgs.customParent,
                     customScale = toastArgs.customScale,
                     customEnableBackImage = toastArgs.customEnableBackImage,
-                    isChangeColor = toastArgs.isChangeColor,
-                    isCustomUpDistance = toastArgs.isCustomUpDistance,
                     customUpDistance = toastArgs.customUpDistance,
-                    isCustomHoldDuration = toastArgs.isCustomHoldDuration,
                     customHoldDuration = toastArgs.customHoldDuration,
                     useScreenPercentage = toastArgs.useScreenPercentage,
                     screenPercentage = toastArgs.screenPercentage,
@@ -262,11 +226,12 @@ namespace NamPhuThuy.AnimateWithScripts
         private void PlayFlashAnim(float holdTime, float upDist)
         {
             _rectTransform.localScale = Vector3.zero;
-            _canvasGroup.alpha = 1f;
+            _canvasGroup.alpha = 0f;
 
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
             _seq.Append(_rectTransform.DOScale(1.1f, 0.7f * _inDuration).SetEase(_inEase));
+            _seq.Join(_canvasGroup.DOFade(1f, 0.7f * _inDuration).SetEase(_inEase));
             _seq.Append(_rectTransform.DOScale(1f, 0.3f * _inDuration).SetEase(_inEase));
             
             if (holdTime > 0f) _seq.AppendInterval(holdTime);
@@ -280,16 +245,15 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void PlayFloatAnim(float holdTime, float upDist)
         {
-            _rectTransform.localScale = Vector3.zero;
+            _rectTransform.localScale = Vector3.one;
             _canvasGroup.alpha = 0f;
 
-            float totalDuration = _inDuration + holdTime + _downFadeDuration;
+            float totalDuration = _upDuration + holdTime + _downFadeDuration;
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
             _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
-            _seq.Insert(0f, _canvasGroup.DOFade(1f, _inDuration).SetEase(_inEase));
-            _seq.Insert(0f, _rectTransform.DOScale(Vector3.one, _inDuration).SetEase(_inEase));
-            _seq.Insert(_inDuration + holdTime, _canvasGroup.DOFade(0f, _downFadeDuration).SetEase(_downEase));
+            _seq.Insert(0f, _canvasGroup.DOFade(1f, _upDuration).SetEase(_inEase));
+            _seq.Insert(_upDuration + holdTime, _canvasGroup.DOFade(0f, _downFadeDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
         }
 

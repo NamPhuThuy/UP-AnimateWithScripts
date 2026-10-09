@@ -68,7 +68,7 @@ MonoBehaviour:
   m_text: You have empty slots in deck
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc6d4008eb615b241923fd0789deed0c, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 0d6e31ca07a14fa448a4720049d993d7, type: 2}
+  m_sharedMaterial: {fileID: -7876632335158854974, guid: dc6d4008eb615b241923fd0789deed0c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -203,24 +203,20 @@ MonoBehaviour:
   isPlaying: 0
   currentArgs:
     message: 
-    textColor: {r: 0, g: 0, b: 0, a: 0}
     textFont: {fileID: 0}
-    customDuration: 0
+    toastType: 0
     customAnchoredPos: {x: 0, y: 0, z: 0}
-    customParent: {fileID: 0}
     customScale: 0
     customEnableBackImage: 0
-    isChangeColor: 0
-    isCustomUpDistance: 0
     customUpDistance: 0
+    customHoldDuration: 0
     useScreenPercentage: 0
     screenPercentage: {x: 0, y: 0}
   messageText: {fileID: 9173678522159357702}
   backImage: {fileID: 6714918850751644749}
   ignoreTimeScale: 1
+  toastType: 1
   isChangeColor: 0
-  isCustomUpDistance: 0
-  customUpDistance: 24
 --- !u!1 &7346708429932132327
 GameObject:
   m_ObjectHideFlags: 0

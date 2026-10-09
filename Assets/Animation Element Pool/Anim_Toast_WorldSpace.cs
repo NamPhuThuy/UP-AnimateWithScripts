@@ -129,18 +129,12 @@ namespace NamPhuThuy.AnimateWithScripts
                 {
                     OnComplete = toastArgs.OnComplete,
                     message = toastArgs.message,
-                    textColor = toastArgs.textColor,
                     textFont = toastArgs.textFont,
                     toastType = toastArgs.toastType,
-                    customDuration = toastArgs.customDuration,
                     customScale = toastArgs.customScale,
-                    isChangeColor = toastArgs.isChangeColor,
-                    isCustomUpDistance = toastArgs.isCustomUpDistance,
                     customUpDistance = toastArgs.customUpDistance,
-                    isCustomHoldDuration = toastArgs.isCustomHoldDuration,
                     customHoldDuration = toastArgs.customHoldDuration,
                     worldPosition = toastArgs.customAnchoredPos,
-                    targetTransform = toastArgs.customParent
                 };
             }
             else

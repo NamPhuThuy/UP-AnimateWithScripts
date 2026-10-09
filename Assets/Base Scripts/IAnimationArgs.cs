@@ -54,20 +54,14 @@ namespace NamPhuThuy.AnimateWithScripts
 
         // Must-have Values
         public string message;
-        public Color textColor; // default is (0f, 0f, 0f, 0f)
         public TMP_FontAsset textFont;
         
         // Custom Values
         public ToastType toastType;
-        public float customDuration;
         public Vector3 customAnchoredPos;
-        public Transform customParent;
         public float customScale;
         public bool customEnableBackImage;
-        public bool isChangeColor;
-        public bool isCustomUpDistance;
         public float customUpDistance;
-        public bool isCustomHoldDuration;
         public float customHoldDuration;
         
         // New percentage-based positioning

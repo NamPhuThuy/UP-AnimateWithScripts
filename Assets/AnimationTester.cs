@@ -112,8 +112,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new ToastArgs
                 {
                     message = testMessage,
-                    textColor = Color.white,
-                    customDuration = 1f,
                     useScreenPercentage = _useScreenPercentage,
                     screenPercentage = _screenPercentage,
                     customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS // Fallback
