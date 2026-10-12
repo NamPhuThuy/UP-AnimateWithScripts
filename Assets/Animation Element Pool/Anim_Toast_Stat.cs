@@ -92,7 +92,6 @@ namespace NamPhuThuy.AnimateWithScripts
                     statValue = toastArgs.message,
                     textFont = toastArgs.textFont,
                     toastType = toastArgs.toastType,
-                    customAnchoredPos = toastArgs.customAnchoredPos,
                     customScale = toastArgs.customScale,
                     customEnableBackImage = toastArgs.customEnableBackImage,
                     customUpDistance = toastArgs.customUpDistance,
@@ -127,15 +126,9 @@ namespace NamPhuThuy.AnimateWithScripts
                 if (_parentCanvas) _parentCanvasRect = _parentCanvas.GetComponent<RectTransform>();
             }
 
-            if (currentArgs.useScreenPercentage)
+            if (currentArgs.screenPercentage != Vector2.zero)
             {
-                float targetX = _parentCanvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
-                float targetY = _parentCanvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
-
-                float finalX = targetX - (_parentCanvasRect.rect.width * 0.5f);
-                float finalY = targetY - (_parentCanvasRect.rect.height * 0.5f);
-
-                SetAnchoredPos(new Vector2(finalX, finalY));
+                SetAnchoredPos(AnimationConst.GetAnchoredPosFromPercent(_parentCanvasRect, currentArgs.screenPercentage));
             }
             else if (currentArgs.customAnchoredPos != default)
             {
@@ -210,7 +203,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
             switch (activeType)
             {
-                case ToastType.FLOAT:
+                case ToastType.FLOAT_ALL:
+                case ToastType.FLOAT_IN_MIDDLE:
                     PlayFloatAnim(holdTime, upDist);
                     break;
                 case ToastType.FLASH:

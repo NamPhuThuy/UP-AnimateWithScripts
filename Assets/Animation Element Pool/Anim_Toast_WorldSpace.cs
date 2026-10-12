@@ -134,7 +134,6 @@ namespace NamPhuThuy.AnimateWithScripts
                     customScale = toastArgs.customScale,
                     customUpDistance = toastArgs.customUpDistance,
                     customHoldDuration = toastArgs.customHoldDuration,
-                    worldPosition = toastArgs.customAnchoredPos,
                 };
             }
             else
@@ -245,7 +244,8 @@ namespace NamPhuThuy.AnimateWithScripts
 
             switch (activeType)
             {
-                case ToastType.FLOAT:
+                case ToastType.FLOAT_ALL:
+                case ToastType.FLOAT_IN_MIDDLE:
                     PlayFloatAnim(holdTime, upDist);
                     break;
                 case ToastType.FLASH:

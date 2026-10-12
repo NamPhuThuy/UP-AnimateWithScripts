@@ -166,8 +166,9 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             var args = new ToastArgs
             {
+                toastType = ToastType.FLOAT_IN_MIDDLE,
                 message = message,
-                customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
+                screenPercentage = AnimationConst.BELOW_ANCHORED,
             };
             Play(args);
         }

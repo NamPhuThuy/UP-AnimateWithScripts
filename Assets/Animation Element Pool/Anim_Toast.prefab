@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2625162628203273799}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -1}
-  m_SizeDelta: {x: 929.4618, y: 142.5107}
+  m_SizeDelta: {x: -94, y: -46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4341484013653853779
 CanvasRenderer:
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70.2
+  m_fontSize: 70.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -148,6 +148,8 @@ GameObject:
   - component: {fileID: 2625162628203273799}
   - component: {fileID: 6683221631010279429}
   - component: {fileID: 4587091639683192124}
+  - component: {fileID: 6437543643206520616}
+  - component: {fileID: 4551724711325211387}
   m_Layer: 0
   m_Name: Anim_Toast
   m_TagString: Untagged
@@ -165,16 +167,16 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2171569674992330562}
   - {fileID: 8753076596845289573}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 231}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 511.5, y: 94}
+  m_SizeDelta: {x: 1023, y: 188}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &6683221631010279429
 CanvasGroup:
@@ -205,18 +207,57 @@ MonoBehaviour:
     message: 
     textFont: {fileID: 0}
     toastType: 0
-    customAnchoredPos: {x: 0, y: 0, z: 0}
     customScale: 0
     customEnableBackImage: 0
     customUpDistance: 0
     customHoldDuration: 0
     useScreenPercentage: 0
     screenPercentage: {x: 0, y: 0}
+    backgroundSizePercent: {x: 0, y: 0}
   messageText: {fileID: 9173678522159357702}
-  backImage: {fileID: 6714918850751644749}
+  backImage: {fileID: 4551724711325211387}
   ignoreTimeScale: 1
-  toastType: 1
-  isChangeColor: 0
+  toastType: 3
+  screenPercentage: {x: 0.5, y: 0.35}
+  backgroundSizePercent: {x: 0, y: 0}
+--- !u!222 &6437543643206520616
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3715635711672700614}
+  m_CullTransparentMesh: 1
+--- !u!114 &4551724711325211387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3715635711672700614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 878d369a600110d4cb851bb0ac86e105, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7346708429932132327
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2171569674992330562
 RectTransform:
   m_ObjectHideFlags: 0
@@ -269,7 +310,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7346708429932132327}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

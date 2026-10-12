@@ -43,7 +43,9 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         NONE = 0,
         FLASH = 1,
-        FLOAT = 2,
+        FLOAT_ALL = 2,
+        FLOAT_IN_MIDDLE = 3,
+        FLOAT = FLOAT_IN_MIDDLE,
     }
 
     [Serializable]
@@ -58,15 +60,15 @@ namespace NamPhuThuy.AnimateWithScripts
         
         // Custom Values
         public ToastType toastType;
-        public Vector3 customAnchoredPos;
         public float customScale;
         public bool customEnableBackImage;
         public float customUpDistance;
         public float customHoldDuration;
         
-        // New percentage-based positioning
+        // New percentage-based positioning & sizing
         public bool useScreenPercentage;
         public Vector2 screenPercentage; // e.g., (50, 50) for center
+        public Vector2 backgroundSizePercent; // e.g., (0.8f, 0.1f) or (80, 10) for screen percentage
     }
 
     [Serializable]

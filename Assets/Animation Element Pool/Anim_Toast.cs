@@ -19,24 +19,28 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] private Image backImage;
 
-        private readonly float _holdDuration = 0.6f;
-        private readonly float _upDuration = 0.5f;
-        private readonly float _downDuration = 0.5f;
-        private readonly float _upDistance = 36f;
+        private readonly float _holdDuration = 0.3f;
+        private readonly float _inDuration = 0.3f;
+        private readonly float _outDuration = 0.5f;
+        private readonly float _upDistance = 0.02f;
         private readonly Ease _inEase = Ease.OutCubic;
         private readonly Ease _upEase = Ease.OutQuad;
         private readonly Ease _downEase = Ease.InCubic;
 
         [Header("Flags")]
         [SerializeField] private bool ignoreTimeScale = true;
-        [SerializeField] private ToastType toastType = ToastType.FLASH;
+        [SerializeField] private ToastType toastType = ToastType.FLOAT_IN_MIDDLE;
+
+        [Header("Positioning & Sizing")]
+        [SerializeField] private Vector2 screenPercentage = new Vector2(0.5f, 0.35f);
+        [SerializeField] private Vector2 backgroundSizePercent;
 
         private Canvas _defaultCanvas;
         private RectTransform _defaultCanvasRect;
         private Canvas _parentCanvas;
         private RectTransform _parentCanvasRect;
         private Sequence _seq;
-        private Vector2 _basePos;
+        private Vector2 _defaultSizeDelta;
         private readonly string _fallbackText = "Readying!";
        
 
@@ -50,7 +54,7 @@ namespace NamPhuThuy.AnimateWithScripts
             _defaultCanvasRect = _defaultCanvas.GetComponent<RectTransform>();
             _parentCanvas = _defaultCanvas;
             _parentCanvasRect = _defaultCanvasRect;
-            _basePos = _rectTransform.anchoredPosition;
+            _defaultSizeDelta = _rectTransform.sizeDelta;
             _canvasGroup.alpha = 0f;
             gameObject.SetActive(false);
         }
@@ -77,7 +81,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 currentArgs = popupArgs;
                 gameObject.SetActive(true);
-                KillTweens();
+                HandleSpamClick();
                 
                 SetValues();
                 
@@ -85,8 +89,17 @@ namespace NamPhuThuy.AnimateWithScripts
             }
             else
             {
-                throw new ArgumentException("Invalid argument type for VFXPopupText");
+                throw new ArgumentException("Invalid argument type for Anim_Toast");
             }
+        }
+
+        public void HandleSpamClick()
+        {
+            KillTweens();
+            _seq?.Kill(false);
+            _seq = null;
+            _rectTransform.DOKill(false);
+            _canvasGroup.DOKill(false);
         }
 
         protected override void SetValues()
@@ -104,38 +117,23 @@ namespace NamPhuThuy.AnimateWithScripts
                 _parentCanvasRect = _parentCanvas.GetComponent<RectTransform>();
             }*/
 
-            if (currentArgs.useScreenPercentage)
-            {
-                // Instead of changing anchors, we calculate the offset from the current anchors
-                // This way we respect the prefab's setup and center pivot
-                float targetX = _parentCanvasRect.rect.width * (currentArgs.screenPercentage.x / 100f);
-                float targetY = _parentCanvasRect.rect.height * (currentArgs.screenPercentage.y / 100f);
+            Vector2 percent = currentArgs.screenPercentage != Vector2.zero
+                ? currentArgs.screenPercentage
+                : screenPercentage;
 
-                // Since standard anchors are middle/center, the bottom left is (-width/2, -height/2)
-                // We need to shift the target position so (50,50) is (0,0) locally
-                float finalX = targetX - (_parentCanvasRect.rect.width * 0.5f);
-                float finalY = targetY - (_parentCanvasRect.rect.height * 0.5f);
+            SetAnchoredPos(AnimationConst.GetAnchoredPosFromPercent(_parentCanvasRect, percent));
 
-                SetAnchoredPos(new Vector2(finalX, finalY));
-            }
-            else if (currentArgs.customAnchoredPos != default)
-            {
-                SetAnchoredPos(currentArgs.customAnchoredPos);
-            }
-            else
-            {
-                SetAnchoredPos(_basePos);
-            }
+            Vector2 bgSizePercent = currentArgs.backgroundSizePercent != Vector2.zero
+                ? currentArgs.backgroundSizePercent
+                : backgroundSizePercent;
+
+            SetBackgroundSize(bgSizePercent);
             
-            if (!Mathf.Approximately(currentArgs.customScale, 0f))
+            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            _rectTransform.localScale = Vector3.one * targetScale;
+            if (backImage.rectTransform != _rectTransform)
             {
-                backImage.rectTransform.localScale = Vector3.one * currentArgs.customScale;
-                messageText.rectTransform.localScale = Vector3.one * currentArgs.customScale;
-            }
-            else
-            {
-                backImage.rectTransform.localScale = Vector3.one;
-                messageText.rectTransform.localScale = Vector3.one;
+                backImage.rectTransform.localScale = Vector3.one * targetScale;
             }
             
             SetContent(currentArgs.message);
@@ -145,10 +143,11 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             _seq = null;
             gameObject.SetActive(false);
-            _rectTransform.anchoredPosition = _basePos;
             _canvasGroup.alpha = 0f;
             _parentCanvas = _defaultCanvas;
             _parentCanvasRect = _defaultCanvasRect;
+            SetBackgroundSize(Vector2.zero);
+            _rectTransform.localScale = Vector3.one;
         }
 
         #endregion
@@ -156,32 +155,20 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             _seq?.Kill(false);
 
-            float holdTime;
-            if (currentArgs.customHoldDuration > 0f)
-            {
-                holdTime = currentArgs.customHoldDuration;
-            }
-            else
-            {
-                holdTime = _holdDuration;
-            }
-          
-            float upDist;
-            if (currentArgs.customUpDistance > 0f)
-            {
-                upDist = currentArgs.customUpDistance;
-            }
-            else
-            {
-                upDist = _upDistance;
-            }
+            float holdTime = currentArgs.customHoldDuration > 0f ? currentArgs.customHoldDuration : _holdDuration;
+
+            float upDistPercent = currentArgs.customUpDistance > 0f ? currentArgs.customUpDistance : _upDistance;
+            float upDist = upDistPercent <= 1f ? upDistPercent * _parentCanvasRect.rect.height : upDistPercent;
 
             ToastType activeType = currentArgs.toastType != ToastType.NONE ? currentArgs.toastType : toastType;
 
             switch (activeType)
             {
-                case ToastType.FLOAT:
-                    PlayFloatAnim(holdTime, upDist);
+                case ToastType.FLOAT_ALL:
+                    PlayFloatAllAnim(holdTime, upDist);
+                    break;
+                case ToastType.FLOAT_IN_MIDDLE:
+                    PlayFloatInMiddleAnim(holdTime, upDist);
                     break;
                 case ToastType.FLASH:
                 default:
@@ -192,35 +179,58 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void PlayFlashAnim(float holdTime, float upDist)
         {
+            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
             _rectTransform.localScale = Vector3.zero;
             _canvasGroup.alpha = 0f;
 
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
-            _seq.Append(_rectTransform.DOScale(1.1f, 0.7f * _upDuration).SetEase(_inEase));
-            _seq.Join(_canvasGroup.DOFade(1f,  _upDuration).SetEase(_inEase));
-            _seq.Append(_rectTransform.DOScale(1f, 0.3f * _upDuration).SetEase(_inEase));
+            _seq.Append(_rectTransform.DOScale(1.1f * targetScale, 0.7f * _inDuration).SetEase(_inEase));
+            _seq.Join(_canvasGroup.DOFade(1f,  _inDuration).SetEase(_inEase));
+            _seq.Append(_rectTransform.DOScale(1f * targetScale, 0.3f * _inDuration).SetEase(_inEase));
             
             if (holdTime > 0f) _seq.AppendInterval(holdTime);
             
-            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, _upDuration).SetEase(_upEase));
-            _seq.Append(_rectTransform.DOScale(1.1f, 0.3f * _downDuration).SetEase(_downEase));
-            _seq.Join(_canvasGroup.DOFade(0f, 0.7f * _downDuration));
-            _seq.Append(_rectTransform.DOScale(0, 0.7f * _downDuration).SetEase(_downEase));
+            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, _inDuration).SetEase(_upEase));
+            _seq.Append(_rectTransform.DOScale(1.1f * targetScale, 0.3f * _outDuration).SetEase(_downEase));
+            _seq.Join(_canvasGroup.DOFade(0f, 0.7f * _outDuration));
+            _seq.Append(_rectTransform.DOScale(0, 0.7f * _outDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
         }
 
-        private void PlayFloatAnim(float holdTime, float upDist)
+        private void PlayFloatAllAnim(float holdTime, float upDist)
         {
-            _rectTransform.localScale = Vector3.one;
+            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            _rectTransform.localScale = Vector3.one * targetScale;
             _canvasGroup.alpha = 0f;
 
-            float totalDuration = _upDuration + holdTime + _downDuration;
+            float totalDuration = _inDuration + holdTime + _outDuration;
             _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
 
             _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
-            _seq.Insert(0f, _canvasGroup.DOFade(1f, _upDuration).SetEase(_inEase));
-            _seq.Insert(_upDuration + holdTime, _canvasGroup.DOFade(0f, _downDuration).SetEase(_downEase));
+            _seq.Insert(0f, _canvasGroup.DOFade(1f, _inDuration).SetEase(_inEase));
+            _seq.Insert(_inDuration + holdTime, _canvasGroup.DOFade(0f, _outDuration).SetEase(_downEase));
+            _seq.OnComplete(OnAnimationComplete);
+        }
+
+        private void PlayFloatInMiddleAnim(float holdTime, float upDist)
+        {
+            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            _rectTransform.localScale = Vector3.one * targetScale;
+            _canvasGroup.alpha = 0f;
+
+            _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
+
+            _seq.Append(_canvasGroup.DOFade(1f, _inDuration).SetEase(_inEase));
+            if (holdTime > 0f)
+            {
+                _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, holdTime).SetEase(_upEase));
+            }
+            else
+            {
+                _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, _inDuration).SetEase(_upEase));
+            }
+            _seq.Append(_canvasGroup.DOFade(0f, _outDuration).SetEase(_downEase));
             _seq.OnComplete(OnAnimationComplete);
         }
 
@@ -265,6 +275,23 @@ namespace NamPhuThuy.AnimateWithScripts
         private void SetAnchoredPos(Vector2 anchoredPos)
         {
             _rectTransform.anchoredPosition = anchoredPos;
+        }
+
+        public void SetBackgroundSize(Vector2 sizePercent)
+        {
+            if (sizePercent == Vector2.zero)
+            {
+                _rectTransform.sizeDelta = _defaultSizeDelta;
+                backImage.rectTransform.sizeDelta = _defaultSizeDelta;
+                return;
+            }
+
+            Vector2 targetSize = AnimationConst.GetSizeFromPercent(_parentCanvasRect, sizePercent);
+            if (targetSize.x <= 0f) targetSize.x = _defaultSizeDelta.x;
+            if (targetSize.y <= 0f) targetSize.y = _defaultSizeDelta.y;
+
+            _rectTransform.sizeDelta = targetSize;
+            backImage.rectTransform.sizeDelta = targetSize;
         }
 
         #endregion

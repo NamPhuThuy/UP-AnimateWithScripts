@@ -45,9 +45,9 @@ namespace NamPhuThuy.AnimateWithScripts
         private string testMessage = "Test Message";
         private float _testDuration = 2f;
         
-        // Positioning
-        private bool _useScreenPercentage = false;
-        private Vector2 _screenPercentage = new Vector2(50, 50);
+        // Positioning & Sizing
+        private Vector2 _screenPercentage = AnimationConst.BELOW_ANCHORED;
+        private Vector2 _backgroundSizePercent;
         
         // Sprite Motion
         private ObjActiveAuto.MotionType _motionType;
@@ -78,12 +78,9 @@ namespace NamPhuThuy.AnimateWithScripts
             _testDuration = EditorGUILayout.FloatField("Duration", _testDuration);
             isUseVFXManagerPos = EditorGUILayout.Toggle("Use VFXManager Position", isUseVFXManagerPos);
             
-            EditorGUILayout.LabelField("Positioning", EditorStyles.boldLabel);
-            _useScreenPercentage = EditorGUILayout.Toggle("Use Screen % (Toast/Popup)", _useScreenPercentage);
-            if (_useScreenPercentage)
-            {
-                _screenPercentage = EditorGUILayout.Vector2Field("Screen % (X,Y)", _screenPercentage);
-            }
+            EditorGUILayout.LabelField("Positioning & Sizing", EditorStyles.boldLabel);
+            _screenPercentage = EditorGUILayout.Vector2Field("Screen % (X,Y)", _screenPercentage);
+            _backgroundSizePercent = EditorGUILayout.Vector2Field("Bg Size % (W,H)", _backgroundSizePercent);
             
             EditorGUILayout.LabelField("Sprite Motion", EditorStyles.boldLabel);
             _motionType = (ObjActiveAuto.MotionType)EditorGUILayout.EnumPopup("Motion Type", _motionType);
@@ -111,10 +108,10 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 var args = new ToastArgs
                 {
+                    toastType = ToastType.FLOAT_IN_MIDDLE,
                     message = testMessage,
-                    useScreenPercentage = _useScreenPercentage,
                     screenPercentage = _screenPercentage,
-                    customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS // Fallback
+                    backgroundSizePercent = _backgroundSizePercent,
                 };
                 AnimationManager.Ins.Play(args);
             }
@@ -130,10 +127,8 @@ namespace NamPhuThuy.AnimateWithScripts
                 var args = new ToastImageArgs
                 {
                     sprite = _script.itemSprites[randomIndex],
-                    useScreenPercentage = _useScreenPercentage,
                     screenPercentage = _screenPercentage,
                     anchoredPos = randAnchoredPosi,
-                    isUseAnchoredPos = !_useScreenPercentage,
                     customDuration = _testDuration,
                     toastType = ToastType.FLASH
                 };
