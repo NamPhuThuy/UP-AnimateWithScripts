@@ -87,19 +87,16 @@ namespace NamPhuThuy.AnimateWithScripts
         // Custom Values
         public ToastType toastType;
         public float customDuration;
-        public Vector3 customAnchoredPos;
         public Transform customParent;
         public float customScale;
         public bool customEnableBackImage;
-        public bool isChangeColor;
-        public bool isCustomUpDistance;
         public float customUpDistance;
-        public bool isCustomHoldDuration;
         public float customHoldDuration;
 
         // Positioning
         public bool useScreenPercentage;
         public Vector2 screenPercentage;
+        public Vector2 backgroundSizePercent;
     }
 
     [Serializable]

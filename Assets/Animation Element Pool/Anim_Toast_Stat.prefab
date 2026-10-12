@@ -111,8 +111,8 @@ RectTransform:
   - {fileID: 3319398542834907329}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 559, y: 124}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -175,7 +175,6 @@ MonoBehaviour:
     textFont: {fileID: 0}
     toastType: 0
     customDuration: 0
-    customAnchoredPos: {x: 0, y: 0, z: 0}
     customParent: {fileID: 0}
     customScale: 0
     customEnableBackImage: 0
@@ -186,6 +185,7 @@ MonoBehaviour:
     customHoldDuration: 0
     useScreenPercentage: 0
     screenPercentage: {x: 0, y: 0}
+    backgroundSizePercent: {x: 0, y: 0}
   statText: {fileID: 6563475648571934698}
   imgIcon: {fileID: 2632806959985109061}
   backImage: {fileID: 651365137622151326}
