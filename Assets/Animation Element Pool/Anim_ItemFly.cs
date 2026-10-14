@@ -179,7 +179,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void PlayAnim()
         {
-            int itemSizeX = itemSprite.texture.width;
+            int itemSizeX = (int)itemSprite.rect.width;
 
             for (int i = 0; i < _activeItemCount; i++)
             {
@@ -189,13 +189,13 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void SetupRewardItem(int index, int itemSizeX)
         {
-            int randomSizeX = (int)(Random.Range(SIZE_RANDOM_MIN, SIZE_RANDOM_MAX) * itemSizeX);
             var reward = itemList[index];
             var image = _itemImages[index];
 
             reward.gameObject.SetActive(true);
-            image.SetSizeKeepRatioY(randomSizeX);
             image.sprite = itemSprite;
+            image.SetNativeSize();
+            reward.sizeDelta *= Random.Range(SIZE_RANDOM_MIN, SIZE_RANDOM_MAX);
             image.color = Color.white;
             
             reward.localPosition = new Vector3(Random.Range(-2 * itemSizeX, 2 * itemSizeX), Random.Range(-2 * itemSizeX, 2 * itemSizeX));
