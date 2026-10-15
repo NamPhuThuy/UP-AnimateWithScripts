@@ -22,7 +22,9 @@ namespace NamPhuThuy.AnimateWithScripts
         [SerializeField] private TextMeshProUGUI statText;
         [SerializeField] private Image imgIcon;
         [SerializeField] private Image backImage;
+        [SerializeField] private Sprite customBackground;
 
+      
         private readonly float _holdDuration = 0.3f;
         private readonly float _inDuration = 0.3f;
         private readonly float _outDuration = 0.5f;
@@ -45,6 +47,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private RectTransform _parentCanvasRect;
         private Sequence _seq;
         private Vector2 _defaultSizeDelta;
+        private Sprite _defaultBackgroundSprite;
         private readonly string _fallbackText = "Stat Up!";
 
         #region MonoBehaviour Callbacks
@@ -58,6 +61,7 @@ namespace NamPhuThuy.AnimateWithScripts
             _parentCanvas = _defaultCanvas;
             _parentCanvasRect = _defaultCanvasRect;
             _defaultSizeDelta = _rectTransform.sizeDelta;
+            if (backImage) _defaultBackgroundSprite = backImage.sprite;
             _canvasGroup.alpha = 0f;
             gameObject.SetActive(false);
         }
@@ -91,6 +95,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     statValue = toastArgs.message,
                     textFont = toastArgs.textFont,
                     toastType = toastArgs.toastType,
+                    customBackground = toastArgs.customBackground,
                     customScale = toastArgs.customScale,
                     customEnableBackImage = toastArgs.customEnableBackImage,
                     customUpDistance = toastArgs.customUpDistance,
@@ -173,17 +178,20 @@ namespace NamPhuThuy.AnimateWithScripts
                 imgIcon.gameObject.SetActive(false);
             }
 
-            // Set merged stat content
-            SetContent(currentArgs.statType, currentArgs.statValue);
+            // Set content
+            string content = !string.IsNullOrEmpty(currentArgs.statValue)
+                ? currentArgs.statValue
+                : (!string.IsNullOrEmpty(currentArgs.statType) ? currentArgs.statType : _fallbackText);
+            SetContent(content);
 
-            // Set text color
-            if (currentArgs.textColor != default)
+            // Set custom background
+            Sprite bg = currentArgs.customBackground != null 
+                ? currentArgs.customBackground 
+                : (customBackground != null ? customBackground : _defaultBackgroundSprite);
+
+            if (backImage != null && bg != null)
             {
-                statText.color = currentArgs.textColor;
-            }
-            else
-            {
-                statText.color = Color.white;
+                backImage.sprite = bg;
             }
         }
 
@@ -196,6 +204,10 @@ namespace NamPhuThuy.AnimateWithScripts
             _parentCanvasRect = _defaultCanvasRect;
             SetBackgroundSize(Vector2.zero);
             _rectTransform.localScale = Vector3.one;
+            if (backImage != null && _defaultBackgroundSprite != null)
+            {
+                backImage.sprite = _defaultBackgroundSprite;
+            }
         }
 
         #endregion
@@ -309,20 +321,21 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region Content Setup
 
+        public void SetContent(string content)
+        {
+            statText.text = !string.IsNullOrEmpty(content) ? content : _fallbackText;
+        }
+
+        public void SetContent(string content, Action moreSetup)
+        {
+            SetContent(content);
+            moreSetup?.Invoke();
+        }
+
         public void SetContent(string statType, string statValue)
         {
-            if (string.IsNullOrEmpty(statType))
-            {
-                statText.text = !string.IsNullOrEmpty(statValue) ? statValue : _fallbackText;
-            }
-            else if (string.IsNullOrEmpty(statValue))
-            {
-                statText.text = statType;
-            }
-            else
-            {
-                statText.text = $"{statType} {statValue}";
-            }
+            string content = !string.IsNullOrEmpty(statValue) ? statValue : statType;
+            SetContent(content);
         }
 
         public void SetContent(string statType, string statValue, Action moreSetup)

@@ -28,7 +28,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         [Header("Stats")]
         [SerializeField] private Vector3 targetPosition;
-        [SerializeField] private int totalAmount;
+        [SerializeField] private int addValue;
         [SerializeField] private int prevValue;
         [Tooltip("Total duration from first spawn until last item lands")]
         [SerializeField] private float totalVfxDuration = 1.6f;
@@ -116,7 +116,7 @@ namespace NamPhuThuy.AnimateWithScripts
             targetPosition = currentArgs.targetInteractTransform ? currentArgs.targetInteractTransform.transform.position : currentArgs.targetText.position;
             
             // VALUES
-            totalAmount = currentArgs.addValue;
+            addValue = currentArgs.addValue;
             prevValue = currentArgs.prevValue;
 
             if (!Mathf.Approximately(currentArgs.delayBetweenItems, 0))
@@ -124,13 +124,25 @@ namespace NamPhuThuy.AnimateWithScripts
                 pathDuration = currentArgs.delayBetweenItems;
             }
             
-            _activeItemCount = Mathf.Max(1, currentArgs.itemAmount > 0 ? currentArgs.itemAmount : _initialPoolSize);
+            int targetAmount = currentArgs.itemAmount > 0 ? currentArgs.itemAmount : _initialPoolSize;
+            int maxAllowed = currentArgs.itemAmount > 0 ? Mathf.Min(_initialPoolSize, currentArgs.itemAmount) : _initialPoolSize;
+
+            if (addValue > 0 && addValue < maxAllowed)
+            {
+                _activeItemCount = addValue;
+            }
+            else
+            {
+                _activeItemCount = Mathf.Max(1, targetAmount);
+            }
+
             _remainingItems = _activeItemCount;
-            _unitValue = totalAmount / _initialPoolSize;
+            _unitValue = _activeItemCount > 0 ? addValue / _activeItemCount : 0;
             
-            // Compute per-index delay so last item finishes at totalVfxDuration
+            // Compute per-index delay so last item finishes at totalVfxDuration, clamped to normal step delay for low item counts
             float spacingBudget = Mathf.Max(0f, totalVfxDuration - INITIAL_DELAY - bounceDuration - pathDuration);
-            _spawnStepDelay = (_activeItemCount > 1) ? spacingBudget / (_activeItemCount - 1) : 0f;
+            float maxStepDelay = (_initialPoolSize > 1) ? spacingBudget / (_initialPoolSize - 1) : 0.1f;
+            _spawnStepDelay = (_activeItemCount > 1) ? Mathf.Min(spacingBudget / (_activeItemCount - 1), maxStepDelay) : 0f;
             
             transform.position = currentArgs.startPosition;
             Debug.Log(message:$"start posi: {currentArgs.startPosition}");
@@ -260,7 +272,7 @@ namespace NamPhuThuy.AnimateWithScripts
                         realResourceText.gameObject.SetActive(true);
                         fakeResourceText.gameObject.SetActive(false);
                         fakeResourceText.transform.SetParent(transform);
-                        realResourceText.SetText(NUMBER_FORMAT, prevValue + totalAmount);
+                        realResourceText.SetText(NUMBER_FORMAT, prevValue + addValue);
                     }
                     
                     try 
@@ -301,8 +313,8 @@ namespace NamPhuThuy.AnimateWithScripts
             DebugLogger.Log();
             if (IsHaveRealText)
             {
-                DebugLogger.Log(message:$"Update fake text: {prevValue + totalAmount - _remainingItems * _unitValue}");
-                fakeResourceText.SetText(NUMBER_FORMAT, prevValue + totalAmount - _remainingItems * _unitValue);
+                DebugLogger.Log(message:$"Update fake text: {prevValue + addValue - _remainingItems * _unitValue}");
+                fakeResourceText.SetText(NUMBER_FORMAT, prevValue + addValue - _remainingItems * _unitValue);
             }
         }
 

@@ -197,11 +197,12 @@ namespace NamPhuThuy.AnimateWithScripts
             Play(args);
         }
 
-        public void PlayBasicToastStat(Sprite icon, string statType, string statValue, Color textColor = default, float duration = 0f)
+        public void PlayBasicToastStat(Sprite icon, string statType, string statValue, Color textColor = default, float duration = 0f, Sprite customBackground = null)
         {
             var args = new ToastStatArgs
             {
                 iconSprite = icon,
+                customBackground = customBackground,
                 statType = statType,
                 statValue = statValue,
                 textColor = textColor != default ? textColor : Color.white,

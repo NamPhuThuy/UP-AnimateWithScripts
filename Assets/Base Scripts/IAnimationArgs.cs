@@ -60,6 +60,7 @@ namespace NamPhuThuy.AnimateWithScripts
         
         // Custom Values
         public ToastType toastType;
+        public Sprite customBackground;
         public float customScale;
         public bool customEnableBackImage;
         public float customUpDistance;
@@ -79,6 +80,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         // Must-have / Stat Values
         public Sprite iconSprite;
+        public Sprite customBackground;
         public string statType;
         public string statValue;
         public Color textColor;
