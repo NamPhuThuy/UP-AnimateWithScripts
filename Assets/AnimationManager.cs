@@ -205,7 +205,6 @@ namespace NamPhuThuy.AnimateWithScripts
                 statType = statType,
                 statValue = statValue,
                 textColor = textColor != default ? textColor : Color.white,
-                customDuration = duration,
             };
             Play(args);
         }

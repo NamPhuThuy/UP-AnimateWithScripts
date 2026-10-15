@@ -147,7 +147,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
             SetBackgroundSize(bgSizePercent);
 
-            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            float targetScale = GetTargetScale();
             _rectTransform.localScale = Vector3.one * targetScale;
             if (backImage.rectTransform != _rectTransform)
             {
@@ -226,14 +226,17 @@ namespace NamPhuThuy.AnimateWithScripts
                     PlayFlashAnim(holdTime, upDist);
                     break;
             }
+        }
 
-            if (currentArgs.customDuration != 0f)
-                StartAutoReturn(currentArgs.customDuration);
+        private float GetTargetScale()
+        {
+            if (!Mathf.Approximately(currentArgs.customScale, 0f)) return currentArgs.customScale;
+            return 1f;
         }
 
         private void PlayFlashAnim(float holdTime, float upDist)
         {
-            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            float targetScale = GetTargetScale();
             _rectTransform.localScale = Vector3.zero;
             _canvasGroup.alpha = 0f;
 
@@ -254,7 +257,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void PlayFloatAllAnim(float holdTime, float upDist)
         {
-            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            float targetScale = GetTargetScale();
             _rectTransform.localScale = Vector3.one * targetScale;
             _canvasGroup.alpha = 0f;
 
@@ -269,7 +272,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void PlayFloatInMiddleAnim(float holdTime, float upDist)
         {
-            float targetScale = !Mathf.Approximately(currentArgs.customScale, 0f) ? currentArgs.customScale : 1f;
+            float targetScale = GetTargetScale();
             _rectTransform.localScale = Vector3.one * targetScale;
             _canvasGroup.alpha = 0f;
 
