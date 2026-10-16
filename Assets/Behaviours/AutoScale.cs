@@ -7,7 +7,7 @@ using DG.Tweening;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class ObjScaleAuto : ObjActiveAuto
+    public class AutoScale : AutoMotion
     {
         [Header("Stats")] 
         [SerializeField] private Vector3 originalScale = Vector3.one;

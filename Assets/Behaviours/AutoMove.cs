@@ -11,7 +11,7 @@ namespace NamPhuThuy.AnimateWithScripts
     /// <summary>
     /// Havent Tested yet
     /// </summary>
-    public class ObjMoveBetweenAuto : ObjActiveAuto
+    public class AutoMove : AutoMotion
     {
         [Header("Flags")]
         [SerializeField] private Ease ease = Ease.InOutSine;
@@ -40,9 +40,9 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public override MotionType Type { get => MotionType.MOVE; }
 
-        protected override void Start()
+        private void Awake()
         {
-            base.Start();
+            // Cache in Awake: OnEnable (which may call Play) runs before Start
             _rootLocalPos = transform.localPosition;
         }
 
@@ -138,11 +138,11 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
     /*#if UNITY_EDITOR
-    [CustomEditor(typeof(ObjMoveBetweenAuto))]
+    [CustomEditor(typeof(AutoMove))]
     [CanEditMultipleObjects]
-    public class ObjMoveBetweenAutoEditor : Editor
+    public class AutoMoveEditor : Editor
     {
-        private ObjMoveBetweenAuto script;
+        private AutoMove script;
         private Texture2D frogIcon;
         
         private void OnEnable()
@@ -153,7 +153,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            script = (ObjMoveBetweenAuto)target;
+            script = (AutoMove)target;
 
             ButtonResetValues();
         }

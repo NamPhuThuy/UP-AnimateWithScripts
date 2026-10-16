@@ -168,7 +168,7 @@ namespace NamPhuThuy.AnimateWithScripts
         // Must have values
         public Sprite sprite;
         public Vector3 worldSpaceStartPosi;
-        public ObjActiveAuto.MotionType motionType;
+        public AutoMotion.MotionType motionType;
       
 
         // Custom values

@@ -15,13 +15,13 @@ namespace NamPhuThuy.AnimateWithScripts
         #region Private Serializable Fields
 
         [Header("Flags")] 
-        [SerializeField] private ObjActiveAuto.MotionType motionType;
+        [SerializeField] private AutoMotion.MotionType motionType;
 
         [Header("Components")] 
         [SerializeField] private Transform interactTransform;// The transform that this script control
-        [SerializeField] private ObjClockwiseAnimAuto objClockwiseAnimAuto;
-        [SerializeField] private ObjRotateAuto objRotateAuto;
-        [SerializeField] private ObjScaleAuto objScaleAuto;
+        [SerializeField] private AutoSwing objClockwiseAnimAuto;
+        [SerializeField] private AutoRotate objRotateAuto;
+        [SerializeField] private AutoScale objScaleAuto;
         [SerializeField] private SpriteRenderer spriteRenderer;
 
         [Header("Stats")] 
@@ -59,15 +59,15 @@ namespace NamPhuThuy.AnimateWithScripts
 
             switch (motionType)
             {
-                case ObjActiveAuto.MotionType.CLOCK:
+                case AutoMotion.MotionType.CLOCK:
                     objClockwiseAnimAuto.Play();
                     
                     break;
-                case ObjActiveAuto.MotionType.ROTATE:
+                case AutoMotion.MotionType.ROTATE:
                     objRotateAuto.Play();
                     
                     break;
-                case ObjActiveAuto.MotionType.SCALE:
+                case AutoMotion.MotionType.SCALE:
                     objScaleAuto.Play();
                     break;
             }

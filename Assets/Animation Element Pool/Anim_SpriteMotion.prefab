@@ -105,7 +105,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55572d8946830d843b3e418bb24e7d14, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.ObjClockwiseAnimAuto
+  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.AutoSwing
   startIn: 0
   duration: 0.15
   startAngle: {x: 0, y: 0, z: -15}
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a4e44e28c0619c428ff8f6870a749c0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.ObjRotateAuto
+  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.AutoRotate
   startIn: 0
   ease: 1
   rotateMode: 3
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c721f157ba14b41b9f3fa91b06feae, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.ObjScaleAuto
+  m_EditorClassIdentifier: NamPhuThuy.AnimateWithScripts::NamPhuThuy.AnimateWithScripts.AutoScale
   startIn: 0
   originalScale: {x: 1, y: 1, z: 1}
   targetScale: {x: 0.9, y: 0.9, z: 0.9}

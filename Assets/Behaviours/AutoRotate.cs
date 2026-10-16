@@ -11,7 +11,7 @@ namespace NamPhuThuy.AnimateWithScripts
     /// <summary>
     /// Havent Tested yet
     /// </summary>
-    public class ObjRotateAuto : ObjActiveAuto
+    public class AutoRotate : AutoMotion
     {
         [Header("Flags")]
         [SerializeField] private Ease ease = Ease.Linear;
@@ -62,11 +62,11 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
     /*#if UNITY_EDITOR
-    [CustomEditor(typeof(ObjRotateAuto))]
+    [CustomEditor(typeof(AutoRotate))]
     [CanEditMultipleObjects]
-    public class ObjRotateAutoEditor : Editor
+    public class AutoRotateEditor : Editor
     {
-        private ObjRotateAuto script;
+        private AutoRotate script;
         private Texture2D frogIcon;
         
         private void OnEnable()
@@ -77,7 +77,7 @@ namespace NamPhuThuy.AnimateWithScripts
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            script = (ObjRotateAuto)target;
+            script = (AutoRotate)target;
 
             ButtonResetValues();
         }

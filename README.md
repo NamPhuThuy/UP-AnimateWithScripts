@@ -110,8 +110,10 @@ Add the package to your Unity project's `Packages/manifest.json` file under `"de
 | `Anim_Toast_WorldSpace.cs` | Displays temporary floating text messages in 3D world space | `Play(ToastWorldSpaceArgs)` |
 | `Anim_Toast.cs` | Displays a simple temporary notification/toast text message | `Play(ToastArgs)` |
 | `IAnimationArgs.cs` | Interfaces and structs defining parameters for each animation type | N/A (Data Structures) |
-| `ObjActiveAuto.cs` | Automatically enables/disables a GameObject after a delay | N/A (Inspector Driven) |
-| `ObjMoveBetweenAuto.cs` | Automatically pings-pongs an object between a start and end point | N/A (Inspector Driven) |
-| `ObjRotateAuto.cs` | Applies continuous rotation to an object automatically | N/A (Inspector Driven) |
-| `ObjScaleAuto.cs` | Applies automatic pulsing/scaling to an object over time | N/A (Inspector Driven) |
+| `AutoMotion.cs` | Base class: auto Play/Stop on Enable or Start | N/A (Inspector Driven) |
+| `AutoMove.cs` / `AutoMoveRect.cs` | Loops an object through waypoints (localPosition / offsets from anchoredPosition) | N/A (Inspector Driven) |
+| `AutoSwing.cs` / `AutoSwingRect.cs` | Swings an object back and forth between two angles | N/A (Inspector Driven) |
+| `AutoRotate.cs` / `AutoRotateRect.cs` | Applies continuous tweened rotation to an object | N/A (Inspector Driven) |
+| `AutoSpin.cs` / `AutoSpinRect.cs` | Spins an object at a constant speed every frame | N/A (Inspector Driven) |
+| `AutoScale.cs` / `AutoScaleRect.cs` | Applies automatic pulsing/scaling to an object over time | N/A (Inspector Driven) |
 | `BezierCurveHelper.cs` | Mathematical helper for generating complex Bezier paths | N/A (Static Utils) |

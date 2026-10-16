@@ -50,7 +50,7 @@ namespace NamPhuThuy.AnimateWithScripts
         private Vector2 _backgroundSizePercent;
         
         // Sprite Motion
-        private ObjActiveAuto.MotionType _motionType;
+        private AutoMotion.MotionType _motionType;
 
         private bool isUseVFXManagerPos = false;
 
@@ -83,7 +83,7 @@ namespace NamPhuThuy.AnimateWithScripts
             _backgroundSizePercent = EditorGUILayout.Vector2Field("Bg Size % (W,H)", _backgroundSizePercent);
             
             EditorGUILayout.LabelField("Sprite Motion", EditorStyles.boldLabel);
-            _motionType = (ObjActiveAuto.MotionType)EditorGUILayout.EnumPopup("Motion Type", _motionType);
+            _motionType = (AutoMotion.MotionType)EditorGUILayout.EnumPopup("Motion Type", _motionType);
 
             EditorGUILayout.Space(5);
 

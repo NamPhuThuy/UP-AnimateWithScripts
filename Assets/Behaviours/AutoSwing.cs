@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public class ObjClockwiseAnimAuto : ObjActiveAuto
+    public class AutoSwing : AutoMotion
     {
         [Header("Stats")]
         [SerializeField] private float duration = 0.5f;
@@ -26,6 +26,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public override void Play()
         {
+            _currentSeq?.Kill();
             // transform.localEulerAngles = startAngle;
             _currentSeq = DOTween.Sequence();
             _currentSeq.Insert(0, transform.DOLocalRotate(endAngle, duration).SetEase(ease));
@@ -35,7 +36,7 @@ namespace NamPhuThuy.AnimateWithScripts
 
         public override void Stop()
         {
-            _currentSeq.Kill();
+            _currentSeq?.Kill();
             
             var val = transform.localEulerAngles;
             val.z = _rootAngle;

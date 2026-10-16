@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace NamPhuThuy.AnimateWithScripts
 {
-    public abstract class ObjActiveAuto : MonoBehaviour
+    public abstract class AutoMotion : MonoBehaviour
     {
         [Header("Flags")]
         [SerializeField] StartIn startIn = StartIn.ON_ENABLE;
