@@ -15,41 +15,55 @@ namespace NamPhuThuy.AnimateWithScripts
     {
         [Header("Flags")]
         [SerializeField] private Ease ease = Ease.Linear;
-        [SerializeField] private RotateMode rotateMode = RotateMode.LocalAxisAdd;
+        [SerializeField] private RotateMode rotateMode = RotateMode.FastBeyond360;
+        [SerializeField] private LoopType loopType = LoopType.Incremental;
         
         [Header("Stats")]
         [SerializeField] private float duration = 1f;
         [SerializeField] private Vector3 rotateBy = new Vector3(0f, 0f, 360f);
-     
 
         private Tween _currentTween;
         private Vector3 _rootLocalEulerAngles;
 
-        public override MotionType Type { get => MotionType.ROTATE; }
+        public override MotionType Type => MotionType.ROTATE;
+
+        private void Reset()
+        {
+            ResetValues();
+        }
+
+        protected virtual void Awake()
+        {
+            _rootLocalEulerAngles = transform.localEulerAngles;
+        }
 
         protected override void Start()
         {
             base.Start();
-            _rootLocalEulerAngles = transform.localEulerAngles;
         }
 
         public override void Play()
         {
-            _currentTween?.Kill();
+            CompleteExistingTweens();
 
             _currentTween = transform
                 .DOLocalRotate(rotateBy, duration, rotateMode)
+                .SetRelative(true)
                 .SetEase(ease)
-                .SetLoops(-1, LoopType.Restart)
+                .SetLoops(-1, loopType)
                 .SetUpdate(true);
         }
 
         public override void Stop()
         {
+            CompleteExistingTweens();
+            transform.localEulerAngles = _rootLocalEulerAngles;
+        }
+
+        public void CompleteExistingTweens()
+        {
             _currentTween?.Kill();
             _currentTween = null;
-
-            transform.localEulerAngles = _rootLocalEulerAngles;
         }
 
         public void ResetValues()
@@ -57,7 +71,8 @@ namespace NamPhuThuy.AnimateWithScripts
             duration = 1f;
             rotateBy = new Vector3(0f, 0f, 360f);
             ease = Ease.Linear;
-            rotateMode = RotateMode.LocalAxisAdd;
+            rotateMode = RotateMode.FastBeyond360;
+            loopType = LoopType.Incremental;
         }
     }
 
