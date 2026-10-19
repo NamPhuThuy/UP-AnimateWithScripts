@@ -72,11 +72,26 @@ namespace NamPhuThuy.AnimateWithScripts
         public Vector2 backgroundSizePercent; // e.g., (0.8f, 0.1f) or (80, 10) for screen percentage
     }
 
+    /// <summary>
+    /// Each value maps to its own AnimationType -> its own Toast_Stat prefab variant in the AnimationCatalog.
+    /// </summary>
+    public enum ToastStatLayout
+    {
+        HORIZONTAL = 0,
+        BIG_ICON = 1,
+    }
+
     [Serializable]
     public struct ToastStatArgs : IAnimationArgs
     {
-        public AnimationType Type => AnimationType.TOAST_STAT;
+        public AnimationType Type => layout switch
+        {
+            ToastStatLayout.BIG_ICON => AnimationType.TOAST_STAT_BIG_ICON,
+            _ => AnimationType.TOAST_STAT_HORIZONTAL,
+        };
         public Action OnComplete { get; set; }
+
+        public ToastStatLayout layout;
 
         // Must-have / Stat Values
         public Sprite iconSprite;

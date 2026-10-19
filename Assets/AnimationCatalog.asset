@@ -44,7 +44,12 @@ MonoBehaviour:
     limit: 8
     softMaxAliveSeconds: 10
   - type: 4
-    prefab: {fileID: 1779754764910653779, guid: 724926da3ad16b0438e065cdb017c24d, type: 3}
+    prefab: {fileID: 8409974750330906440, guid: d6ca02ea467d4b34cb66db8333a475ba, type: 3}
     preload: 1
     limit: 2
+    softMaxAliveSeconds: 10
+  - type: 5
+    prefab: {fileID: 8154917250221184292, guid: 15edc9709f6cdf443bdd6105342d069d, type: 3}
+    preload: 3
+    limit: 5
     softMaxAliveSeconds: 10

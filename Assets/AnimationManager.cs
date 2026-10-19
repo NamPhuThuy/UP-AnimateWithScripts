@@ -86,6 +86,7 @@ namespace NamPhuThuy.AnimateWithScripts
             {
                 DebugLogger.LogError($"Missing VFX prefab for {type}", context: this); 
                 return null;
+                
             }
 
             // 1. If we have an idle instance in the pool, use it

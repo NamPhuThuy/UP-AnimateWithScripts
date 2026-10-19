@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1779754764910653779}
   - component: {fileID: 5050734915943959535}
   m_Layer: 0
-  m_Name: Anim_Toast_Stat
+  m_Name: Toast_Stat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

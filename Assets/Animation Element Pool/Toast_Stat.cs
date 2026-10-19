@@ -11,7 +11,7 @@ using UnityEditor;
 namespace NamPhuThuy.AnimateWithScripts
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class Anim_Toast_Stat : AnimationBase
+    public class Toast_Stat : AnimationBase
     {
         [Header("Stats")] 
         [SerializeField] private ToastStatArgs currentArgs;
@@ -49,6 +49,12 @@ namespace NamPhuThuy.AnimateWithScripts
         private Vector2 _defaultSizeDelta;
         private Sprite _defaultBackgroundSprite;
         private readonly string _fallbackText = "Stat Up!";
+
+        /// <summary>
+        /// Total length (seconds) of the toast currently playing, from appear to fully hidden.
+        /// Read it right after Play(). Measured in unscaled time when ignoreTimeScale is on.
+        /// </summary>
+        public float TotalDuration => _seq.Duration();
 
         #region MonoBehaviour Callbacks
 
@@ -400,15 +406,15 @@ namespace NamPhuThuy.AnimateWithScripts
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(Anim_Toast_Stat))]
+    [CustomEditor(typeof(Toast_Stat))]
     [CanEditMultipleObjects]
     public class Anim_Toast_StatEditor : Editor
     {
-        private Anim_Toast_Stat _target;
+        private Toast_Stat _target;
         
         private void OnEnable()
         {
-            _target = (Anim_Toast_Stat)target;
+            _target = (Toast_Stat)target;
         }
         
         public override void OnInspectorGUI()
