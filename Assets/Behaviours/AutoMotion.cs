@@ -1,4 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace NamPhuThuy.AnimateWithScripts
 {
@@ -65,6 +68,40 @@ namespace NamPhuThuy.AnimateWithScripts
         public abstract void Play();
 
         public abstract void Stop();
+
+        /// <summary>
+        /// Restore the rest pose, then rebuild the motion from the current params.
+        /// Stop() kills in-flight tweens first, so spamming Replay never stacks or drifts.
+        /// </summary>
+        public void Replay()
+        {
+            Stop();
+            Play();
+        }
     }
 
+#if UNITY_EDITOR
+    [CustomEditor(typeof(AutoMotion), true)]
+    [CanEditMultipleObjects]
+    public class AutoMotionEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            EditorGUILayout.Space();
+            using (new EditorGUI.DisabledScope(!Application.isPlaying))
+            {
+                if (GUILayout.Button("Apply Params & Replay"))
+                {
+                    foreach (var t in targets)
+                        ((AutoMotion)t).Replay();
+                }
+            }
+
+            if (!Application.isPlaying)
+                EditorGUILayout.HelpBox("Enter Play Mode to replay the motion.", MessageType.None);
+        }
+    }
+#endif
 }

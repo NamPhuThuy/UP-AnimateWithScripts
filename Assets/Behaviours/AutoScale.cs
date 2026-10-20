@@ -50,7 +50,10 @@ namespace NamPhuThuy.AnimateWithScripts
             DebugLogger.Log();
             // FIX: Kill existing sequence to prevent stacking animations if Play() is called multiple times
             currentSequence?.Kill();
-            
+
+            // Recompute here too: OnValidate skips it in Play Mode, so live multiplier edits would be ignored
+            targetScale = originalScale * scaleMultiplier;
+
             currentSequence = DOTween.Sequence();
             currentSequence.AppendInterval(delayBeforeStart);
             currentSequence.AppendCallback(CreateLoopSequence);
