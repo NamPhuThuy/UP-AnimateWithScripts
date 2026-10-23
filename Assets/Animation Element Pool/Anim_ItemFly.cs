@@ -262,7 +262,7 @@ namespace NamPhuThuy.AnimateWithScripts
             seq.Append(reward.transform.DOPath(path, pathDuration, PathType.CatmullRom).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 _remainingItems--;
-                DebugLogger.Log(message:$"remain Items: {_remainingItems}");
+                // DebugLogger.Log(message:$"remain Items: {_remainingItems}");
                 
                 // Animate the last item
                 if (_remainingItems <= 0)
@@ -287,7 +287,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     Recycle();
                 }
 
-                DebugLogger.Log(message: $"About trigger some effects");
+                // DebugLogger.Log(message: $"About trigger some effects");
                 
                 try 
                 {
@@ -298,7 +298,7 @@ namespace NamPhuThuy.AnimateWithScripts
                     Debug.LogError($"Error in OnItemInteract callback: {ex.Message}\n{ex.StackTrace}");
                 }
                 
-                DebugLogger.Log(message: $"About trigger some effects 2");
+                // DebugLogger.Log(message: $"About trigger some effects 2");
                 ApllyPunchEffect();
                 
                 UpdateFakeResourceText();
@@ -310,17 +310,17 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private void UpdateFakeResourceText()
         {
-            DebugLogger.Log();
+            // DebugLogger.Log();
             if (IsHaveRealText)
             {
-                DebugLogger.Log(message:$"Update fake text: {prevValue + addValue - _remainingItems * _unitValue}");
+                // DebugLogger.Log(message:$"Update fake text: {prevValue + addValue - _remainingItems * _unitValue}");
                 fakeResourceText.SetText(NUMBER_FORMAT, prevValue + addValue - _remainingItems * _unitValue);
             }
         }
 
         private void ApllyPunchEffect()
         {
-            DebugLogger.Log();
+            // DebugLogger.Log();
             if (targetInteractTransform == null) return;
 
             float now = Time.time;
